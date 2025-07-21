@@ -13,7 +13,7 @@ import {
   NotificationContextApiProps,
 } from '../../Context/Notification/NotificationContextApi';
 import { multiplePostApi } from '../../Helper/api/multipleAPI';
-import { storeDataInSessionStorage } from '../../Helper/HelperFunction';
+import { storeDataInLocalStorage } from '../../Helper/HelperFunction';
 import { useDebounce } from '../../Hooks/useDebounce';
 import { endpointObject } from '../../interface/propsInterface';
 
@@ -80,7 +80,7 @@ function VerifyEmailAddress() {
     if (!res?.success) {
       handelNotification(res, 'top-right');
     } else {
-      storeDataInSessionStorage(
+      storeDataInLocalStorage(
         res?.data?.authenticationToken,
         'authenticationToken'
       );

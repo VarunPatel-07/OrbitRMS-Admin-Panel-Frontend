@@ -3,9 +3,11 @@
 Welcome to the OrbitRMS-AdminPanel repository. This project serves as the admin interface for the OrbitRMS system, enabling administrators to manage employees, client interactions, social media presence, website content, and more—within a centralized dashboard.
 
 ## 🚀 Project Overview
+
 The OrbitRMS-AdminPanel is a powerful and intuitive front-end built to manage the backend operations of the OrbitRMS ecosystem. With a focus on scalability, performance, and usability, it empowers administrators with real-time insights and controls over the entire system.
 
 ## ✨ Features
+
 - **Modern Admin Dashboard**  
   Clean, responsive, and user-friendly interface tailored for admins.
 
@@ -25,6 +27,7 @@ The OrbitRMS-AdminPanel is a powerful and intuitive front-end built to manage th
   Authentication and protected routes for secure access.
 
 ## 🛠️ Technologies Used
+
 - **Framework:** React.js + TypeScript
 - **Styling:** Tailwind CSS / SCSS
 - **State Management:** Context API / Zustand
@@ -34,9 +37,11 @@ The OrbitRMS-AdminPanel is a powerful and intuitive front-end built to manage th
 - **Build Tool:** Vite
 
 ## ⚙️ Getting Started
+
 Follow these steps to set up and run the OrbitRMS-AdminPanel locally.
 
 ### 📦 Prerequisites
+
 - Node.js (v22.10.0)
 - PNPM (recommended package manager)
 - Git
@@ -129,4 +134,3 @@ For any inquiries or support, please contact:
 - **Email**: <contact.varunpatel.dev@gmail.com>
 - **Website**: [https://varunpatel.vercel.app/](https://varunpatel.vercel.app/)
 - **GitHub**: [VarunPatel-07](https://github.com/VarunPatel-07)
-0

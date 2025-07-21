@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 import OrbitLogo from '../../assets/Images/orbitrms-final-logo-transperent.webp';
@@ -7,6 +8,7 @@ import AlertModal from '../../common/AlertModal';
 import Button from '../../common/Button';
 import Input from '../../common/Input';
 import Loader from '../../common/Loader';
+import MainSuspenseLoader from '../../Components/Loader/MainSuspenseLoader';
 import {
   alertModalSuccessButtonArray,
   AuthFormDataInitialState,
@@ -18,7 +20,8 @@ import {
   NotificationContext,
   NotificationContextApiProps,
 } from '../../Context/Notification/NotificationContextApi';
-import { signInApiFunction } from '../../Helper/api/api';
+import { signInApiFunction, verifyUserApiFunction } from '../../Helper/api/api';
+import HelmetSeo from '../../Helper/HelmetSeo';
 import {
   getDataFromLocalStorage,
   isValidEmail,
@@ -35,11 +38,15 @@ function SignIn() {
     NotificationContext
   ) as NotificationContextApiProps;
 
+  const navigate = useNavigate();
+
   const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const useEffectRef = useRef(false);
 
   const [formData, setFormData] = useState<SignInPageFormDataInterface>(
     AuthFormDataInitialState
   );
+  const [showGlobalLoader, setShowGlobalLoader] = useState(true as boolean);
   const [showError, setShowError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [countDown, setCountDown] = useState<number>();
@@ -122,6 +129,18 @@ function SignIn() {
     }, 1000);
   };
 
+  const verifyUsersLoggedIn = useDebounce(async () => {
+    const response = await verifyUserApiFunction();
+
+    if (response?.success) {
+      setShowGlobalLoader(false);
+      navigate('/orbitrms/dashboard');
+    } else {
+      setShowGlobalLoader(false);
+      handelNotification(response, 'top-right');
+    }
+  }, 100);
+
   useEffect(() => {
     const localData = getDataFromLocalStorage(MAX_SIGN_IN_ATTEMPT);
 
@@ -132,8 +151,25 @@ function SignIn() {
     }
   }, [expiryTimeUTCString]);
 
+  useEffect(() => {
+    if (useEffectRef.current) return;
+    useEffectRef.current = true;
+    const _localToken = getDataFromLocalStorage('authenticationToken');
+    if (_localToken) {
+      verifyUsersLoggedIn();
+    } else {
+      setShowGlobalLoader(false);
+    }
+  }, [verifyUsersLoggedIn]);
+
   return (
     <>
+      <HelmetSeo
+        Title='Sign In | OrbitRMS Admin Panel'
+        Content='Log in to OrbitRMS and start managing everything in one place with ease and efficiency!'
+      />
+
+      <MainSuspenseLoader loading={showGlobalLoader} />
       <div className='w-screen h-screen bg-white'>
         <div className='flex items-stretch justify-start w-full h-full'>
           <div className='w-0 lg:w-1/2 hidden lg:block bg-red-50 relative'>
