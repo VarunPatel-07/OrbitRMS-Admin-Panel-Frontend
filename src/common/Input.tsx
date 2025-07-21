@@ -3,7 +3,7 @@ import { FaCheck, FaEye, FaEyeSlash, FaStarOfLife } from 'react-icons/fa';
 import clsx from 'clsx';
 
 import { classNames } from '../Helper/HelperFunction';
-import type { InputProps } from '../interface/propsInterface';
+import { InputProps } from '../interface/CommonComponentProps';
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (props, ref: ForwardedRef<HTMLInputElement>) => {

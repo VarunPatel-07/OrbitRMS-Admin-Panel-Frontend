@@ -1,16 +1,20 @@
-export interface InputProps {
-  name: string;
-  type?: 'text' | 'password' | 'email' | 'number' | 'url' | 'checkbox';
-  value?: string;
-  setValue?: (value: string) => void;
-  placeHolder?: string;
-  className?: string;
-  placeholderColor?: string;
-  viewPasswordBtn?: boolean;
-  showError?: boolean;
-  errorMessage?: string;
-  labelFieldName?: string;
-  isRequiredField?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  disabled?: boolean;
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export interface endpointObject {
+  endPoint: string;
+  protected: boolean;
+  data?: object;
+  header?: object;
+}
+export interface URLObject {
+  url: string;
+  Method: 'GET' | 'POST';
+  data?: object;
+  header?: object;
+}
+export interface ApiReturnInterface {
+  message: string;
+  success: boolean;
+  data?: any;
+  metadata?: any;
+  current_session_id?: string;
 }
