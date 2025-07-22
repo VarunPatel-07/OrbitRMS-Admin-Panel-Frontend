@@ -3,7 +3,12 @@ import { SetStateAction } from 'react';
 import axios from 'axios';
 
 import { LoginFormInterface } from '../../interface/CommonComponentProps';
-import { ErrorHandler, storeDataInSessionStorage } from '../HelperFunction';
+import {
+  clearLocalSessionStorage,
+  ErrorHandler,
+  getDataFromLocalStorage,
+  storeDataInSessionStorage,
+} from '../HelperFunction';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_API_BASEURL;
 
@@ -43,6 +48,35 @@ export const signInApiFunction = async (
     }
 
     return response?.data;
+  } catch (error: any) {
+    return ErrorHandler(error);
+  }
+};
+
+export const verifyUserApiFunction = async () => {
+  try {
+    const _localToken = getDataFromLocalStorage('authenticationToken');
+    if (!_localToken) {
+      return { success: false, message: 'User not authenticated' };
+    }
+
+    const url = `${BASE_URL}/auth/verify-user`;
+    const config = {
+      method: 'GET',
+      url,
+      headers: {
+        ...defaultHeader,
+        Authorization: `Bearer ${_localToken}`,
+      },
+    };
+
+    const response = await axios(config);
+    const res = response?.data;
+    if (!res?.success) {
+      window.location.href = '/auth/sign-in';
+      clearLocalSessionStorage();
+    }
+    return res;
   } catch (error: any) {
     return ErrorHandler(error);
   }
