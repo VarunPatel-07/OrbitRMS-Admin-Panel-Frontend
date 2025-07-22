@@ -4,11 +4,11 @@ import { MdModeEdit } from 'react-icons/md';
 import { Tooltip } from 'react-tooltip';
 
 import Breadcrumbs from '../../common/Breadcrumbs';
-import { FilterObjectInterface } from '../../common/Table/FilterInput';
 import Table from '../../common/Table/Table';
 import TableFilterSearchBar from '../../common/Table/TableFilterSearchBar';
 import TableInfoHeader from '../../common/Table/TableInfoHeader';
 import TableNoDataFound from '../../common/Table/TableNoDataFound';
+import EmployeeProfilePicture from '../../Components/EmployeeProfilePicture';
 import TableSkeletonLoader from '../../Components/Loader/Table/TableSkeletonLoader';
 import { FilterFieldsTypeEnums } from '../../enums/enums';
 import { multipleFetchApi } from '../../Helper/api/multipleAPI';
@@ -22,6 +22,7 @@ import {
 } from '../../interface/OrganizationManager';
 import {
   endpointObject,
+  FilterObjectInterface,
   UrlEncodedFilterQueryInterface,
 } from '../../interface/propsInterface';
 import { OrganizationManagerFiltersArray } from './OrganizationManagerFiltersArray';
@@ -54,9 +55,19 @@ function OrganizationManager() {
       isSortable: true,
       isSticky: false,
       canToggleVisibility: true,
-      renderContent: (data: string) => (
+      childKey: 'organization_image',
+      renderContent: (data: string, childData: string) => (
         <div className='w-fit'>
-          <p className='font-inter text-black font-medium text-base'>{data}</p>
+          <div className='w-fit flex items-center justify-start gap-2.5'>
+            <EmployeeProfilePicture
+              profilePicture={childData}
+              height={40}
+              width={40}
+            />
+            <p className='font-inter text-black font-semibold text-base'>
+              {data}
+            </p>
+          </div>
         </div>
       ),
     },
@@ -275,6 +286,7 @@ function OrganizationManager() {
       setData(res?.data);
     }
     setIsInitialFetching(false);
+    setIsFetchingData(false);
   }, 100);
 
   const handelApplyFilterEmployeeListing = async (

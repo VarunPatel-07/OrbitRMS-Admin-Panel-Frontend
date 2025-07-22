@@ -1,7 +1,7 @@
 import React, { SetStateAction } from 'react';
 import { FaArrowLeftLong, FaArrowRightLong } from 'react-icons/fa6';
 
-import { classNames } from '../../Helper/HelperFunctions';
+import { classNames } from '../../Helper/HelperFunction';
 import { returnPaginationRang } from '../../Helper/returnPaginationRange';
 import DropDown from '../DropDown';
 

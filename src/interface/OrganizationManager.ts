@@ -25,4 +25,5 @@ export interface OrganizationDetails {
   intern_code_prefix: string;
   country_info: CountryInfo;
   organization_address: OrganizationAddress;
+  organization_image: string;
 }

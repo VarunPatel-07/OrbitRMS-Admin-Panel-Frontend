@@ -204,3 +204,13 @@ export const formateDate = (
 
   return formattedDate;
 };
+
+export const convertToTitleCase = (field_name: string) => {
+  return field_name
+    ?.split('_')
+    .map(
+      (word) =>
+        word?.charAt(0)?.toUpperCase() + word?.slice(1)?.toLocaleLowerCase()
+    )
+    .join(' ');
+};
