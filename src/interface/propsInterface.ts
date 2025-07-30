@@ -34,6 +34,7 @@ export interface TableInfoHeaderInterface {
   renderDateSelector?: boolean;
   year?: number;
   handelYearButton?: (type: 'increment' | 'decrement') => void;
+  loading?: boolean;
 }
 export interface Column {
   key: string;
@@ -76,7 +77,7 @@ export interface ModuleValueInterface {
 export interface FilterObjectInterface {
   id: string;
   moduleValue: ModuleValueInterface[];
-  optionType?: string;
+  optionType?: 'text' | 'select' | 'multi-select' | 'date';
 }
 export interface FiltersOptionsDropdownInterface {
   showCurrentOptionDropdown: boolean;
@@ -97,6 +98,7 @@ export interface FiltersOptionsDropdownInterface {
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   showFilterDropDownMenu: boolean;
   searchInputValue: string;
+  enterClickHandler: () => void;
 }
 
 export interface countryObject {
@@ -154,4 +156,11 @@ export interface FilterInputMainFilterDropdownInterface {
   setCurrentFilterId: React.Dispatch<SetStateAction<string>>;
   setFilterObject: React.Dispatch<SetStateAction<FilterObjectInterface[]>>;
   setShowCurrentOperatorDropdown: React.Dispatch<SetStateAction<boolean>>;
+}
+
+export interface MetaDataInterface {
+  total_data: number;
+  total_pages: number;
+  current_page: number;
+  record_per_page: number;
 }
