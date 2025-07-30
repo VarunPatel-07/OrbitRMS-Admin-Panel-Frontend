@@ -14,7 +14,7 @@ function FinalFilterRenderHelper({
   handelClickOnDeleteBtn?: (data: FilterObjectInterface) => void;
 }) {
   return (
-    <div className='w-fit py-1 pl-1 flex flex-wrap gap-2 h-full'>
+    <div className='w-fit py-1 pl-1 flex flex-nowrap gap-2 h-full'>
       {filterArray.map((arrayQuery, index) => (
         <div
           key={`${arrayQuery?.id}-${index}`}
@@ -25,7 +25,7 @@ function FinalFilterRenderHelper({
               <span
                 key={`query-${id}`}
                 className={classNames(
-                  'bg-white border border-slate-300 rounded-md px-2 text-sm h-full flex items-center justify-center',
+                  'bg-white border border-slate-300 rounded-md px-2 text-sm h-full flex items-center justify-center text-nowrap',
                   {
                     'font-medium text-black':
                       query?.type === FilterFieldsTypeEnums[0],

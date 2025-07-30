@@ -29,6 +29,7 @@ const FiltersOptionsDropdown = React.memo(function FiltersOptionsDropdown(
     setInputValue,
     showFilterDropDownMenu,
     searchInputValue,
+    enterClickHandler,
   } = props;
   const virtualListRef = useRef<VirtualList>(null);
 
@@ -83,6 +84,8 @@ const FiltersOptionsDropdown = React.memo(function FiltersOptionsDropdown(
       }
     } else if (e.key === 'Escape') {
       setShowCurrentOptionDropdown(false);
+    } else if (e.key === 'Enter') {
+      enterClickHandler();
     }
   };
 

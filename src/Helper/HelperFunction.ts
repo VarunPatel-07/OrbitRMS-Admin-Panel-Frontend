@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { MutableRefObject, SetStateAction } from 'react';
 import { AxiosError } from 'axios';
 import CryptoJS from 'crypto-js';
 import validator from 'validator';
@@ -139,10 +140,14 @@ export const getDataFromTheSessionStorage = (
   return JSON.parse(sessionStorageData);
 };
 
-export const MaxLimitCountDownTimeFormatter = (seconds: number) => {
-  const mins = Math.floor((seconds % (1000 * 60 * 60)) / (1000 * 60));
-  const secs = Math.floor((seconds % (1000 * 60)) / 1000);
-  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+export const MaxLimitCountDownTimeFormatter = (ms: number): string => {
+  if (!ms || isNaN(ms)) return '00:00';
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60)
+    .toString()
+    .padStart(2, '0');
+  const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+  return `${minutes}:${seconds}`;
 };
 
 export const formateDate = (
@@ -213,4 +218,46 @@ export const convertToTitleCase = (field_name: string) => {
         word?.charAt(0)?.toUpperCase() + word?.slice(1)?.toLocaleLowerCase()
     )
     .join(' ');
+};
+
+export const handleCountDownFunction = (
+  utcString: string,
+  intervalRef: MutableRefObject<ReturnType<typeof setInterval> | null>,
+  setCountDown: React.Dispatch<SetStateAction<number>>,
+  LOCAL_DATA_STRING: string
+) => {
+  // Clear existing interval if any
+  if (intervalRef?.current) {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  }
+
+  // Start new countdown interval
+  intervalRef.current = setInterval(() => {
+    const expiryDate = new Date(utcString);
+    const currentDate = new Date();
+    const difference = expiryDate.getTime() - currentDate.getTime();
+
+    if (difference <= 0) {
+      setCountDown(0);
+      removeDataFromLocalStorage(LOCAL_DATA_STRING);
+      clearInterval(intervalRef.current!);
+      intervalRef.current = null;
+    } else {
+      setCountDown(difference);
+    }
+  }, 1000);
+};
+
+export const NormalizeStringifiedArray = (value: string) => {
+  if (!value) return null;
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) {
+      return parsed; // return the parsed array
+    }
+    return null;
+  } catch {
+    return null;
+  }
 };

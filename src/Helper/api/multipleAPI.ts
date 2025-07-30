@@ -153,10 +153,8 @@ export const multiplePostApi = async (
         return res?.data;
       } catch (error: any) {
         // Handle error (e.g., return an error object or log it)
-
         if (unauthorizedStatusCodes.includes(error?.status)) {
           const status = error?.response?.status || error?.status;
-
           if (unauthorizedStatusCodes.includes(status)) {
             window.location.href = '/auth/sign-in';
             return;

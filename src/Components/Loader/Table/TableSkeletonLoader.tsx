@@ -51,7 +51,10 @@ function TableSkeletonLoader({
       {showFilterLoader && (
         <div
           aria-hidden='true'
-          className='p-2 bg-gray-200 w-full relative border border-black/10 border-b-0'
+          className={classNames(
+            'p-2 bg-gray-200 w-full relative border border-black/10 border-b-0',
+            { 'rounded-t-lg': !showHeaderLoader }
+          )}
         >
           <div className='flex items-stretch justify-between h-10 -translate-y-1 gap-3'>
             <div className='w-full'>

@@ -24,7 +24,7 @@ function Breadcrumbs({
                 <Link to={item.link} className='text-black'>
                   <FaHome />
                 </Link>
-              ) : navigation.pathname == item.link ? (
+              ) : navigation.pathname.includes(item.link) ? (
                 <span className='text-blue-700 font-medium cursor-default inline-block text-sm'>
                   {item.name ? (
                     item?.name

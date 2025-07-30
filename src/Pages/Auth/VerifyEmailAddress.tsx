@@ -7,13 +7,20 @@ import OrbitLogo from '../../assets/Images/orbitrms-final-logo-transperent.webp'
 import AuthLotiAnimation from '../../assets/lottie/AuthPageLoginAnimation.lottie';
 import Button from '../../common/Button';
 import Loader from '../../common/Loader';
+import { MINIMUM_RESEND_OTP_INTERVAL } from '../../Constant/Constant';
 import { ERROR_MESSAGES } from '../../Constant/ErrorMessages';
 import {
   NotificationContext,
   NotificationContextApiProps,
 } from '../../Context/Notification/NotificationContextApi';
 import { multiplePostApi } from '../../Helper/api/multipleAPI';
-import { storeDataInLocalStorage } from '../../Helper/HelperFunction';
+import {
+  getDataFromLocalStorage,
+  handleCountDownFunction,
+  MaxLimitCountDownTimeFormatter,
+  removeDataFromLocalStorage,
+  storeDataInLocalStorage,
+} from '../../Helper/HelperFunction';
 import { useDebounce } from '../../Hooks/useDebounce';
 import { endpointObject } from '../../interface/propsInterface';
 
@@ -24,7 +31,7 @@ function VerifyEmailAddress() {
 
   const OTPInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const useEffectRef = useRef(false);
-
+  const intervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const navigate = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -32,13 +39,16 @@ function VerifyEmailAddress() {
   const [otpCode, setOtpCode] = useState<string[]>([]);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [countDown, setCountDown] = useState<number>(0);
+  const [expiryTimeUTCString, setExpiryTimeUTCString] = useState<string>('');
+  const [resendOtpLoader, setResendOtpLoader] = useState<boolean>(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
   ) => {
     const value = e.target.value;
-    if (value.length > 1 || (value && !/^\d$/.test(value))) return;
+    if (value.length > 1 || (value && !/^\d?$/.test(value))) return;
 
     const OtpCodeArray = [...otpCode];
     OtpCodeArray[index] = value;
@@ -67,7 +77,7 @@ function VerifyEmailAddress() {
     const signature = searchParams.get('signature');
     const endPointArr: endpointObject[] = [
       {
-        endPoint: `auth/verify-otp?id=${id}&signature=${signature}`,
+        endPoint: `auth/otp/verify-otp?id=${id}&signature=${signature}`,
         protected: false,
         data: {
           otp: otpCode?.join(''),
@@ -98,9 +108,74 @@ function VerifyEmailAddress() {
     }
   };
 
+  const handelResendMailWithDebounce = useDebounce(async () => {
+    const id = searchParams.get('id');
+    const signature = searchParams.get('signature');
+    const endPointArr: endpointObject[] = [
+      {
+        endPoint: `auth/otp/re-send-otp?id=${id}&signature=${signature}`,
+        protected: false,
+      },
+    ];
+
+    const response = await multiplePostApi(endPointArr);
+    const res = response[0];
+    if (res?.success) {
+      storeDataInLocalStorage(
+        res?.data?.resend_available_at,
+        MINIMUM_RESEND_OTP_INTERVAL
+      );
+      setExpiryTimeUTCString(res?.data?.resend_available_at);
+      removeDataFromLocalStorage(MINIMUM_RESEND_OTP_INTERVAL);
+    } else {
+      handelNotification(res, 'top-right');
+      storeDataInLocalStorage(
+        res?.data?.resend_available_at,
+        MINIMUM_RESEND_OTP_INTERVAL
+      );
+      setExpiryTimeUTCString(res?.data?.resend_available_at);
+    }
+    setResendOtpLoader(false);
+  }, 100);
+
+  const handelResendMail = () => {
+    if (Number.isFinite(countDown) && countDown <= 0) {
+      setResendOtpLoader(true);
+      handelResendMailWithDebounce();
+    }
+  };
+
   useEffect(() => {
     OTPInputRefs.current[0]?.focus();
   }, []);
+
+  useEffect(() => {
+    const localData = getDataFromLocalStorage(MINIMUM_RESEND_OTP_INTERVAL);
+
+    const resendAvailableAt = searchParams.get('resend-available-at');
+    if (resendAvailableAt) {
+      if (!localData) {
+        storeDataInLocalStorage(resendAvailableAt, MINIMUM_RESEND_OTP_INTERVAL);
+        setExpiryTimeUTCString(resendAvailableAt);
+        const id = searchParams.get('id');
+        const signature = searchParams.get('signature');
+        setTimeout(() => {
+          navigate(`/auth/verify-email?id=${id}&signature=${signature}`);
+        }, 0);
+      }
+    }
+
+    const data = localData || expiryTimeUTCString || resendAvailableAt;
+
+    if (data) {
+      handleCountDownFunction(
+        data,
+        intervalRef,
+        setCountDown,
+        MINIMUM_RESEND_OTP_INTERVAL
+      );
+    }
+  }, [expiryTimeUTCString, searchParams]);
 
   useEffect(() => {
     if (useEffectRef.current) return;
@@ -220,16 +295,39 @@ function VerifyEmailAddress() {
                     )}
                   </Button>
                 </div>
-                {/* {countDown ? (
-                  <p className='text-red-600 flex items-center gap-1 justify-center text-sm mt-1'>
-                    <span className='inline-block'>Try Again After:</span>
-                    <span className='inline-block'>
-                      {MaxLimitCountDownTimeFormatter(countDown)}
-                    </span>
-                  </p>
-                ) : (
-                  ''
-                )} */}
+                <div className='w-full'>
+                  <Button
+                    type='button'
+                    className='bg-transparent border border-black/50 text-black w-full text-base group'
+                    onClick={handelResendMail}
+                    disabled={
+                      (Number.isFinite(countDown) && countDown > 0) ||
+                      resendOtpLoader
+                    }
+                  >
+                    {resendOtpLoader ? (
+                      <Loader loaderText='resending....' />
+                    ) : (
+                      <span className='flex flex-col gap-1'>
+                        {Number.isFinite(countDown) && countDown > 0 ? (
+                          <span className='text-sm'>
+                            You can request a new code in
+                            <span className='font-medium'>
+                              ({MaxLimitCountDownTimeFormatter(countDown)})
+                            </span>
+                          </span>
+                        ) : (
+                          <span className='text-black/80 group-hover:text-black transition-all'>
+                            Didn’t receive the code?{' '}
+                            <span className='group-hover:text-blue-600 underline'>
+                              Resend
+                            </span>
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

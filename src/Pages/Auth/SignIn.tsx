@@ -24,9 +24,9 @@ import { signInApiFunction, verifyUserApiFunction } from '../../Helper/api/api';
 import HelmetSeo from '../../Helper/HelmetSeo';
 import {
   getDataFromLocalStorage,
+  handleCountDownFunction,
   isValidEmail,
   MaxLimitCountDownTimeFormatter,
-  removeDataFromLocalStorage,
   storeDataInLocalStorage,
 } from '../../Helper/HelperFunction';
 import { useDebounce } from '../../Hooks/useDebounce';
@@ -49,7 +49,7 @@ function SignIn() {
   const [showGlobalLoader, setShowGlobalLoader] = useState(true as boolean);
   const [showError, setShowError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [countDown, setCountDown] = useState<number>();
+  const [countDown, setCountDown] = useState<number>(0);
   const [expiryTimeUTCString, setExpiryTimeUTCString] = useState<string>('');
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [alertModalPropsInfo, setAlertModalPropsInfo] = useState<ModalInfoType>(
@@ -73,7 +73,7 @@ function SignIn() {
     if (res?.success) {
       setLoading(false);
       setShowAlertModal(true);
-      const link = `/auth/verify-email?id=${res?.data?.id}&signature=${res?.data?.admin_signature}`;
+      const link = `/auth/verify-email?id=${res?.data?.id}&signature=${res?.data?.admin_signature}&resend-available-at=${encodeURIComponent(res?.data?.resend_available_at)}`;
       setAlertModalPropsInfo({
         success: true,
         alertModalTitle: 'A 6-Digit Code Has Been Sent',
@@ -109,26 +109,6 @@ function SignIn() {
     }
   };
 
-  const handelCountDownFunction = (utcString: string) => {
-    if (intervalRef?.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    intervalRef.current = setInterval(() => {
-      const expiryDate = new Date(utcString);
-      const currentDate = new Date();
-      const difference = expiryDate.getTime() - currentDate.getTime();
-      if (difference <= 0) {
-        setCountDown(0);
-        removeDataFromLocalStorage(MAX_SIGN_IN_ATTEMPT);
-        clearInterval(intervalRef.current!);
-        intervalRef.current = null;
-      } else {
-        setCountDown(difference);
-      }
-    }, 1000);
-  };
-
   const verifyUsersLoggedIn = useDebounce(async () => {
     const response = await verifyUserApiFunction();
 
@@ -147,7 +127,12 @@ function SignIn() {
     const data = localData || expiryTimeUTCString;
 
     if (data) {
-      handelCountDownFunction(data);
+      handleCountDownFunction(
+        data,
+        intervalRef,
+        setCountDown,
+        MAX_SIGN_IN_ATTEMPT
+      );
     }
   }, [expiryTimeUTCString]);
 

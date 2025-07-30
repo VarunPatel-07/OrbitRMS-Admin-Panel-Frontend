@@ -15,6 +15,7 @@ import ProtectedRoute from './Helper/ProtectedRoute';
 import { useDebounce } from './Hooks/useDebounce';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import OrganizationManager from './Pages/OrganizationManager/OrganizationManager';
+import ViewOrganizationPage from './Pages/ViewOrganization/ViewOrganizationPage';
 
 function App() {
   const { handelNotification } = useContext(
@@ -70,6 +71,12 @@ function App() {
                     path='/organization-manager'
                     element={
                       <ProtectedRoute element={<OrganizationManager />} />
+                    }
+                  />
+                  <Route
+                    path='/organizations/:id/*'
+                    element={
+                      <ProtectedRoute element={<ViewOrganizationPage />} />
                     }
                   />
                 </Routes>
