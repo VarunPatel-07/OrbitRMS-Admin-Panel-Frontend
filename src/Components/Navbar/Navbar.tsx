@@ -13,6 +13,11 @@ function Navbar() {
             alt=''
           />
         </div>
+        <div className='py-2'>
+          <div className='bg-rose-600 h-full px-3 flex items-center justify-center rounded-lg'>
+            <p className='text-base font-semibold text-white'>Admin Panel</p>
+          </div>
+        </div>
       </div>
 
       <div className='w-fit relative'>

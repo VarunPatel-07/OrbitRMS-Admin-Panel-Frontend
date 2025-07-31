@@ -32,6 +32,7 @@ export interface OrganizationDetails {
 export interface ViewOrgSidebarPropsInterface {
   loading: boolean;
   data: OrganizationSettingsInterface;
+  handelClickOnOrgPowerOff: (data: OrganizationSettingsInterface) => void;
 }
 
 export interface OrganizationSettingsInterface {

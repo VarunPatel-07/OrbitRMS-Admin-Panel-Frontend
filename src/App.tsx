@@ -14,6 +14,7 @@ import { getDataFromLocalStorage } from './Helper/HelperFunction';
 import ProtectedRoute from './Helper/ProtectedRoute';
 import { useDebounce } from './Hooks/useDebounce';
 import Dashboard from './Pages/Dashboard/Dashboard';
+import MaintenanceMode from './Pages/MaintenanceMode/MaintenanceMode';
 import OrganizationManager from './Pages/OrganizationManager/OrganizationManager';
 import ViewOrganizationPage from './Pages/ViewOrganization/ViewOrganizationPage';
 
@@ -78,6 +79,10 @@ function App() {
                     element={
                       <ProtectedRoute element={<ViewOrganizationPage />} />
                     }
+                  />
+                  <Route
+                    path='/maintenance-mode'
+                    element={<ProtectedRoute element={<MaintenanceMode />} />}
                   />
                 </Routes>
               </div>

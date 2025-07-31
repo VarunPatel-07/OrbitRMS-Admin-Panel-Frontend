@@ -354,7 +354,6 @@ function OrganizationManager() {
   const handelApplyOrganizationListingFilter = async (
     filterArray: FilterObjectInterface[]
   ) => {
-    console.log(filterArray);
     setIsFetchingData(true);
     let queryString = '';
     if (filterArray?.length > 0) {
@@ -385,11 +384,6 @@ function OrganizationManager() {
           }
         });
 
-        console.log(
-          queryObj?.moduleValue?.filter(
-            (tem) => tem.type === FilterFieldsTypeEnums[2]
-          )
-        );
         return obj;
       });
 
@@ -444,7 +438,6 @@ function OrganizationManager() {
       const res = response[0];
 
       if (res?.success) {
-        setOrganizationStatusLoader(false);
         setIsFetchingData(true);
         setAlertModalInfo(OrganizationManagerAlertModalInitialObj);
         setDeactivateOrganizationModal(false);
@@ -454,6 +447,7 @@ function OrganizationManager() {
           recordsPerPage
         );
       }
+      setOrganizationStatusLoader(false);
     },
     100
   );

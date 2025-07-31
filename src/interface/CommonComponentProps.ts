@@ -71,3 +71,18 @@ export interface OrgManagerAlertModalProps {
   handelOnClickButton: (id: string) => void;
   setLoading: React.Dispatch<SetStateAction<boolean>>;
 }
+
+export interface NotFoundPagesOptionsButtonArray {
+  label: string;
+  className: string;
+  type: 'link' | 'button';
+  link?: string;
+  onClick?: () => void;
+  icon?: React.ReactElement;
+}
+
+export interface NotFoundPageComponentPropsInterface {
+  message: string;
+  title: string;
+  optionsButton: NotFoundPagesOptionsButtonArray[];
+}
