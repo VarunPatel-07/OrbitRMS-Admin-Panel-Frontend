@@ -13,7 +13,7 @@ function Button({
     <button
       type={type}
       className={clsx(
-        'disabled:opacity-75 disabled:cursor-not-allowed text-base py-2 font-semibold font-inter rounded-lg',
+        'disabled:opacity-75 disabled:cursor-not-allowed text-base font-semibold font-inter rounded-lg',
         className
       )}
       disabled={disabled}

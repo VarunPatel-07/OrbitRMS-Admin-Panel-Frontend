@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
-import { BsCheckCircle } from 'react-icons/bs';
-import { MdOutlineDoNotDisturbOn } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 
+import { AlertModalDefaultIcon } from '../Helper/Helper';
 import { classNames } from '../Helper/HelperFunction';
 import { AlertModalProps } from '../interface/CommonComponentProps';
 
 function AlertModal(props: AlertModalProps) {
-  const { ModalInfo, showAlertModal, setShowAlertModal } = props;
+  const { ModalInfo, showAlertModal, setShowAlertModal, AlertIcon } = props;
 
   const [showModalAnimation, setShowModalAnimation] = useState<boolean>(false);
   const [renderComponent, setRenderComponent] = useState<boolean>(false);
@@ -86,49 +85,9 @@ function AlertModal(props: AlertModalProps) {
             <div className='grid grid-cols-1 gap-8'>
               {/* It Is used To Show Case The Icon Related To The Action Modal */}
               <div className='w-full flex items-center justify-center'>
-                <div className='w-[110px] h-[110px] relative'>
-                  <span
-                    className={classNames(
-                      'rounded-full flex items-center justify-center aspect-square w-[90px] h-[90px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[1]',
-                      {
-                        'border-2 border-red-700/[0.1]': !ModalInfo.success,
-                        'border-2 border-green-700/[0.1]': ModalInfo.success,
-                      }
-                    )}
-                  ></span>
-                  <span
-                    className={classNames(
-                      'rounded-full flex items-center justify-center aspect-square w-[75px] h-[75px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[2]',
-                      {
-                        'border-2 border-red-700/[0.25]': !ModalInfo.success,
-                        'border-2 border-green-700/[0.25]': ModalInfo.success,
-                      }
-                    )}
-                  ></span>
-                  <span
-                    className={classNames(
-                      'rounded-full flex items-center justify-center aspect-square w-[60px] h-[60px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[3]',
-                      {
-                        'border-2 border-red-700/[0.35]': !ModalInfo.success,
-                        'border-2 border-green-700/[0.35]': ModalInfo.success,
-                      }
-                    )}
-                  ></span>
-                  <span
-                    className={classNames(
-                      'rounded-full flex items-center justify-center aspect-square w-[45px] h-[45px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[4]',
-                      {
-                        'border-2 border-red-700/[0.6]': !ModalInfo.success,
-                        'border-2 border-green-700/[0.6]': ModalInfo.success,
-                      }
-                    )}
-                  ></span>
-                  {ModalInfo.success ? (
-                    <BsCheckCircle className='text-green-700 w-7 h-7 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[5]' />
-                  ) : (
-                    <MdOutlineDoNotDisturbOn className='text-red-700 w-7 h-7 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[5]' />
-                  )}
-                </div>
+                {AlertIcon
+                  ? AlertIcon
+                  : AlertModalDefaultIcon(ModalInfo?.success)}
               </div>
               <div className='w-full'>
                 <h3 className='text-black text-2xl font-semibold font-inter text-pretty text-center'>

@@ -101,6 +101,23 @@ export interface FiltersOptionsDropdownInterface {
   enterClickHandler: () => void;
 }
 
+export interface FilterInputDateSelectorInterface {
+  showCurrentOptionDropdown: boolean;
+  setShowCurrentOptionDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+  currentFilterId: string;
+  filterObject: FilterObjectInterface[];
+  setFilterObject: React.Dispatch<
+    React.SetStateAction<FilterObjectInterface[]>
+  >;
+  updateFilterObject: (
+    newItem: ModuleValueInterface,
+    id: string,
+    callback?: (updatedArray: FilterObjectInterface[]) => void
+  ) => void;
+  updateFinalFilterQuery: (newData: FilterObjectInterface[]) => void;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+}
+
 export interface countryObject {
   country_flag: string;
   country_name: string;

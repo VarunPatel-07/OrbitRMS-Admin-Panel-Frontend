@@ -1,3 +1,4 @@
+import OrbitIconLogo from '../../assets/Images/orbit-logo.png';
 import OrbitRMSLogo from '../../assets/Images/orbitrms-final-logo-transperent.webp';
 import EmployeeProfilePicture from '../EmployeeProfilePicture';
 
@@ -26,7 +27,7 @@ function Navbar() {
             <EmployeeProfilePicture
               width={40}
               height={40}
-              profilePicture={''}
+              profilePicture={OrbitIconLogo}
             />
           </button>
         </div>

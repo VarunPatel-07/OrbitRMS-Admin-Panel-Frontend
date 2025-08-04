@@ -16,13 +16,13 @@ function Breadcrumbs({
       <div className='w-full bg-white py-2 px-3 absolute z-10 border-b border-b-black/20'>
         <div className='w-full flex items-center gap-2'>
           {BreadcrumbsNavigationFlow.map((item, index) => {
-            // const isLast = BreadcrumbsNavigationFlow.length === index + 1;
+            const isLast = BreadcrumbsNavigationFlow.length === index + 1;
             const isActive = (link: string) => {
               const currentURL = navigation.pathname + navigation.search;
               if (navigation.search) {
                 return currentURL === link;
               }
-              return navigation.pathname.includes(link);
+              return navigation.pathname.includes(link) && isLast;
             };
 
             return (
