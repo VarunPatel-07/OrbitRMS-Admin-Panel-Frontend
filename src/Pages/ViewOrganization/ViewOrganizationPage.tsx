@@ -1,4 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { GoArrowLeft } from 'react-icons/go';
 import Skeleton from 'react-loading-skeleton';
 import {
   Link,
@@ -10,23 +12,31 @@ import {
 } from 'react-router-dom';
 
 import Breadcrumbs from '../../common/Breadcrumbs';
+import NotFound from '../../common/NotFound';
+import OrgAlertModal from '../../Components/Modal/OrgAlertModal';
 import {
   OrganizationInfoInitialData,
+  OrganizationManagerAlertModalInitialObj,
   ViewOrganizationHeaderButtons,
 } from '../../Constant/OrganizationManagerConstant';
 import {
   NotificationContext,
   NotificationContextApiProps,
 } from '../../Context/Notification/NotificationContextApi';
-import { multipleFetchApi } from '../../Helper/api/multipleAPI';
+import { multipleFetchApi, multiplePutApi } from '../../Helper/api/multipleAPI';
 import { classNames } from '../../Helper/HelperFunction';
 import ProtectedRoute from '../../Helper/ProtectedRoute';
 import { useDebounce } from '../../Hooks/useDebounce';
+import {
+  NotFoundPagesOptionsButtonArray,
+  OrganizationManagerAlertModalInfoType,
+} from '../../interface/CommonComponentProps';
 import {
   OrganizationSettingsInterface,
   ViewOrganizationHeaderButtonsInterface,
 } from '../../interface/OrganizationManager';
 import { endpointObject } from '../../interface/propsInterface';
+import { OrganizationAlertModalHelperFunction } from '../OrganizationManager/OrganizationAlertModalHelper';
 import OrganizationSidebar from './OrganizationsHelper/OrganizationSidebar';
 import OrganizationDetails from './ViewOrganizationPages/OrganizationDetails';
 import OrganizationEmployees from './ViewOrganizationPages/OrganizationEmployees';
@@ -43,9 +53,23 @@ function ViewOrganizationPage() {
   const navigation = useLocation();
 
   const [isFetching, setIsFetching] = useState<boolean>(true);
-  const [data, setData] = useState<OrganizationSettingsInterface>(
+  const [data, setData] = useState<OrganizationSettingsInterface | null>(
     OrganizationInfoInitialData
   );
+  const [organizationStatusLoader, setOrganizationStatusLoader] =
+    useState<boolean>(false);
+  const [alertModalInfo, setAlertModalInfo] =
+    useState<OrganizationManagerAlertModalInfoType>(
+      OrganizationManagerAlertModalInitialObj
+    );
+  const [deactivateOrganizationModal, setDeactivateOrganizationModal] =
+    useState<boolean>(false);
+
+  const handelClickOnOrgPowerOff = (data: OrganizationSettingsInterface) => {
+    setDeactivateOrganizationModal(!deactivateOrganizationModal);
+    const obj = OrganizationAlertModalHelperFunction(data?.status, data?.id);
+    setAlertModalInfo(obj);
+  };
 
   const BreadcrumbsObjects = (OrgName: string) => [
     {
@@ -87,11 +111,35 @@ function ViewOrganizationPage() {
     if (res?.success) {
       setData(res?.data);
     } else {
+      setData(null);
       handelNotification(res, 'top-right');
     }
     setIsFetching(false);
   }, 100);
 
+  const handelOrgStatusWithDebounce = useDebounce(async (id: string) => {
+    const endPointArr: endpointObject[] = [
+      {
+        endPoint: `organization-manager/organization-setting/status?id=${id}`,
+        protected: true,
+      },
+    ];
+    const response = await multiplePutApi(endPointArr);
+    const res = response[0];
+
+    if (res?.success) {
+      setIsFetching(true);
+      setAlertModalInfo(OrganizationManagerAlertModalInitialObj);
+      setDeactivateOrganizationModal(false);
+      fetchOrganizationWithDebounce(id);
+    }
+    setOrganizationStatusLoader(false);
+  }, 100);
+
+  const handelClickOnOrganizationStatusToggled = (id: string) => {
+    setOrganizationStatusLoader(true);
+    handelOrgStatusWithDebounce(id);
+  };
   useEffect(() => {
     if (organization_id?.trim() == '') {
       const data = {
@@ -108,93 +156,165 @@ function ViewOrganizationPage() {
   const basePath = `/orbitrms/organizations/${organization_id}/`;
   const wildcardPath = navigation.pathname.replace(basePath, '');
 
-  return (
-    <div className='w-full h-full'>
-      <div className='w-full h-full flex items-stretch justify-start'>
-        <div className='w-[30%] max-w-[350px] bg-white border-r border-r-black/20 overflow-auto h-[calc(100vh-57px)] hide-scrollbar'>
-          <OrganizationSidebar loading={isFetching} data={data} />
-        </div>
-        <div className='w-[70%] flex-grow overflow-hidden'>
-          <div className='w-full h-full relative'>
-            <Breadcrumbs
-              BreadcrumbsNavigationFlow={BreadcrumbsObjects(
-                data?.general_info?.organization_name
-              )}
-            />
-            {wildcardPath !== 'employee-profile' && (
-              <div className='w-full absolute top-[37px]'>
-                <div className='w-full bg-white px-3 py-2.5 border-b border-black/20'>
-                  <div className='flex items-stretch justify-between gap-4'>
-                    <div className='flex items-center justify-start flex-grow gap-4'>
-                      {isFetching ? (
-                        <>
-                          {Array?.from({ length: 3 }).map((_, index) => (
-                            <Skeleton
-                              height={35}
-                              width={140}
-                              borderRadius={6}
-                              key={index}
-                            />
-                          ))}
-                        </>
-                      ) : (
-                        <>
-                          {OrganizationHeaderButtonArray?.map((item, index) => (
-                            <Link
-                              to={item?.link}
-                              key={index}
-                              className={classNames(`${item?.classNames}`, {
-                                'bg-[#EEF4FF] border border-[#C7D7FE] !text-[#3538CD]':
-                                  navigation.pathname?.startsWith(item?.link),
-                              })}
-                            >
-                              {item?.title}
-                            </Link>
-                          ))}
-                        </>
-                      )}
+  const optionsButtonArray: NotFoundPagesOptionsButtonArray[] = [
+    {
+      label: 'back To Organization Listing',
+      type: 'link',
+      className:
+        'text-black flex items-center justify-center gap-2 capitalize px-4 py-2 border border-black/30 rounded-lg hover:text-white hover:bg-black transition-all w-fit',
+      link: `/orbitrms/organization-manager`,
+      icon: <GoArrowLeft className='text-xl' />,
+    },
+  ];
+  const PageNotFoundOptionsButton: NotFoundPagesOptionsButtonArray[] = [
+    {
+      label: 'back To Home Page',
+      type: 'link',
+      className:
+        'text-black flex items-center justify-center gap-2 capitalize px-4 py-2 border border-black/30 rounded-lg hover:text-white hover:bg-black transition-all w-fit',
+      link: `/orbitrms/dashboard`,
+      icon: <GoArrowLeft className='text-xl' />,
+    },
+  ];
+
+  if (data)
+    return (
+      <>
+        <div className='w-full h-full'>
+          <div className='w-full h-full flex items-stretch justify-start'>
+            <div className='w-[30%] max-w-[350px] bg-white border-r border-r-black/20 overflow-auto h-[calc(100vh-57px)] hide-scrollbar'>
+              <OrganizationSidebar
+                loading={isFetching}
+                data={data}
+                handelClickOnOrgPowerOff={handelClickOnOrgPowerOff}
+              />
+            </div>
+            <div className='w-[70%] flex-grow overflow-hidden'>
+              <div className='w-full h-full relative'>
+                {wildcardPath !== 'employee-profile' && (
+                  <Breadcrumbs
+                    BreadcrumbsNavigationFlow={BreadcrumbsObjects(
+                      data?.general_info?.organization_name
+                    )}
+                  />
+                )}
+
+                {wildcardPath !== 'employee-profile' && (
+                  <div className='w-full absolute top-[37px] z-10'>
+                    <div className='w-full bg-white px-3 py-2.5 border-b border-black/20'>
+                      <div className='flex items-stretch justify-between gap-4'>
+                        <div className='flex items-center justify-start flex-grow gap-4'>
+                          {isFetching ? (
+                            <>
+                              {Array?.from({ length: 3 }).map((_, index) => (
+                                <Skeleton
+                                  height={35}
+                                  width={140}
+                                  borderRadius={6}
+                                  key={index}
+                                />
+                              ))}
+                            </>
+                          ) : (
+                            <>
+                              {OrganizationHeaderButtonArray?.map(
+                                (item, index) => (
+                                  <Link
+                                    to={item?.link}
+                                    key={index}
+                                    className={classNames(
+                                      `${item?.classNames}`,
+                                      {
+                                        'bg-[#EEF4FF] border border-[#C7D7FE] !text-[#3538CD]':
+                                          navigation.pathname?.startsWith(
+                                            item?.link
+                                          ),
+                                      }
+                                    )}
+                                  >
+                                    {item?.title}
+                                  </Link>
+                                )
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            )}
+                )}
 
-            <div className='pt-12 h-full'>
-              <Routes>
-                {['/', '/organization-details'].map((eachPath, index) => (
-                  <Route
-                    path={eachPath}
-                    key={index}
-                    element={
-                      <ProtectedRoute
+                <div className='h-full'>
+                  <Routes>
+                    {['/', '/organization-details'].map((eachPath, index) => (
+                      <Route
+                        path={eachPath}
+                        key={index}
                         element={
-                          <OrganizationDetails
-                            data={data}
-                            loading={isFetching}
+                          <ProtectedRoute
+                            element={
+                              <OrganizationDetails
+                                data={data}
+                                loading={isFetching}
+                              />
+                            }
                           />
                         }
                       />
-                    }
-                  />
-                ))}
-                <Route
-                  path={'/employees'}
-                  element={
-                    <ProtectedRoute element={<OrganizationEmployees />} />
-                  }
-                />
+                    ))}
+                    <Route
+                      path={'/employees'}
+                      element={
+                        <ProtectedRoute element={<OrganizationEmployees />} />
+                      }
+                    />
 
-                <Route
-                  path={'/employee-profile'}
-                  element={<ProtectedRoute element={<OrgEmployeeProfile OrgData={data} />} />}
-                />
-              </Routes>
+                    <Route
+                      path={'/employee-profile'}
+                      element={
+                        <ProtectedRoute
+                          element={<OrgEmployeeProfile OrgData={data} />}
+                        />
+                      }
+                    />
+                    <Route
+                      path={'*'}
+                      element={
+                        <NotFound
+                          title='Page Not Found'
+                          message=''
+                          optionsButton={PageNotFoundOptionsButton}
+                        />
+                      }
+                    />
+                  </Routes>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+        {createPortal(
+          <OrgAlertModal
+            ModalInfo={alertModalInfo}
+            showAlertModal={deactivateOrganizationModal}
+            setShowAlertModal={setDeactivateOrganizationModal}
+            loading={organizationStatusLoader}
+            setLoading={setOrganizationStatusLoader}
+            handelOnClickButton={handelClickOnOrganizationStatusToggled}
+          />,
+          document.body
+        )}
+      </>
+    );
+  else {
+    return (
+      <NotFound
+        title='Organization Not Found'
+        message='We could not find any organization associated with the ID you provided. This might be due to an incorrect or outdated ID. Please double-check the ID and try again. If the issue persists, contact the system administrator or support team for assistance.'
+        optionsButton={optionsButtonArray}
+      />
+    );
+  }
 }
 
 export default ViewOrganizationPage;

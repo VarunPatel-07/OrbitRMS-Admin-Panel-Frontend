@@ -33,6 +33,7 @@ export interface InfoFieldProps {
   renderDate?: boolean;
   default_dateformat?: string;
   isLink?: boolean;
+  renderTime?: boolean;
 }
 type InterFaceModuleLabelType =
   | 'employee_general_info'

@@ -113,7 +113,7 @@ function OrgAlertModal(props: OrgManagerAlertModalProps) {
               </div>
               <div className='w-full'>
                 <p
-                  className='text-black font-inter text-base text-pretty'
+                  className='text-black font-inter text-[15px] text-pretty'
                   dangerouslySetInnerHTML={{
                     __html: ModalInfo?.alertModelInfo,
                   }}

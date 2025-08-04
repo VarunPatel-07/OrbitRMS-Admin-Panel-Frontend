@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { FaPowerOff } from 'react-icons/fa';
 import { FaRegCircleCheck } from 'react-icons/fa6';
 import { IoCloseCircleOutline, IoEye } from 'react-icons/io5';
-import { MdModeEdit } from 'react-icons/md';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 
@@ -11,15 +12,22 @@ import TableNoDataFound from '../../../common/Table/TableNoDataFound';
 import TablePagination from '../../../common/Table/TablePagination';
 import EmployeeProfilePicture from '../../../Components/EmployeeProfilePicture';
 import TableSkeletonLoader from '../../../Components/Loader/Table/TableSkeletonLoader';
+import OrgAlertModal from '../../../Components/Modal/OrgAlertModal';
 import { dropdownMenuArray, initialMetadata } from '../../../Constant/Constant';
+import { OrganizationManagerAlertModalInitialObj } from '../../../Constant/OrganizationManagerConstant';
 import { FilterFieldsTypeEnums } from '../../../enums/enums';
 // import {
 //   NotificationContext,
 //   NotificationContextApiProps,
 // } from '../../../Context/Notification/NotificationContextApi';
-import { multipleFetchApi } from '../../../Helper/api/multipleAPI';
+import {
+  multipleFetchApi,
+  multiplePutApi,
+} from '../../../Helper/api/multipleAPI';
 import { BeautifulAccountStatusRenderer } from '../../../Helper/Helper';
+import { classNames } from '../../../Helper/HelperFunction';
 import { useDebounce } from '../../../Hooks/useDebounce';
+import { OrganizationManagerAlertModalInfoType } from '../../../interface/CommonComponentProps';
 import { Column } from '../../../interface/interface';
 import {
   EmployeeEmployeeInfo,
@@ -33,6 +41,7 @@ import {
   MetaDataInterface,
   UrlEncodedFilterQueryInterface,
 } from '../../../interface/propsInterface';
+import { OrganizationEmployeeAlertModalHelper } from '../OrganizationsHelper/OrganizationEmployeeAlertModalHelper';
 import { EmployeeListingFiltersArray } from './EmployeeListingFiltersArray';
 
 function OrganizationEmployees() {
@@ -57,6 +66,23 @@ function OrganizationEmployees() {
   const [metaData, setMetaData] = useState<MetaDataInterface>(initialMetadata);
   const [recordsPerPage, setRecordsPerPage] = useState<string | number>(10);
   const [selectedPage, setSelectedPage] = useState<number>(1);
+  const [employeeStatusLoader, setEmployeeStatusLoader] =
+    useState<boolean>(false);
+  const [deactivateOrganizationModal, setDeactivateOrganizationModal] =
+    useState<boolean>(false);
+  const [alertModalInfo, setAlertModalInfo] =
+    useState<OrganizationManagerAlertModalInfoType>(
+      OrganizationManagerAlertModalInitialObj
+    );
+
+  const handelClickOnOrgPowerOff = (data: EmployeeFieldInterface) => {
+    setDeactivateOrganizationModal(!deactivateOrganizationModal);
+    const obj = OrganizationEmployeeAlertModalHelper(
+      data?.account_status,
+      data?.personal_info?.user_id
+    );
+    setAlertModalInfo(obj);
+  };
 
   //
   // ? This Are The Column Which Is Used To render The Data Dynamically From The Backend
@@ -225,16 +251,22 @@ function OrganizationEmployees() {
         return (
           <div className='w-full h-full flex items-center justify-start gap-2'>
             <button
-              className='text-black/80 p-1.5'
-              data-tooltip-id='project_status_edit_button'
-              data-tooltip-content='Edit'
-              //   onClick={() => {
-              //     navigate(
-              //       `/${organization}/employee/edit/${data?.personal_info?.user_id}`
-              //     );
-              //   }}
+              className={classNames(
+                'text-black/80 p-1.5 disabled:opacity-50 disabled:cursor-not-allowed',
+                {
+                  'text-green-700': !data?.account_status,
+                  'text-rose-600': data?.account_status,
+                }
+              )}
+              data-tooltip-id='organization_power_off_button'
+              data-tooltip-content={
+                data?.account_status
+                  ? 'Deactivate Organization'
+                  : 'Activate Organization'
+              }
+              onClick={() => handelClickOnOrgPowerOff(data)}
             >
-              <MdModeEdit className='text-[22px]' />
+              <FaPowerOff className='text-xl' />
             </button>
             <button
               className='text-black/80 p-1.5 disabled:opacity-50 disabled:cursor-not-allowed'
@@ -301,7 +333,6 @@ function OrganizationEmployees() {
   const handelApplyFilterEmployeeListing = async (
     filterArray: FilterObjectInterface[]
   ) => {
-    console.log(filterArray);
     setIsFetchingData(true);
     let queryString = '';
     if (filterArray?.length > 0) {
@@ -386,6 +417,49 @@ function OrganizationEmployees() {
     );
   };
 
+  const handelClickOnDisableEmployeeWithDebounce = useDebounce(
+    async (
+      queryString: string,
+      employee_id: string,
+      organization_id: string
+    ) => {
+      const endPointArr: endpointObject[] = [
+        {
+          endPoint: `organization/employees/disable-employee?employee_id=${employee_id}&organization_id=${organization_id}`,
+          protected: true,
+        },
+      ];
+      const response = await multiplePutApi(endPointArr);
+      const res = response[0];
+      if (!res.success) {
+        setIsFetchingData(true);
+        setAlertModalInfo(OrganizationManagerAlertModalInitialObj);
+        setDeactivateOrganizationModal(false);
+        fetchOrganizationEmployeeWithDebounce(organization_id, queryString);
+      }
+      setEmployeeStatusLoader(false);
+    },
+    100
+  );
+  const handelClickOnDisableEmployee = (id: string) => {
+    const filterQuery = queryParameter.get('filter');
+    let queryString = '';
+    if (filterQuery) {
+      const decodeQuery = decodeURIComponent(filterQuery);
+      const parsedFilter = JSON.parse(decodeQuery);
+      queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
+    }
+    setEmployeeStatusLoader(true);
+    if (organization_id) {
+      handelClickOnDisableEmployeeWithDebounce(
+        queryString,
+        id,
+        organization_id
+      );
+      return;
+    }
+  };
+
   useEffect(() => {
     if (useEffectRef.current) return;
     useEffectRef.current = true;
@@ -398,8 +472,6 @@ function OrganizationEmployees() {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
 
-      console.log(parsedFilter);
-
       setUrlDecodedFilterQuery(parsedFilter);
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
@@ -408,70 +480,84 @@ function OrganizationEmployees() {
   }, [fetchOrganizationEmployeeWithDebounce, queryParameter]);
 
   return (
-    <div className='w-full h-full px-4 2xl:px-5 pb-4 2xl:pb-5 pt-[65px]'>
-      {isInitialFetching ? (
-        <div className='w-full h-full overflow-hidden'>
-          <TableSkeletonLoader
-            tableHeaderCount={5}
-            tableValueCount={13}
-            maxHeight='calc(-315px + 100vh)'
-            showHeaderLoader={false}
-          />
-        </div>
-      ) : (
-        <>
-          <TableFilterSearchBar
-            filterColumnsArray={EmployeeListingFiltersArray}
-            handelApplyFilterFunc={handelApplyFilterEmployeeListing}
-            urlDecodedFilterQuery={urlDecodedFilterQuery}
-            classNames='rounded-t-lg'
-          />
-          {isFetchingData ? (
+    <>
+      <div className='w-full h-full px-4 2xl:px-5 pb-4 2xl:pb-5 pt-28'>
+        {isInitialFetching ? (
+          <div className='w-full h-full overflow-hidden'>
             <TableSkeletonLoader
               tableHeaderCount={5}
               tableValueCount={13}
               maxHeight='calc(-315px + 100vh)'
-              showFilterLoader={false}
               showHeaderLoader={false}
             />
-          ) : (
-            <>
-              {data?.length > 0 ? (
-                <>
-                  <Table
-                    columns={columns}
-                    data={data}
+          </div>
+        ) : (
+          <>
+            <TableFilterSearchBar
+              filterColumnsArray={EmployeeListingFiltersArray}
+              handelApplyFilterFunc={handelApplyFilterEmployeeListing}
+              urlDecodedFilterQuery={urlDecodedFilterQuery}
+              classNames='rounded-t-lg'
+            />
+            {isFetchingData ? (
+              <TableSkeletonLoader
+                tableHeaderCount={5}
+                tableValueCount={13}
+                maxHeight='calc(-315px + 100vh)'
+                showFilterLoader={false}
+                showHeaderLoader={false}
+              />
+            ) : (
+              <>
+                {data?.length > 0 ? (
+                  <>
+                    <Table
+                      columns={columns}
+                      data={data}
+                      tableWrapperClass={
+                        'overflow-auto max-h-[calc(100vh-305px)] h-full bg-white'
+                      }
+                      stickyHeaderClass='sticky top-0'
+                    />
+                    <TablePagination
+                      paginationDropDownArray={dropdownMenuArray}
+                      recordsPerPage={recordsPerPage}
+                      handelClickOnDroDownVal={handelClickOnRecordPerPage}
+                      clickOnPaginationVal={handelClickOnPaginationButtons}
+                      selectedPage={selectedPage}
+                      totalPage={metaData?.total_pages}
+                    />
+                  </>
+                ) : (
+                  <TableNoDataFound
                     tableWrapperClass={
-                      'overflow-auto max-h-[calc(100vh-310px)] h-full bg-white'
+                      'max-h-[calc(100%-50px)] h-full rounded-b-lg'
                     }
-                    stickyHeaderClass='sticky top-0'
+                    notFoundTitle={'No Employees Found'}
+                    notFoundMessage={
+                      'No matching employee found. Try refining your search or add a new employee.'
+                    }
+                    notFoundOptionsButtonsArray={[]}
                   />
-                  <TablePagination
-                    paginationDropDownArray={dropdownMenuArray}
-                    recordsPerPage={recordsPerPage}
-                    handelClickOnDroDownVal={handelClickOnRecordPerPage}
-                    clickOnPaginationVal={handelClickOnPaginationButtons}
-                    selectedPage={selectedPage}
-                    totalPage={metaData?.total_pages}
-                  />
-                </>
-              ) : (
-                <TableNoDataFound
-                  tableWrapperClass={
-                    'max-h-[calc(100%-50px)] h-full rounded-b-lg'
-                  }
-                  notFoundTitle={'No Employees Found'}
-                  notFoundMessage={
-                    'No matching employee found. Try refining your search or add a new employee.'
-                  }
-                  notFoundOptionsButtonsArray={[]}
-                />
-              )}
-            </>
-          )}
-        </>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </div>
+
+      {createPortal(
+        <OrgAlertModal
+          ModalInfo={alertModalInfo}
+          showAlertModal={deactivateOrganizationModal}
+          setShowAlertModal={setDeactivateOrganizationModal}
+          loading={employeeStatusLoader}
+          setLoading={setEmployeeStatusLoader}
+          handelOnClickButton={handelClickOnDisableEmployee}
+        />,
+        document.body
       )}
-    </div>
+    </>
   );
 }
 

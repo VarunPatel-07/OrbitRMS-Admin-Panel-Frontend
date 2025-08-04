@@ -63,17 +63,17 @@ function Notification() {
                   <div
                     key={notification.id}
                     id={notification.id}
-                    className={`bg-white shadow-[0px_0px_10px_0px_rgba(0,0,0,0.3)] rounded-md pl-3 pr-5 py-2 ${
+                    className={`bg-white shadow-[0px_0px_10px_0px_rgba(0,0,0,0.3)] rounded-md pl-3 pr-5 py-2 max-w-[400px] ${
                       getEnterAnimationClass[notification.notificationDirection]
                     }`}
                   >
                     <div className='flex items-center gap-2'>
                       {notification.success ? (
-                        <FaRegCircleCheck className='text-green-600 w-5 h-5' />
+                        <FaRegCircleCheck className='text-green-600 min-w-5 min-h-5 w-5 h-5' />
                       ) : (
-                        <IoCloseCircleOutline className='text-rose-600 w-6 h-6' />
+                        <IoCloseCircleOutline className='text-rose-600 min-w-6 min-h-6 w-6 h-6' />
                       )}
-                      <p className='text-black text-sm'>
+                      <p className='text-black text-sm text-wrap'>
                         {notification.message}
                       </p>
                     </div>

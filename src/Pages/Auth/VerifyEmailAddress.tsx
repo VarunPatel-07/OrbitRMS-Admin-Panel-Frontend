@@ -284,7 +284,7 @@ function VerifyEmailAddress() {
                 <div className='w-full'>
                   <Button
                     type='button'
-                    className='bg-[var(--them-green-color)] w-full'
+                    className='bg-[var(--them-green-color)] w-full py-2.5'
                     onClick={handelSubmitButton}
                     disabled={loading}
                   >
@@ -298,7 +298,7 @@ function VerifyEmailAddress() {
                 <div className='w-full'>
                   <Button
                     type='button'
-                    className='bg-transparent border border-black/50 text-black w-full text-base group'
+                    className='bg-transparent border border-black/50 text-black w-full text-base group py-2.5'
                     onClick={handelResendMail}
                     disabled={
                       (Number.isFinite(countDown) && countDown > 0) ||

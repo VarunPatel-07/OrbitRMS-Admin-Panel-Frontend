@@ -14,6 +14,7 @@ import {
   SearchBarFilterOptionsInterface,
   UrlEncodedFilterQueryInterface,
 } from '../../../interface/propsInterface';
+import FilterInputDateSelector from './FilterInputHelperFunctions/FilterInputDateSelector';
 import FilterInputMainFilterDropdown from './FilterInputHelperFunctions/FilterInputMainFilterDropdown';
 import FiltersOperatorDropdown from './FilterInputHelperFunctions/FiltersOperatorDropdown';
 import FiltersOptionsDropdown from './FilterInputHelperFunctions/FiltersOptionsDropdown';
@@ -234,11 +235,29 @@ function FilterInput({
             });
           });
         } else {
-          modelValueArray.push({
-            label: arrayItem?.value,
-            value: arrayItem?.value,
-            type: FilterFieldsTypeEnums[2],
-          });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          let value: any = null;
+          let isJson = false;
+
+          try {
+            value = JSON.parse(arrayItem?.value);
+            isJson = typeof value === 'object' && value !== null;
+          } catch {
+            isJson = false;
+          }
+          if (isJson) {
+            modelValueArray.push({
+              label: 'date',
+              value: arrayItem?.value,
+              type: FilterFieldsTypeEnums[2],
+            });
+          } else {
+            modelValueArray.push({
+              label: arrayItem?.value,
+              value: arrayItem?.value,
+              type: FilterFieldsTypeEnums[2],
+            });
+          }
         }
 
         const obj: FilterObjectInterface = {
@@ -333,6 +352,21 @@ function FilterInput({
                 showFilterDropDownMenu={showFilterDropDownMenu}
                 searchInputValue={searchInputValue}
                 enterClickHandler={handelSelectedFilterOnClickOfEnter}
+              />
+            )}
+
+          {currentFilterId?.trim() !== '' &&
+            filterColumnsArray?.find((item) => item?.id === currentFilterId)
+              ?.optionType === 'date' && (
+              <FilterInputDateSelector
+                setShowCurrentOptionDropdown={setShowCurrentOptionDropdown}
+                showCurrentOptionDropdown={showCurrentOptionDropdown}
+                currentFilterId={currentFilterId}
+                filterObject={filterObject}
+                setFilterObject={setFilterObject}
+                updateFilterObject={updateFilterObject}
+                updateFinalFilterQuery={updateFinalFilterQuery}
+                setInputValue={setInputValue}
               />
             )}
         </div>

@@ -14,6 +14,8 @@ import { getDataFromLocalStorage } from './Helper/HelperFunction';
 import ProtectedRoute from './Helper/ProtectedRoute';
 import { useDebounce } from './Hooks/useDebounce';
 import Dashboard from './Pages/Dashboard/Dashboard';
+import MaintenanceMode from './Pages/MaintenanceMode/MaintenanceModePages/MaintenanceMode';
+import MaintenanceModeHistory from './Pages/MaintenanceMode/MaintenanceModePages/MaintenanceModeHistory';
 import OrganizationManager from './Pages/OrganizationManager/OrganizationManager';
 import ViewOrganizationPage from './Pages/ViewOrganization/ViewOrganizationPage';
 
@@ -77,6 +79,17 @@ function App() {
                     path='/organizations/:id/*'
                     element={
                       <ProtectedRoute element={<ViewOrganizationPage />} />
+                    }
+                  />
+                  <Route
+                    path='/maintenance-mode'
+                    element={<ProtectedRoute element={<MaintenanceMode />} />}
+                  />
+                  \
+                  <Route
+                    path='/maintenance-mode/history'
+                    element={
+                      <ProtectedRoute element={<MaintenanceModeHistory />} />
                     }
                   />
                 </Routes>

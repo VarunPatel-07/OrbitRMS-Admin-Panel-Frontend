@@ -89,6 +89,8 @@ const FiltersOptionsDropdown = React.memo(function FiltersOptionsDropdown(
     }
   };
 
+
+
   const handelOptionsClick = useCallback(
     (data: ModuleValueInterface) => {
       setShowCurrentOperatorDropdown(false);
@@ -99,35 +101,47 @@ const FiltersOptionsDropdown = React.memo(function FiltersOptionsDropdown(
       );
 
       if (currentModule?.optionType === 'multi-select') {
-        const isExist = Boolean(
-          filterObject.find((object) =>
-            object?.moduleValue?.find(
-              (entity) =>
-                entity?.label?.toLocaleLowerCase() ===
-                data.label?.toLocaleLowerCase()
-            )
-          )
-        );
-        if (!isExist) {
+        if (memoizedFilteredOptions?.length === 1) {
           updateFilterObject(
             { label: data.label, value: data.value, type: data?.type },
-            currentFilterId
+            currentFilterId,
+            (updatedArray) => {
+              updateFinalFilterQuery(updatedArray);
+              setInputValue('');
+            }
           );
         } else {
-          setFilterObject((pervArray) => {
-            return pervArray?.map((arrayObj) => {
-              if (arrayObj?.id === currentFilterId) {
-                const updatedModuleValue = arrayObj?.moduleValue?.filter(
-                  (moduleValue) =>
-                    moduleValue?.label?.toLocaleLowerCase() !==
-                    data?.label?.toLocaleLowerCase()
-                );
+          const isExist = Boolean(
+            filterObject.find((object) =>
+              object?.moduleValue?.find(
+                (entity) =>
+                  entity?.label?.toLocaleLowerCase() ===
+                  data.label?.toLocaleLowerCase()
+              )
+            )
+          );
 
-                return { ...arrayObj, moduleValue: updatedModuleValue };
-              }
-              return arrayObj;
+          if (!isExist) {
+            updateFilterObject(
+              { label: data.label, value: data.value, type: data?.type },
+              currentFilterId
+            );
+          } else {
+            setFilterObject((pervArray) => {
+              return pervArray?.map((arrayObj) => {
+                if (arrayObj?.id === currentFilterId) {
+                  const updatedModuleValue = arrayObj?.moduleValue?.filter(
+                    (moduleValue) =>
+                      moduleValue?.label?.toLocaleLowerCase() !==
+                      data?.label?.toLocaleLowerCase()
+                  );
+
+                  return { ...arrayObj, moduleValue: updatedModuleValue };
+                }
+                return arrayObj;
+              });
             });
-          });
+          }
         }
       } else if (currentModule?.optionType === 'select') {
         updateFilterObject(

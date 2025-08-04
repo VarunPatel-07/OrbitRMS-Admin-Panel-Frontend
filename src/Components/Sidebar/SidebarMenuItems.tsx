@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { FaWrench } from 'react-icons/fa';
 import { LuBuilding2 } from 'react-icons/lu';
 import { MdSpaceDashboard } from 'react-icons/md';
 
@@ -35,5 +36,15 @@ export const SidebarMenuItems = (
     protected: true,
     showToolTip: true,
     ToolTipValue: 'Organization Manager',
+  },
+  {
+    id: 3,
+    name: 'Maintenance Mode',
+    icon: <FaWrench className='w-6 h-6' />,
+    label: 'data-tooltip-maintenance-mode',
+    link: `/${organization}/maintenance-mode`,
+    protected: true,
+    showToolTip: true,
+    ToolTipValue: 'Maintenance Mode',
   },
 ];

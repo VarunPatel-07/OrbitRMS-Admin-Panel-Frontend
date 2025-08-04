@@ -6,7 +6,7 @@ import { classNames, formateDate } from '../../../Helper/HelperFunction';
 import { ViewOrgSidebarPropsInterface } from '../../../interface/OrganizationManager';
 
 function OrganizationSidebar(props: ViewOrgSidebarPropsInterface) {
-  const { loading, data } = props;
+  const { loading, data, handelClickOnOrgPowerOff } = props;
 
   return (
     <div className='w-full h-full pt-10'>
@@ -53,6 +53,7 @@ function OrganizationSidebar(props: ViewOrgSidebarPropsInterface) {
                         data?.status,
                     }
                   )}
+                  onClick={() => handelClickOnOrgPowerOff(data)}
                 >
                   {data?.status
                     ? 'Disable Organization'

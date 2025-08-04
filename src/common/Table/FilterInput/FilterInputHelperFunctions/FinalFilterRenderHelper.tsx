@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IoClose } from 'react-icons/io5';
 
 import { FilterFieldsTypeEnums } from '../../../../enums/enums';
-import { classNames } from '../../../../Helper/HelperFunction';
+import {
+  classNames,
+  formateDate,
+  isValidDateString,
+} from '../../../../Helper/HelperFunction';
 import { FilterObjectInterface } from '../../../../interface/propsInterface';
 
 function FinalFilterRenderHelper({
@@ -21,21 +26,102 @@ function FinalFilterRenderHelper({
           className={`${background} p-1 flex items-center justify-center rounded-md gap-2`}
         >
           <div className='flex items-center gap-1 h-full'>
-            {arrayQuery?.moduleValue?.map((query, id) => (
-              <span
-                key={`query-${id}`}
-                className={classNames(
-                  'bg-white border border-slate-300 rounded-md px-2 text-sm h-full flex items-center justify-center text-nowrap',
-                  {
-                    'font-medium text-black':
-                      query?.type === FilterFieldsTypeEnums[0],
-                    'text-black/80': query?.type !== FilterFieldsTypeEnums[0],
-                  }
-                )}
-              >
-                {query.value}
-              </span>
-            ))}
+            {arrayQuery?.moduleValue?.map((query, id) => {
+              if (query.label === 'date' || isValidDateString(query?.label)) {
+                let value: any = null;
+                let isJson = false;
+
+                try {
+                  value = JSON.parse(query?.value);
+                  isJson = typeof value === 'object' && value !== null;
+                } catch {
+                  isJson = false;
+                }
+
+                if (isJson) {
+                  return (
+                    <span
+                      key={`query-${id}`}
+                      className='flex items-center gap-1'
+                    >
+                      <span
+                        className={classNames(
+                          'bg-white border border-slate-300 rounded-md px-2 text-sm h-full flex items-center justify-center text-nowrap',
+                          {
+                            'font-medium text-black':
+                              query?.type === FilterFieldsTypeEnums[0],
+                            'text-black/80':
+                              query?.type !== FilterFieldsTypeEnums[0],
+                          }
+                        )}
+                      >
+                        {formateDate(value.start_date, 'DD/MM/YYYY', false)}
+                      </span>
+                      <span
+                        className={classNames(
+                          'bg-white border border-slate-300 rounded-md px-2 text-sm h-full flex items-center justify-center text-nowrap',
+                          {
+                            'font-medium text-black':
+                              query?.type === FilterFieldsTypeEnums[0],
+                            'text-black/80':
+                              query?.type !== FilterFieldsTypeEnums[0],
+                          }
+                        )}
+                      >
+                        To
+                      </span>
+                      <span
+                        className={classNames(
+                          'bg-white border border-slate-300 rounded-md px-2 text-sm h-full flex items-center justify-center text-nowrap',
+                          {
+                            'font-medium text-black':
+                              query?.type === FilterFieldsTypeEnums[0],
+                            'text-black/80':
+                              query?.type !== FilterFieldsTypeEnums[0],
+                          }
+                        )}
+                      >
+                        {formateDate(value.end_date, 'DD/MM/YYYY', false)}
+                      </span>
+                    </span>
+                  );
+                } else {
+                  return (
+                    <span
+                      key={`query-${id}`}
+                      className={classNames(
+                        'bg-white border border-slate-300 rounded-md px-2 text-sm h-full flex items-center justify-center text-nowrap',
+                        {
+                          'font-medium text-black':
+                            query?.type === FilterFieldsTypeEnums[0],
+                          'text-black/80':
+                            query?.type !== FilterFieldsTypeEnums[0],
+                        }
+                      )}
+                    >
+                      {formateDate(query?.value, 'DD/MM/YYYY', false)}
+                    </span>
+                  );
+                }
+              } else {
+                return (
+                  <span
+                    key={`query-${id}`}
+                    className={classNames(
+                      'bg-white border border-slate-300 rounded-md px-2 text-sm h-full flex items-center justify-center text-nowrap',
+                      {
+                        'font-medium text-black':
+                          query?.type === FilterFieldsTypeEnums[0],
+                        'text-black/80':
+                          query?.type !== FilterFieldsTypeEnums[0],
+                      }
+                    )}
+                  >
+                    {query.value}
+                  </span>
+                );
+              }
+            })}
           </div>
           {handelClickOnDeleteBtn && (
             <button onClick={() => handelClickOnDeleteBtn(arrayQuery)}>

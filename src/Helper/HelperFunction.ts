@@ -155,7 +155,7 @@ export const formateDate = (
   default_dateformat: string,
   showTime: boolean = true
 ): string => {
-  const date = new Date(UTCString + 'Z');
+  const date = new Date(UTCString?.endsWith('Z') ? UTCString : UTCString + 'Z');
   const year = date.getFullYear();
   const twoDigitYear = year % 100;
   const month = date.getMonth(); // 0-based
@@ -260,4 +260,67 @@ export const NormalizeStringifiedArray = (value: string) => {
   } catch {
     return null;
   }
+};
+
+export const isRichTextEditorIsEmpty = (htmlString: string) => {
+  const text = htmlString
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, '')
+    .replace(/"/g, '')
+    .trim();
+
+  return text === '';
+};
+
+export const differenceBetweenDates = (next_date: string) => {
+  const current_date = new Date();
+  const nextDate = getUTCDateFormIsoString(next_date);
+
+  return Math.abs(current_date.getTime() - nextDate.getTime()) / (1000 * 60);
+};
+
+export const isValidDateString = (dateString: string) => {
+  const date = new Date(dateString);
+  return !isNaN(date.getTime());
+};
+
+export const getUTCDateFormIsoString = (dateString: string): Date => {
+  return new Date(dateString?.endsWith('Z') ? dateString : dateString + 'Z');
+};
+
+export const compareTwoNestedObject = (objOne: any, objTwo: any): boolean => {
+  if (objOne === objTwo) return true;
+
+  if (
+    typeof objOne !== 'object' ||
+    typeof objTwo !== 'object' ||
+    objOne == null ||
+    objTwo == null
+  )
+    return false;
+
+  const objOneKeys = Object.keys(objOne);
+  const objTwoKeys = Object.keys(objTwo);
+
+  if (objOneKeys.length !== objTwoKeys.length) return false;
+
+  for (const key of objOneKeys) {
+    if (!objTwoKeys.includes(key)) return false;
+    const valOne = objOne[key];
+    const valTwo = objTwo[key];
+
+    const areObjects =
+      typeof valOne === 'object' &&
+      valOne !== null &&
+      typeof valTwo === 'object' &&
+      valTwo !== null;
+
+    if (areObjects) {
+      if (!compareTwoNestedObject(valOne, valTwo)) return false;
+    } else {
+      if (valOne !== valTwo) return false;
+    }
+  }
+
+  return true;
 };

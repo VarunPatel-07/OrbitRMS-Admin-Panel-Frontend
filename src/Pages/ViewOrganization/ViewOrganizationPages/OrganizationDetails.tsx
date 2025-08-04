@@ -314,7 +314,7 @@ function OrganizationDetails(props: OrganizationDetailsPropsInterface) {
     },
   ];
   return (
-    <div className='w-full h-[calc(100vh-120px)] overflow-auto hide-scrollbar pt-[60px] px-5'>
+    <div className='w-full h-[calc(100vh-60px)] overflow-auto hide-scrollbar px-5 pt-28'>
       {loading ? (
         <OrganizationSettingLoader />
       ) : (
