@@ -22,7 +22,7 @@ export interface MaintenanceModeAlertModalInterface {
   handelClickOnCancelButton: () => void;
   loading: boolean;
   showReasonField: boolean;
-  handelScheduleMaintenanceMode: () => void;
+  handelScheduleMaintenanceMode: (type: 'scheduled' | 'cancelling') => void;
   scheduledMaintenanceStartEndDates: scheduledMaintenanceStartEndDatesInterface;
   setScheduledMaintenanceStartEndDates: React.Dispatch<
     SetStateAction<scheduledMaintenanceStartEndDatesInterface>
@@ -35,10 +35,17 @@ export interface MaintenanceModeFormDataInterface {
   message: string;
   updated_at: string;
   updated_by: string;
+  scheduler_info: {
+    started_at: string;
+    started_by: string;
+    ended_at: string;
+    ended_by: string;
+    id: string;
+  };
 }
 
 export interface MaintenanceModeModalInfo {
-  status: 'active' | 'inActive' | 'scheduled';
+  status: 'active' | 'inActive' | 'scheduled' | 'cancelling';
   protected: boolean;
   alertModalTitle: string;
   alertModelInfo: string;
@@ -63,6 +70,8 @@ export interface MaintenanceModeHistoryInterface {
   status: 'scheduled' | 'active' | 'completed' | 'cancelled';
   type: 'manual' | 'scheduled';
   cancellation_reason: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface MaintenanceModeHistoryDetailsInterface {

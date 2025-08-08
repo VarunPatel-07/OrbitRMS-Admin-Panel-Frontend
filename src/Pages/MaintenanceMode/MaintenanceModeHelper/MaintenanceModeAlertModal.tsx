@@ -54,15 +54,32 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
   ) => {
     if (!date) return;
 
-    // Update state
-    setScheduledMaintenanceStartEndDates((prevData) => ({
-      ...prevData,
-      [module_name]: date,
-    }));
+    setScheduledMaintenanceStartEndDates((prevData) => {
+      if (module_name === 'started_at') {
+        const newEndDate = new Date(date);
+        newEndDate.setHours(newEndDate.getHours() + 1);
+
+        return {
+          ...prevData,
+          started_at: date,
+          ended_at: newEndDate,
+        };
+      }
+
+      return {
+        ...prevData,
+        [module_name]: new Date(date),
+      };
+    });
   };
 
   const getMinimumTime = (type: 'started_at' | 'ended_at') => {
     const now = new Date();
+
+    // const currentDate = scheduledMaintenanceStartEndDates[type]
+    //   ? new Date(scheduledMaintenanceStartEndDates[type])
+    //   : now;
+
     const selected = scheduledMaintenanceStartEndDates[type]
       ? new Date(scheduledMaintenanceStartEndDates[type])
       : now;
@@ -204,7 +221,13 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
                     datePickerPosition={'left-start'}
                     showError={showError}
                     showTimeSelect
-                    minimumDate={new Date()}
+                    minimumDate={
+                      scheduledMaintenanceStartEndDates?.started_at
+                        ? new Date(
+                            scheduledMaintenanceStartEndDates?.started_at
+                          )
+                        : new Date()
+                    }
                     minTime={getMinimumTime('ended_at')}
                     maxTime={getMaximumTime('ended_at')}
                     errorMessage={
@@ -216,11 +239,15 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
                 </div>
               )}
 
-              {showReasonField && (
+              {(showReasonField || ModalInfo?.status === 'cancelling') && (
                 <div className='w-full'>
                   <TextArea
                     name='reason'
-                    labelFieldName='Reason for Activation'
+                    labelFieldName={
+                      ModalInfo?.status === 'cancelling'
+                        ? 'Reason for Cancellation'
+                        : 'Reason for Activation'
+                    }
                     isRequiredField
                     rows={3}
                     value={maintenanceModeReason}
@@ -244,20 +271,35 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
                   >
                     Cancel
                   </Button>
-                  {ModalInfo?.status == 'scheduled' ? (
+                  {ModalInfo?.status == 'scheduled' ||
+                  ModalInfo?.status == 'cancelling' ? (
                     <Button
                       type='button'
-                      className='text-base px-16 py-2 font-medium rounded-lg mx-auto text-white w-full bg-[var(--them-green-light-color)]'
-                      onClick={handelScheduleMaintenanceMode}
+                      className='text-base px-5 py-2 font-medium rounded-lg mx-auto text-white w-full bg-[var(--them-green-light-color)]'
+                      onClick={() =>
+                        handelScheduleMaintenanceMode(
+                          ModalInfo?.status as 'scheduled' | 'cancelling'
+                        )
+                      }
                       disabled={loading}
                     >
                       {loading ? (
-                        <Loader loaderText='Scheduling...' />
+                        <Loader
+                          loaderText={
+                            ModalInfo?.status === 'cancelling'
+                              ? 'Cancelling...'
+                              : 'Scheduling...'
+                          }
+                        />
+                      ) : ModalInfo?.status === 'cancelling' ? (
+                        'Confirm Cancellation'
                       ) : (
                         'Schedule'
                       )}
                     </Button>
-                  ) : (
+                  ) : null}
+                  {ModalInfo?.status === 'active' ||
+                  ModalInfo?.status === 'inActive' ? (
                     <Button
                       type='button'
                       className={classNames(
@@ -285,7 +327,7 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
                         'Activate'
                       )}
                     </Button>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>

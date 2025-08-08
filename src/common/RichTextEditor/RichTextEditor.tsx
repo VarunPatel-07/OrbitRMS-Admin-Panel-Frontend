@@ -144,7 +144,7 @@ function RichTextEditor(props: RichTextEditorInterface) {
     editorProps: {
       attributes: {
         class:
-          'text-black rounded-lg px-3 py-1.5 outline-none min-h-[300px] rounded-t-none border-t-0 outline-t-none',
+          'text-black rounded-lg px-3 py-1.5 outline-none min-h-[320px] rounded-t-none border-t-0 outline-t-none',
       },
     },
     onUpdate: ({ editor }) => {

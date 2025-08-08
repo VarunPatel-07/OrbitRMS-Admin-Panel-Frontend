@@ -40,45 +40,6 @@ function EditScheduledMaintenanceMode(
     useState<MaintenanceModeHistoryInterface | null>(null);
 
   const boxRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handelClickOutSideTheBox = (event: MouseEvent) => {
-      if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
-        setShowEditModal(false);
-      }
-    };
-    document.addEventListener('mousedown', handelClickOutSideTheBox);
-    return () => {
-      document.removeEventListener('mousedown', handelClickOutSideTheBox);
-    };
-  }, [setShowEditModal]);
-
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-
-    if (showEditModal) {
-      setRenderComponent(true); // Mount modal
-
-      // Trigger show animation slightly later
-      timeout = setTimeout(() => {
-        setShowModalAnimation(true);
-      }, 100); // Small delay for transition to kick in
-    } else {
-      setShowModalAnimation(false); // Start hide animation
-
-      // After animation duration, unmount the modal
-      timeout = setTimeout(() => {
-        setRenderComponent(false);
-      }, 500); // Match with your CSS `duration-300`
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [showEditModal]);
-
-  useEffect(() => {
-    if (data && !editData) setEditData(data);
-  }, [data, editData]);
 
   const handelClickOnDate = (
     date: Date | null,
@@ -88,13 +49,49 @@ function EditScheduledMaintenanceMode(
 
     if (setEditData)
       setEditData((pervData) => {
-        if (!pervData) return pervData;
+        if (!pervData) return null;
+        if (module_name === 'started_at') {
+          const newEndDate = new Date(date);
+          newEndDate.setHours(newEndDate.getHours() + 1);
+
+          return {
+            ...pervData,
+            started_at: date?.toISOString(),
+            ended_at: newEndDate?.toISOString(),
+          };
+        }
+
         return {
           ...pervData,
-          [module_name]: date.toISOString(),
+          [module_name]: new Date(date)?.toISOString(),
         };
       });
   };
+
+  // const handelClickOnDate = (
+  //   date: Date | null,
+  //   module_name: 'started_at' | 'ended_at'
+  // ) => {
+  //   if (!date) return;
+
+  //   setScheduledMaintenanceStartEndDates((prevData) => {
+  //     if (module_name === 'started_at') {
+  //       const newEndDate = new Date(date);
+  //       newEndDate.setHours(newEndDate.getHours() + 1);
+
+  //       return {
+  //         ...prevData,
+  //         started_at: date,
+  //         ended_at: newEndDate,
+  //       };
+  //     }
+
+  //     return {
+  //       ...prevData,
+  //       [module_name]: new Date(date),
+  //     };
+  //   });
+  // };
 
   const getMinimumTime = (type: 'started_at' | 'ended_at') => {
     const now = getUTCDateFormIsoString(data[type]);
@@ -141,7 +138,11 @@ function EditScheduledMaintenanceMode(
             datePickerPosition={'bottom'}
             showError={showError}
             showTimeSelect
-            minimumDate={new Date()}
+            minimumDate={
+              editData?.started_at
+                ? getUTCDateFormIsoString(editData?.started_at)
+                : new Date()
+            }
             disabled={differenceBetweenDates(data?.started_at) <= 30}
             maxTime={getMinimumTime('started_at')}
             minTime={getMaximumTime('started_at')}
@@ -162,7 +163,11 @@ function EditScheduledMaintenanceMode(
             datePickerPosition={'bottom'}
             showError={showError}
             showTimeSelect
-            minimumDate={new Date()}
+            minimumDate={
+              editData?.ended_at
+                ? getUTCDateFormIsoString(editData?.ended_at)
+                : new Date()
+            }
             minTime={getMinimumTime('ended_at')}
             maxTime={getMaximumTime('ended_at')}
             disabled={differenceBetweenDates(data?.ended_at) <= 30}
@@ -283,6 +288,46 @@ function EditScheduledMaintenanceMode(
       </>
     );
   };
+
+  useEffect(() => {
+    const handelClickOutSideTheBox = (event: MouseEvent) => {
+      if (boxRef.current && !boxRef.current.contains(event.target as Node)) {
+        setShowEditModal(false);
+      }
+    };
+    document.addEventListener('mousedown', handelClickOutSideTheBox);
+    return () => {
+      document.removeEventListener('mousedown', handelClickOutSideTheBox);
+    };
+  }, [setShowEditModal]);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (showEditModal) {
+      setRenderComponent(true); // Mount modal
+
+      // Trigger show animation slightly later
+      timeout = setTimeout(() => {
+        setShowModalAnimation(true);
+      }, 100); // Small delay for transition to kick in
+    } else {
+      setShowModalAnimation(false); // Start hide animation
+
+      // After animation duration, unmount the modal
+      timeout = setTimeout(() => {
+        setRenderComponent(false);
+      }, 500); // Match with your CSS `duration-300`
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [showEditModal]);
+
+  useEffect(() => {
+    if (data && !editData) setEditData(data);
+  }, [data, editData]);
 
   if (renderComponent)
     return (

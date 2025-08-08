@@ -176,7 +176,7 @@ function MaintenanceModeHistoryDetails(
                     Message
                   </span>
                   <div
-                    className='text-sm lg:text-base font-inter font-medium text-black/65 inline-block capitalize w-full p-3 border border-black/20 rounded-md'
+                    className='text-sm lg:text-base font-inter font-medium text-black inline-block capitalize w-full p-3 border border-black/20 rounded-md'
                     dangerouslySetInnerHTML={{ __html: data?.message }}
                   ></div>
                 </div>
