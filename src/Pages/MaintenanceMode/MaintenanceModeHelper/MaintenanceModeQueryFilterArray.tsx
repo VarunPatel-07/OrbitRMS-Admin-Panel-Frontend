@@ -59,6 +59,11 @@ export const MaintenanceModeQueryFilterArray: SearchBarFilterOptionsInterface[] 
           value: 'Completed',
           type: FilterFieldsTypeEnums[2],
         },
+        {
+          label: 'cancelled',
+          value: 'Cancelled',
+          type: FilterFieldsTypeEnums[2],
+        },
       ],
     },
     {

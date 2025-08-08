@@ -157,12 +157,20 @@ function MaintenanceModeHistory() {
       isSortable: true,
       isSticky: false,
       canToggleVisibility: true,
-      renderContent: (data: string) => (
-        <div
-          className='w-fit text-ellipsis overflow-hidden line-clamp-4 font-inter text-base text-black'
-          dangerouslySetInnerHTML={{ __html: data }}
-        ></div>
-      ),
+      renderContent: (data: string) => {
+        const sanitizedData = data
+          .replace(/style="[^"]*"/g, '') // remove inline styles
+          .replace(/<h1>/g, '<div>')
+          .replace(/<\/h1>/g, '</div>');
+        return (
+          <div className='line-clamp-4 overflow-hidden min-w-[250px] text-ellipsis'>
+            <div
+              className='prose prose-sm font-inter text-black !text-base'
+              dangerouslySetInnerHTML={{ __html: sanitizedData }}
+            />
+          </div>
+        );
+      },
     },
 
     {
@@ -218,6 +226,36 @@ function MaintenanceModeHistory() {
         <div className='w-fit'>
           <p className='w-full text-ellipsis overflow-hidden line-clamp-4 font-inter text-base text-black'>
             {data}
+          </p>
+        </div>
+      ),
+    },
+    {
+      key: 'created_at',
+      title: 'Created On',
+      isSortable: true,
+      isSticky: false,
+      canToggleVisibility: true,
+
+      renderContent: (data: string) => (
+        <div className='w-fit min-w-[200px]'>
+          <p className='w-full text-ellipsis overflow-hidden line-clamp-4 font-inter text-base text-black'>
+            {data ? formateDate(data, 'DD/MM/YYYY', false) : '-'}
+          </p>
+        </div>
+      ),
+    },
+    {
+      key: 'updated_at',
+      title: 'Updated On',
+      isSortable: true,
+      isSticky: false,
+      canToggleVisibility: true,
+
+      renderContent: (data: string) => (
+        <div className='w-fit min-w-[200px]'>
+          <p className='w-full text-ellipsis overflow-hidden line-clamp-4 font-inter text-base text-black'>
+            {data ? formateDate(data, 'DD/MM/YYYY', false) : '-'}
           </p>
         </div>
       ),

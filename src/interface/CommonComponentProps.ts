@@ -151,3 +151,10 @@ export interface commonDatePickerProps {
   maxTime?: Date | undefined;
   minTime?: Date | undefined;
 }
+
+export interface RichTextEditorMenuProps {
+  icon?: React.ReactElement;
+  name?: string;
+  onClick: () => void;
+  isActive: boolean;
+}

@@ -1,40 +1,65 @@
-import React, { useRef } from 'react';
-import {
-  MdFormatAlignCenter,
-  MdFormatAlignJustify,
-  MdFormatAlignLeft,
-  MdFormatAlignRight,
-} from 'react-icons/md';
+import { useEffect, useRef, useState } from 'react';
+import { BiFontFamily } from 'react-icons/bi';
 import { Editor } from '@tiptap/react';
 import tippy from 'tippy.js';
 
 import './editor.css';
 
-import { AiFillHighlight } from 'react-icons/ai';
-import { FaBold, FaItalic, FaLink, FaStrikethrough } from 'react-icons/fa';
+import { FaLink } from 'react-icons/fa';
 import { FaLinkSlash } from 'react-icons/fa6';
-import {
-  PiTextHFiveBold,
-  PiTextHFourBold,
-  PiTextHOneBold,
-  PiTextHSixBold,
-  PiTextHThreeBold,
-  PiTextHTwoBold,
-} from 'react-icons/pi';
+import { RiFontSizeAi } from 'react-icons/ri';
 import { Instance } from 'tippy.js';
 
 import { classNames } from '../../Helper/HelperFunction';
-
-interface RichTextEditorMenuProps {
-  icon: React.ReactElement;
-  onClick: () => void;
-  isActive: boolean;
-}
+import { RichTextEditorMenuProps } from '../../interface/CommonComponentProps';
+import {
+  EditorMenuDefaultFontFamilyArray,
+  EditorMenuDefaultHeadingItemArray,
+  EditorMenuDefaultMenuItem,
+} from './EditorMenuItemArray';
 
 function MenuBar({ editor }: { editor: Editor | null }) {
   const linkButtonRef = useRef<HTMLButtonElement>(null);
   const tippyInstance = useRef<Instance | null>(null);
 
+  const FontFamilyDropDownRef = useRef<HTMLDivElement>(null);
+  const FontTextDropDownArray = useRef<HTMLDivElement>(null);
+
+  // State Definition For The FontFamily Drop Down
+  const [showFontFamilyDropDown, setShowFontFamilyDropDown] =
+    useState<boolean>(false);
+  const [showFontTextDropDown, setShowFontTextDropDown] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    const handelClickOutSideTheBox = (event: MouseEvent) => {
+      if (
+        FontFamilyDropDownRef.current &&
+        !FontFamilyDropDownRef.current.contains(event.target as Node)
+      ) {
+        setShowFontFamilyDropDown(false);
+      }
+    };
+    document.addEventListener('mousedown', handelClickOutSideTheBox);
+    return () => {
+      document.removeEventListener('mousedown', handelClickOutSideTheBox);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handelClickOutSideTheBox = (event: MouseEvent) => {
+      if (
+        FontTextDropDownArray.current &&
+        !FontTextDropDownArray.current.contains(event.target as Node)
+      ) {
+        setShowFontTextDropDown(false);
+      }
+    };
+    document.addEventListener('mousedown', handelClickOutSideTheBox);
+    return () => {
+      document.removeEventListener('mousedown', handelClickOutSideTheBox);
+    };
+  }, []);
   if (!editor) return null;
 
   const handelSetLinkFunction = () => {
@@ -149,121 +174,163 @@ function MenuBar({ editor }: { editor: Editor | null }) {
     });
   };
 
-  const menuItems: RichTextEditorMenuProps[] = [
-    {
-      icon: <FaBold className='text-lg' />,
-      onClick: () => editor.chain().focus().toggleBold().run(),
-      isActive: editor.isActive('bold'),
-    },
-    {
-      icon: <FaItalic className='text-lg' />,
-      onClick: () => editor.chain().focus().toggleItalic().run(),
-      isActive: editor.isActive('italic'),
-    },
-    {
-      icon: <FaStrikethrough className='text-lg' />,
-      onClick: () => editor.chain().focus().toggleStrike().run(),
-      isActive: editor.isActive('strike'),
-    },
-    {
-      icon: <AiFillHighlight className='text-lg' />,
-      onClick: () => editor.chain().focus().toggleHighlight().run(),
-      isActive: editor.isActive('highlight'),
-    },
-    {
-      icon: <MdFormatAlignLeft className='text-lg' />,
-      onClick: () => editor.chain().focus().setTextAlign('left').run(),
-      isActive: editor.isActive({ textAlign: 'left' }),
-    },
-    {
-      icon: <MdFormatAlignCenter className='text-lg' />,
-      onClick: () => editor.chain().focus().setTextAlign('center').run(),
-      isActive: editor.isActive({ textAlign: 'center' }),
-    },
-    {
-      icon: <MdFormatAlignRight className='text-lg' />,
-      onClick: () => editor.chain().focus().setTextAlign('right').run(),
-      isActive: editor.isActive({ textAlign: 'right' }),
-    },
-    {
-      icon: <MdFormatAlignJustify className='text-lg' />,
-      onClick: () => editor.chain().focus().setTextAlign('justify').run(),
-      isActive: editor.isActive({ textAlign: 'justify' }),
-    },
-    {
-      icon: <PiTextHOneBold className='text-xl' />,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-      isActive: editor.isActive('heading', { level: 1 }) ?? false,
-    },
-    {
-      icon: <PiTextHTwoBold className='text-xl' />,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-      isActive: editor.isActive('heading', { level: 2 }) ?? false,
-    },
-    {
-      icon: <PiTextHThreeBold className='text-xl' />,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-      isActive: editor.isActive('heading', { level: 3 }) ?? false,
-    },
-    {
-      icon: <PiTextHFourBold className='text-xl' />,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 4 }).run(),
-      isActive: editor.isActive('heading', { level: 4 }) ?? false,
-    },
-    {
-      icon: <PiTextHFiveBold className='text-xl' />,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 5 }).run(),
-      isActive: editor.isActive('heading', { level: 5 }) ?? false,
-    },
-    {
-      icon: <PiTextHSixBold className='text-xl' />,
-      onClick: () => editor.chain().focus().toggleHeading({ level: 6 }).run(),
-      isActive: editor.isActive('heading', { level: 6 }) ?? false,
-    },
-  ];
+  const MenuItems = EditorMenuDefaultMenuItem(editor);
+  const HeadingItemArray = EditorMenuDefaultHeadingItemArray(editor);
+  const FontFamilyArray = EditorMenuDefaultFontFamilyArray(editor);
+
+  const RenderMenuItemButton = (
+    index: number,
+    item: RichTextEditorMenuProps,
+    className?: string
+  ) => {
+    return (
+      <button
+        key={index}
+        onClick={item.onClick}
+        className={classNames(
+          `p-2 border border-black/20 rounded-md transition-all ${className}`,
+          {
+            'bg-black text-white': item?.isActive,
+            'hover:bg-black/10 text-black': !item?.isActive,
+          }
+        )}
+      >
+        {item.icon ? item?.icon : item?.name}
+      </button>
+    );
+  };
+
+  const fontSizesArray = Array.from({ length: 100 }, (_, i) => `${1 + i}px`);
 
   return (
     <div className='control-group'>
-      <div className='button-group flex flex-wrap gap-2 border-b border-b-black/20 p-2 rounded-t-lg'>
-        {menuItems.map((item, index) => (
+      <div className='button-group flex flex-wrap items-center justify-start gap-2 border-b border-b-black/20 p-2 rounded-t-lg'>
+        {[...MenuItems, ...HeadingItemArray].map((item, index) =>
+          RenderMenuItemButton(index, item)
+        )}
+
+        <div className='relative'>
           <button
-            key={index}
-            onClick={item.onClick}
+            onClick={() => {
+              setShowFontTextDropDown(!showFontTextDropDown);
+            }}
             className={classNames(
               'p-2 border border-black/20 rounded-md transition-all',
               {
-                'bg-black text-white': item?.isActive,
-                'hover:bg-black/10 text-black': !item?.isActive,
+                'bg-black text-white': editor.isActive('link'),
+                'hover:bg-black/10 text-black': !editor.isActive('link'),
               }
             )}
           >
-            {item.icon}
+            <RiFontSizeAi className='text-xl font-bold' />
           </button>
-        ))}
-        <button
-          ref={linkButtonRef}
-          onClick={handelSetLinkFunction}
-          className={classNames(
-            'p-2 border border-black/20 rounded-md transition-all',
-            {
-              'bg-black text-white': editor.isActive('link'),
-              'hover:bg-black/10 text-black': !editor.isActive('link'),
-            }
-          )}
+          <div
+            ref={FontTextDropDownArray}
+            className={classNames(
+              'min-h-[200px] max-h-[250px] overflow-auto hide-scrollbar absolute top-full right-0 mt-2 mr-2 bg-white border border-black/30 rounded-lg shadow-xl z-30 origin-top p-1',
+              {
+                'opacity-0 scale-y-0 invisible': !showFontTextDropDown,
+                'opacity-100 scale-100 visible': showFontTextDropDown,
+              }
+            )}
+          >
+            <div className='flex flex-col items-center justify-start gap-2'>
+              {fontSizesArray?.map((size, index) => {
+                const isActive = editor.isActive('textStyle', {
+                  fontSize: size,
+                });
+                return (
+                  <button
+                    key={index}
+                    onClick={
+                      isActive
+                        ? () => editor.chain().focus().unsetFontSize().run()
+                        : () => editor.chain().focus().setFontSize(size).run()
+                    }
+                    className={classNames(
+                      `p-2 text-sm rounded-md transition-all`,
+                      {
+                        'bg-black text-white': isActive,
+                        'hover:bg-black/10 text-black': !isActive,
+                      }
+                    )}
+                  >
+                    {size}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        {/* <button
+          onClick={() => editor.chain().focus().setFontSize('32px').run()}
+          className={
+            editor.isActive('textStyle', { fontSize: '32px' })
+              ? 'is-active'
+              : 'text-black'
+          }
+          data-test-id='32px'
         >
-          <FaLink className='text-lg' />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().unsetLink().run()}
-          className={classNames(
-            'p-2 border border-black/20 rounded-md transition-all text-black',
-            {
-              'hover:bg-black/10 text-black': false,
-            }
-          )}
-        >
-          <FaLinkSlash className='text-lg' />
-        </button>
+          Font size 32px
+        </button> */}
+        <div className='flex flex-wrap items-center justify-end gap-2 lg:ml-auto'>
+          <button
+            ref={linkButtonRef}
+            onClick={handelSetLinkFunction}
+            className={classNames(
+              'p-2 border border-black/20 rounded-md transition-all',
+              {
+                'bg-black text-white': editor.isActive('link'),
+                'hover:bg-black/10 text-black': !editor.isActive('link'),
+              }
+            )}
+          >
+            <FaLink className='text-lg' />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().unsetLink().run()}
+            className={classNames(
+              'p-2 border border-black/20 rounded-md transition-all text-black',
+              {
+                'hover:bg-black/10 text-black': false,
+              }
+            )}
+          >
+            <FaLinkSlash className='text-lg' />
+          </button>
+          <div className='relative'>
+            <button
+              onClick={() => {
+                setShowFontFamilyDropDown(!showFontFamilyDropDown);
+              }}
+              className={classNames(
+                'p-2 border border-black/20 rounded-md transition-all',
+                {
+                  'bg-black text-white': editor.isActive('link'),
+                  'hover:bg-black/10 text-black': !editor.isActive('link'),
+                }
+              )}
+            >
+              <BiFontFamily className='text-xl font-bold' />
+            </button>
+            <div
+              ref={FontFamilyDropDownRef}
+              className={classNames(
+                'min-w-[150px] min-h-[200px] max-h-[250px] overflow-auto hide-scrollbar absolute top-full right-0 mt-2 mr-2 bg-white border border-black/30 rounded-lg shadow-xl z-30 origin-top p-2',
+                {
+                  'opacity-0 scale-y-0 invisible': !showFontFamilyDropDown,
+                  'opacity-100 scale-100 visible': showFontFamilyDropDown,
+                }
+              )}
+            >
+              <div className='flex flex-col items-center justify-start gap-2'>
+                {FontFamilyArray.map((item, index) =>
+                  RenderMenuItemButton(index, item, 'w-full py-1.5')
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

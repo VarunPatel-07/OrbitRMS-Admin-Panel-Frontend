@@ -17,6 +17,11 @@ const ScheduleActivateAlertModalTitle = 'Schedule Maintenance Mode Activation?';
 const ScheduleActivateAlertModalDescription =
   'You are about to schedule Maintenance Mode to activate at a specified date and time. Once enabled, all non-admin users will be redirected to the maintenance page. This is useful for planned updates, system checks, or administrative tasks during off-peak hours.';
 
+const CancelScheduledMaintenanceTitle = 'Cancel Scheduled Maintenance Mode?';
+
+const CancelScheduledMaintenanceDescription =
+  'You are about to cancel the scheduled activation of Maintenance Mode. The system will remain fully accessible to all users. This action is useful when planned updates or tasks are postponed or no longer required.';
+
 export const ActivatingMaintenanceModeObject = (
   status: 'active' | 'inActive' | 'scheduled'
 ): MaintenanceModeModalInfo => {
@@ -33,12 +38,18 @@ export const ActivatingMaintenanceModeObject = (
 };
 
 export const SchedulingMaintenanceModeObject = (
-  status: 'active' | 'inActive' | 'scheduled'
+  status: 'active' | 'inActive' | 'scheduled' | 'cancelling'
 ): MaintenanceModeModalInfo => {
   return {
     status: status,
     protected: true,
-    alertModalTitle: ScheduleActivateAlertModalTitle,
-    alertModelInfo: ScheduleActivateAlertModalDescription,
+    alertModalTitle:
+      status == 'cancelling'
+        ? CancelScheduledMaintenanceTitle
+        : ScheduleActivateAlertModalTitle,
+    alertModelInfo:
+      status == 'cancelling'
+        ? CancelScheduledMaintenanceDescription
+        : ScheduleActivateAlertModalDescription,
   };
 };

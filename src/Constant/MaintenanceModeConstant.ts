@@ -1,6 +1,7 @@
 import { BreadcrumbsProps } from '../interface/interface';
 import {
   MaintenanceModeFormDataInterface,
+  MaintenanceModeHistoryInterface,
   MaintenanceModeModalInfo,
 } from '../interface/MaintenanceMode';
 
@@ -42,6 +43,13 @@ export const MaintenanceModeFormData: MaintenanceModeFormDataInterface = {
   message: '',
   updated_at: '',
   updated_by: '',
+  scheduler_info: {
+    started_at: '',
+    started_by: '',
+    ended_at: '',
+    ended_by: '',
+    id: '',
+  },
 };
 
 export const initialMaintenanceModeModalPropsInfo: MaintenanceModeModalInfo = {
@@ -50,3 +58,20 @@ export const initialMaintenanceModeModalPropsInfo: MaintenanceModeModalInfo = {
   alertModalTitle: 'string',
   alertModelInfo: 'string',
 };
+
+export const EditScheduledMaintenanceModeInitialData: MaintenanceModeHistoryInterface =
+  {
+    id: '',
+    maintenance_mode_id: '',
+    started_at: '',
+    ended_at: '',
+    started_by: '',
+    ended_by: '',
+    message: '',
+    reason: '',
+    status: 'active',
+    type: 'manual',
+    cancellation_reason: '',
+    created_at: '',
+    updated_at: '',
+  };

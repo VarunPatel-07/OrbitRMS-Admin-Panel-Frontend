@@ -324,3 +324,9 @@ export const compareTwoNestedObject = (objOne: any, objTwo: any): boolean => {
 
   return true;
 };
+
+export const stripHtml = (html: string = '') =>
+  html
+    .replace(/<[^>]+>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();

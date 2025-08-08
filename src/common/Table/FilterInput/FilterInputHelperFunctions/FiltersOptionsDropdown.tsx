@@ -89,8 +89,6 @@ const FiltersOptionsDropdown = React.memo(function FiltersOptionsDropdown(
     }
   };
 
-
-
   const handelOptionsClick = useCallback(
     (data: ModuleValueInterface) => {
       setShowCurrentOperatorDropdown(false);
