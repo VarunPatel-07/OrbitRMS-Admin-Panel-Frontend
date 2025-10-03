@@ -24,6 +24,7 @@ import { signInApiFunction, verifyUserApiFunction } from '../../Helper/api/api';
 import HelmetSeo from '../../Helper/HelmetSeo';
 import {
   getDataFromLocalStorage,
+  getDataFromSecureCookie,
   handleCountDownFunction,
   isValidEmail,
   MaxLimitCountDownTimeFormatter,
@@ -139,8 +140,8 @@ function SignIn() {
   useEffect(() => {
     if (useEffectRef.current) return;
     useEffectRef.current = true;
-    const _localToken = getDataFromLocalStorage('authenticationToken');
-    if (_localToken) {
+    const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+    if (_cookieToken) {
       verifyUsersLoggedIn();
     } else {
       setShowGlobalLoader(false);

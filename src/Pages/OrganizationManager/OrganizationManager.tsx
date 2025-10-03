@@ -38,6 +38,7 @@ import {
 } from '../../interface/propsInterface';
 import { OrganizationAlertModalHelperFunction } from './OrganizationAlertModalHelper';
 import { OrganizationManagerFiltersArray } from './OrganizationManagerFiltersArray';
+import HelmetSeo from '../../Helper/HelmetSeo';
 
 function OrganizationManager() {
   const useEffectRef = useRef(false);
@@ -485,6 +486,10 @@ function OrganizationManager() {
 
   return (
     <>
+    <HelmetSeo
+        Title='Organization Manager | OrbitRMS Admin Panel'
+        Content='Log in to OrbitRMS and start managing everything in one place with ease and efficiency!'
+      />
       <div className='w-full h-full relative'>
         <Breadcrumbs BreadcrumbsNavigationFlow={OrgManagerBreadcrumbsObjects} />
         <div className='w-full h-full pt-9'>

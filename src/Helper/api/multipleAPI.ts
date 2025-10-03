@@ -8,9 +8,9 @@ import {
   URLObject,
 } from '../../interface/propsInterface';
 import {
+  clearLocalSessionStorage,
   ErrorHandler,
-  getDataFromLocalStorage,
-  getDataFromTheSessionStorage,
+  getDataFromSecureCookie,
 } from '../HelperFunction';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_API_BASEURL;
@@ -24,11 +24,14 @@ export const multipleFetchApi = async (
 ): Promise<ApiReturnInterface[]> => {
   const promises = endPointArr.map(async (eachEndPoint) => {
     if (eachEndPoint.protected) {
-      const _localToken = getDataFromLocalStorage('authenticationToken');
-      const _sessionToken = getDataFromTheSessionStorage('authenticationToken');
-      //   todo we will show the error in the form of the notification
+      const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
 
-      const authToken = `Bearer ${_localToken || _sessionToken}`;
+      if (!_cookieToken) {
+        window.location.href = '/auth/sign-in';
+        clearLocalSessionStorage();
+      }
+
+      const authToken = `Bearer ${_cookieToken}`;
       const headers: Record<string, string> = eachEndPoint?.header
         ? (eachEndPoint.header as Record<string, string>)
         : {
@@ -100,12 +103,14 @@ export const multiplePostApi = async (
 ): Promise<ApiReturnInterface[]> => {
   const promises = endPointArr.map(async (eachEndPoint) => {
     if (eachEndPoint.protected) {
-      const _localToken = getDataFromLocalStorage('authenticationToken');
-      const _sessionToken = getDataFromTheSessionStorage('authenticationToken');
-      //   todo we will show the error in the form of the notification
+      const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
 
-      const authToken = `Bearer ${_localToken || _sessionToken}`;
+      if (!_cookieToken) {
+        window.location.href = '/auth/sign-in';
+        clearLocalSessionStorage();
+      }
 
+      const authToken = `Bearer ${_cookieToken}`;
       const headers: Record<string, string> = eachEndPoint?.header
         ? (eachEndPoint.header as Record<string, string>)
         : {
@@ -176,10 +181,14 @@ export const multiplePutApi = async (
 ): Promise<ApiReturnInterface[]> => {
   const promises = endPointArr.map(async (eachEndPoint) => {
     if (eachEndPoint.protected) {
-      const _localToken = getDataFromLocalStorage('authenticationToken');
-      const _sessionToken = getDataFromTheSessionStorage('authenticationToken');
-      const authToken = `Bearer ${_localToken || _sessionToken}`;
+      const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
 
+      if (!_cookieToken) {
+        window.location.href = '/auth/sign-in';
+        clearLocalSessionStorage();
+      }
+
+      const authToken = `Bearer ${_cookieToken}`;
       const headers: Record<string, string> = eachEndPoint.header
         ? (eachEndPoint.header as Record<string, string>)
         : {
@@ -249,11 +258,14 @@ export const multipleDeleteApi = async (
 ): Promise<ApiReturnInterface[]> => {
   const promises = endPointArr.map(async (eachEndPoint) => {
     if (eachEndPoint.protected) {
-      const _localToken = getDataFromLocalStorage('authenticationToken');
-      const _sessionToken = getDataFromTheSessionStorage('authenticationToken');
-      //   todo we will show the error in the form of the notification
+      const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
 
-      const authToken = `Bearer ${_localToken || _sessionToken}`;
+      if (!_cookieToken) {
+        window.location.href = '/auth/sign-in';
+        clearLocalSessionStorage();
+      }
+
+      const authToken = `Bearer ${_cookieToken}`;
 
       const headers: Record<string, string> = eachEndPoint?.header
         ? (eachEndPoint.header as Record<string, string>)

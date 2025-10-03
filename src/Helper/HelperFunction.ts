@@ -2,6 +2,7 @@
 import React, { MutableRefObject, SetStateAction } from 'react';
 import { AxiosError } from 'axios';
 import CryptoJS from 'crypto-js';
+import Cookies from 'js-cookie';
 import validator from 'validator';
 
 const encryptionKey = import.meta.env.VITE_ENCRYPTION_KEY;
@@ -60,6 +61,58 @@ export const storeDataInLocalStorage = (
   localStorage.setItem(key, dataToStore);
 };
 
+export const storeDataInSecureCookie = (
+  _data: any,
+  key: string,
+  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+) => {
+  if (!key) {
+    console.error('the key is required to store the data');
+    return;
+  }
+  let dataToStore: string;
+  if (encrypted) {
+    _data = typeof _data == 'object' ? JSON.stringify(_data) : _data;
+    dataToStore = CryptoJS.AES.encrypt(_data, encryptionKey).toString();
+  } else {
+    dataToStore = JSON.stringify(_data);
+  }
+  Cookies.set(key, dataToStore, {
+    secure: true,
+    sameSite: 'strict',
+    expires: 7,
+  });
+};
+
+export const getDataFromSecureCookie = (
+  key: string,
+  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+): any | null => {
+  try {
+    const cookieStorageData = Cookies.get(key);
+    if (!cookieStorageData) return null;
+
+    if (encrypted) {
+      if (!encryptionKey)
+        throw new Error('Encryption key is required for decryption');
+      const decryptedData = CryptoJS.AES.decrypt(
+        cookieStorageData,
+        encryptionKey
+      ).toString();
+      if (key != 'adminAuthenticationToken') {
+        return JSON.parse(decryptedData);
+      } else {
+        return decryptedData;
+      }
+    }
+
+    return JSON.parse(cookieStorageData);
+  } catch (error) {
+    console.error(`Error reading from localStorage (key: ${key}):`, error);
+    return null;
+  }
+};
+
 //  * To Handel The Error From The One Place.
 
 export const getDataFromLocalStorage = (
@@ -77,7 +130,7 @@ export const getDataFromLocalStorage = (
         localStorageData,
         encryptionKey
       ).toString();
-      if (key != 'authenticationToken') {
+      if (key != 'adminAuthenticationToken') {
         return JSON.parse(decryptedData);
       } else {
         return decryptedData;
@@ -131,7 +184,7 @@ export const getDataFromTheSessionStorage = (
       sessionStorageData,
       encryptionKey
     ).toString();
-    if (key != 'authenticationToken') {
+    if (key != 'adminAuthenticationToken') {
       return JSON.parse(decryptedData);
     } else {
       return decryptedData;
