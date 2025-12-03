@@ -17,8 +17,11 @@ export const classNames = (
     .join(' ')}`;
 };
 
-export const isValidEmail = (email: string): boolean => {
-  const isValid = validator.isEmail(email);
+export const isValidEmail = (
+  email: string,
+  host_blacklist: string[] = []
+): boolean => {
+  const isValid = validator.isEmail(email, { host_blacklist: host_blacklist });
   return isValid;
 };
 
@@ -383,3 +386,63 @@ export const stripHtml = (html: string = '') =>
     .replace(/<[^>]+>/g, '')
     .replace(/\s+/g, ' ')
     .trim();
+
+export const getRadianAngle = (rotation: number) => {
+  return (rotation * Math.PI) / 180;
+};
+
+export const createImageUtilFunction = (url: string) => {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.src = url;
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = (error) => reject(error);
+  });
+};
+
+export const getBoundingBox = (
+  _width: number,
+  _height: number,
+  radian: number
+) => {
+  return {
+    width:
+      Math.abs(_width * Math.cos(radian)) +
+      Math.abs(_height * Math.sin(radian)),
+    height:
+      Math.abs(_width * Math.sin(radian)) +
+      Math.abs(_height * Math.cos(radian)),
+  };
+};
+
+export const dataUrlToFileConvertor = (dataUrl: string, filename: string) => {
+  const arr = dataUrl.split(',');
+  const match = arr[0].match(/:(.*?);/);
+  const mime = match ? match[1] : 'application/octet-stream';
+
+  const correctedFilename =
+    filename.endsWith('.png') && mime !== 'image/png'
+      ? filename.replace('.png', '.jpeg')
+      : filename;
+
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], correctedFilename, { type: mime });
+};
+
+export const generateTimeBasedGreeting = (): string => {
+  const date = new Date();
+  const time = date?.getHours();
+
+  if (time >= 5 && time < 12) return 'Good Morning';
+  if (time >= 12 && time < 16) return 'Good Afternoon';
+  if (time >= 16 && time < 20) return 'Good Evening';
+  return 'Good Night';
+};

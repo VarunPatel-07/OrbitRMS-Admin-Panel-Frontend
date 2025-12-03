@@ -19,6 +19,8 @@ const defaultHeader = {
   'Content-Type': 'application/json',
 };
 
+// declare const grecaptcha: any;
+
 export const multipleFetchApi = async (
   endPointArr: Array<endpointObject>
 ): Promise<ApiReturnInterface[]> => {
@@ -32,12 +34,19 @@ export const multipleFetchApi = async (
       }
 
       const authToken = `Bearer ${_cookieToken}`;
+
+      // const token = await grecaptcha.execute('YOUR_SITE_KEY', {
+      //   action: 'submit',
+      // });
+
       const headers: Record<string, string> = eachEndPoint?.header
         ? (eachEndPoint.header as Record<string, string>)
         : {
             'Content-Type': 'application/json',
             Authorization: authToken,
           };
+
+      // headers['X-Recaptcha-Token'] = token;
 
       if (!headers?.Authorization) {
         headers.Authorization = authToken;

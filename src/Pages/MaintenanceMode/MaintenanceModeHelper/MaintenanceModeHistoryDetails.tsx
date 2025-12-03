@@ -170,13 +170,13 @@ function MaintenanceModeHistoryDetails(
                   </p>
                 </div>
               </div>
-              <div className='w-full'>
-                <div className='flex flex-col items-start justify-start'>
+              <div className='w-full overflow-hidden'>
+                <div className='flex flex-col items-start justify-start overflow-hidden'>
                   <span className='text-sm lg:text-base font-inter font-medium text-black pb-2 inline-block'>
                     Message
                   </span>
                   <div
-                    className='text-sm lg:text-base font-inter font-medium text-black inline-block capitalize w-full p-3 border border-black/20 rounded-md'
+                    className='text-sm lg:text-base font-inter font-medium text-black inline-block capitalize w-full p-3 border border-black/20 rounded-md overflow-hidden py-10'
                     dangerouslySetInnerHTML={{ __html: data?.message }}
                   ></div>
                 </div>

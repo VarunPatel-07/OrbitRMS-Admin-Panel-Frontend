@@ -1,5 +1,7 @@
 import React, { RefObject, SetStateAction } from 'react';
 
+import { SelectedFileArrayObjInterface } from './Dashboard';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface endpointObject {
   endPoint: string;
@@ -180,4 +182,46 @@ export interface MetaDataInterface {
   total_pages: number;
   current_page: number;
   record_per_page: number;
+}
+
+export interface RichTextEditorApiResponseInterface {
+  account_status: boolean;
+  employee_code: string;
+  first_name: string;
+  full_name: string;
+  id: string;
+  last_name: string;
+  middle_name: string;
+  organization_id: string;
+}
+
+export interface MultipleImageUploaderPropsInterface {
+  name: string;
+  type: 'file' | 'image';
+  RequiredFileTypeArray: Array<string>;
+  showDropFileScreenInFullScreen: boolean;
+  cropShape: 'round' | 'rect';
+  maxCropHeight: number;
+  maxCropWidth: number;
+  isImageCropperActive?: boolean;
+  setIsImageCropperActive?: React.Dispatch<SetStateAction<boolean>>;
+  handelUploadImage: (data: SelectedFileArrayObjInterface[]) => void;
+  asPlusIcon?: boolean;
+  disabled?: boolean;
+  remainingImages?: number;
+  showError?: boolean;
+  errorMessage?: string;
+  maxSize?: number;
+}
+
+export interface DragDropUploaderProps {
+  name: string;
+  type: 'file' | 'image';
+  RequiredFileTypeArray: Array<string>;
+  showDropFileScreenInFullScreen: boolean;
+  cropShape: 'round' | 'rect';
+  maxCropHeight: number;
+  maxCropWidth: number;
+  setImageUrl: (url: string) => void;
+  disabled: boolean;
 }
