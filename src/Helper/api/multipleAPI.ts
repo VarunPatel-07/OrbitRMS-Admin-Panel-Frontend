@@ -8,18 +8,40 @@ import {
   URLObject,
 } from '../../interface/propsInterface';
 import {
+  clearCookieStorage,
   clearLocalSessionStorage,
   ErrorHandler,
   getDataFromSecureCookie,
 } from '../HelperFunction';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_API_BASEURL;
+const VITE_ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
 
 const defaultHeader = {
   'Content-Type': 'application/json',
 };
 
-// declare const grecaptcha: any;
+const multipleFetchApiErrorHandler = (error: any) => {
+  if (VITE_ENVIRONMENT == 'DEVELOPMENT') {
+    return ErrorHandler(error);
+  } else {
+    if (unauthorizedStatusCodes.includes(error?.status)) {
+      const status = error?.response?.status || error?.status;
+
+      if (unauthorizedStatusCodes.includes(status)) {
+        clearCookieStorage();
+        window.location.href = '/auth/sign-in';
+        return;
+      }
+    } else if (!status && error?.message?.includes('Network')) {
+      clearCookieStorage();
+      window.location.href = '/auth/sign-in';
+      return;
+    } else {
+      return ErrorHandler(error);
+    }
+  }
+};
 
 export const multipleFetchApi = async (
   endPointArr: Array<endpointObject>
@@ -63,16 +85,7 @@ export const multipleFetchApi = async (
         const res = await axios(config);
         return res?.data;
       } catch (error: any) {
-        if (unauthorizedStatusCodes.includes(error?.status)) {
-          const status = error?.response?.status || error?.status;
-
-          if (unauthorizedStatusCodes.includes(status)) {
-            window.location.href = '/auth/sign-in';
-            return;
-          }
-        } else {
-          return ErrorHandler(error);
-        }
+        return multipleFetchApiErrorHandler(error);
       }
     } else {
       const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
@@ -84,21 +97,7 @@ export const multipleFetchApi = async (
         const res = await axios(config);
         return res?.data;
       } catch (error: any) {
-        // Handle error (e.g., return an error object or log it)
-        // console.error(
-        //   `Error fetching data from ${eachEndPoint.endPoint}`,
-        //   error
-        // );
-        if (unauthorizedStatusCodes.includes(error?.status)) {
-          const status = error?.response?.status || error?.status;
-
-          if (unauthorizedStatusCodes.includes(status)) {
-            window.location.href = '/auth/sign-in';
-            return;
-          }
-        } else {
-          return ErrorHandler(error);
-        }
+        return multipleFetchApiErrorHandler(error);
       }
     }
   });
@@ -143,15 +142,7 @@ export const multiplePostApi = async (
         const res = await axios(config);
         return res?.data;
       } catch (error: any) {
-        if (unauthorizedStatusCodes.includes(error?.status)) {
-          const status = error?.response?.status || error?.status;
-          if (unauthorizedStatusCodes.includes(status)) {
-            window.location.href = '/auth/sign-in';
-            return;
-          }
-        } else {
-          return ErrorHandler(error);
-        }
+        return multipleFetchApiErrorHandler(error);
       }
     } else {
       const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
@@ -166,16 +157,7 @@ export const multiplePostApi = async (
         const res = await axios(config);
         return res?.data;
       } catch (error: any) {
-        // Handle error (e.g., return an error object or log it)
-        if (unauthorizedStatusCodes.includes(error?.status)) {
-          const status = error?.response?.status || error?.status;
-          if (unauthorizedStatusCodes.includes(status)) {
-            window.location.href = '/auth/sign-in';
-            return;
-          }
-        } else {
-          return ErrorHandler(error);
-        }
+        return multipleFetchApiErrorHandler(error);
       }
     }
   });
@@ -221,16 +203,7 @@ export const multiplePutApi = async (
         const res = await axios(config);
         return res?.data;
       } catch (error: any) {
-        if (unauthorizedStatusCodes.includes(error?.status)) {
-          const status = error?.response?.status || error?.status;
-
-          if (unauthorizedStatusCodes.includes(status)) {
-            window.location.href = '/auth/sign-in';
-            return;
-          }
-        } else {
-          return ErrorHandler(error);
-        }
+        return multipleFetchApiErrorHandler(error);
       }
     } else {
       const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
@@ -245,16 +218,7 @@ export const multiplePutApi = async (
         const res = await axios(config);
         return res?.data;
       } catch (error: any) {
-        if (unauthorizedStatusCodes.includes(error?.status)) {
-          const status = error?.response?.status || error?.status;
-
-          if (unauthorizedStatusCodes.includes(status)) {
-            window.location.href = '/auth/sign-in';
-            return;
-          }
-        } else {
-          return ErrorHandler(error);
-        }
+        return multipleFetchApiErrorHandler(error);
       }
     }
   });
@@ -299,21 +263,7 @@ export const multipleDeleteApi = async (
         const res = await axios(config);
         return res?.data;
       } catch (error: any) {
-        // Handle error (e.g., return an error object or log it)
-        // console.error(
-        //   `Error fetching data from ${eachEndPoint.endPoint}`,
-        //   error
-        // );
-        if (unauthorizedStatusCodes.includes(error?.status)) {
-          const status = error?.response?.status || error?.status;
-
-          if (unauthorizedStatusCodes.includes(status)) {
-            window.location.href = '/auth/sign-in';
-            return;
-          }
-        } else {
-          return ErrorHandler(error);
-        }
+        return multipleFetchApiErrorHandler(error);
       }
     } else {
       const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
@@ -328,17 +278,7 @@ export const multipleDeleteApi = async (
         const res = await axios(config);
         return res?.data;
       } catch (error: any) {
-        // Handle error (e.g., return an error object or log it)
-        if (unauthorizedStatusCodes.includes(error?.status)) {
-          const status = error?.response?.status || error?.status;
-
-          if (unauthorizedStatusCodes.includes(status)) {
-            window.location.href = '/auth/sign-in';
-            return;
-          }
-        } else {
-          return ErrorHandler(error);
-        }
+        return multipleFetchApiErrorHandler(error);
       }
     }
   });

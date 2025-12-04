@@ -101,7 +101,7 @@ export const getDataFromSecureCookie = (
       const decryptedData = CryptoJS.AES.decrypt(
         cookieStorageData,
         encryptionKey
-      ).toString();
+      ).toString(CryptoJS.enc.Utf8);
       if (key != 'adminAuthenticationToken') {
         return JSON.parse(decryptedData);
       } else {
@@ -132,7 +132,7 @@ export const getDataFromLocalStorage = (
       const decryptedData = CryptoJS.AES.decrypt(
         localStorageData,
         encryptionKey
-      ).toString();
+      ).toString(CryptoJS.enc.Utf8);
       if (key != 'adminAuthenticationToken') {
         return JSON.parse(decryptedData);
       } else {
@@ -153,6 +153,14 @@ export const removeDataFromLocalStorage = (key: string) => {
 export const clearLocalSessionStorage = () => {
   localStorage.clear();
   sessionStorage.clear();
+};
+
+export const clearCookieStorage = () => {
+  const allCookie = Cookies.get();
+
+  Object.keys(allCookie).forEach((cookie) => {
+    Cookies.remove(cookie);
+  });
 };
 
 export const storeDataInSessionStorage = (
@@ -186,7 +194,7 @@ export const getDataFromTheSessionStorage = (
     const decryptedData = CryptoJS.AES.decrypt(
       sessionStorageData,
       encryptionKey
-    ).toString();
+    ).toString(CryptoJS.enc.Utf8);
     if (key != 'adminAuthenticationToken') {
       return JSON.parse(decryptedData);
     } else {

@@ -163,21 +163,26 @@ function FeedPostCard(props: propsInterface) {
               spaceBetween={0}
               slidesPerView={1}
               allowTouchMove={false}
-              className='w-full h-full  px-4 py-5 overflow-hidden rounded-lg relative'
+              className='w-full h-full overflow-hidden rounded-lg relative'
             >
-              <button
-                className='w-10 h-10 flex items-center justify-center border border-black/20 rounded-full bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed absolute top-1/2 -translate-x-1/2 left-7 z-10'
-                ref={prevRef}
-              >
-                <RiArrowLeftSLine className='text-slate-900 text-3xl' />
-              </button>
+              {JSON.parse(data?.images)?.length > 1 && (
+                <>
+                  <button
+                    className='w-10 h-10 flex items-center justify-center border border-black/20 rounded-full bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed absolute top-1/2 -translate-x-1/2 left-7 z-10'
+                    ref={prevRef}
+                  >
+                    <RiArrowLeftSLine className='text-slate-900 text-3xl' />
+                  </button>
 
-              <button
-                className='w-10 h-10 flex items-center justify-center border border-black/20 rounded-full bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed absolute top-1/2 -translate-x-1/2 -right-2 z-10'
-                ref={nextRef}
-              >
-                <RiArrowRightSLine className='text-slate-900 text-3xl' />
-              </button>
+                  <button
+                    className='w-10 h-10 flex items-center justify-center border border-black/20 rounded-full bg-white hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed absolute top-1/2 -translate-x-1/2 -right-2 z-10'
+                    ref={nextRef}
+                  >
+                    <RiArrowRightSLine className='text-slate-900 text-3xl' />
+                  </button>
+                </>
+              )}
+
               {JSON.parse(data?.images)?.map((image: string, index: number) => {
                 return (
                   <SwiperSlide key={index}>
