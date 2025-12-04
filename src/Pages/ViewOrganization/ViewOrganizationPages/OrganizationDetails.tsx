@@ -1,10 +1,60 @@
+import { useContext, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { FiAlertTriangle } from 'react-icons/fi';
+import { MdDelete } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
+
+import Button from '../../../common/Button';
 import OrganizationSettingLoader from '../../../Components/Loader/OrganizationSettingLoader';
+import DeleteModal from '../../../Components/Modal/DeleteModal';
+import {
+  NotificationContext,
+  NotificationContextApiProps,
+} from '../../../Context/Notification/NotificationContextApi';
+import { multiplePostApi } from '../../../Helper/api/multipleAPI';
 import { InfoField } from '../../../Helper/Helper';
+import { useDebounce } from '../../../Hooks/useDebounce';
 import { InterFaceModuleData } from '../../../interface/interface';
 import { OrganizationDetailsPropsInterface } from '../../../interface/OrganizationManager';
+import { endpointObject } from '../../../interface/propsInterface';
 
 function OrganizationDetails(props: OrganizationDetailsPropsInterface) {
   const { data, loading } = props;
+  const navigate = useNavigate();
+
+  const { handelNotification } = useContext(
+    NotificationContext
+  ) as NotificationContextApiProps;
+
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [deleteModalLoading, setDeleteModalLoading] = useState<boolean>(false);
+
+  const handelDeleteModalWithDebounce = useDebounce(async () => {
+    const endPointArr: endpointObject[] = [
+      {
+        endPoint: `organization-manager/delete/delete-organization?id=${data?.id}`,
+        protected: true,
+      },
+    ];
+    const response = await multiplePostApi(endPointArr);
+    const res = response[0];
+   
+
+    setDeleteModalLoading(false);
+
+    handelNotification(res, 'top-right');
+
+    if (res.success) {
+      setShowDeleteModal(false);
+      navigate('/orbitrms/organization-manager');
+    }
+  });
+
+  const handelClickOnDelete = () => {
+    setDeleteModalLoading(true);
+    handelDeleteModalWithDebounce();
+  };
+
   const organizationGeneralInfo = () => {
     return (
       <div className='bg-white rounded-xl border border-black/15'>
@@ -314,19 +364,72 @@ function OrganizationDetails(props: OrganizationDetailsPropsInterface) {
     },
   ];
   return (
-    <div className='w-full h-[calc(100vh-60px)] overflow-auto hide-scrollbar px-5 pt-28'>
-      {loading ? (
-        <OrganizationSettingLoader />
-      ) : (
-        <div className='w-full flex flex-col gap-6 pb-5'>
-          {UserInformationDataModules?.map((section) => (
-            <div className='w-full' key={section?.id}>
-              {section?.module}
+    <>
+      <div className='w-full h-[calc(100vh-60px)] overflow-auto hide-scrollbar px-5 pt-28'>
+        {loading ? (
+          <OrganizationSettingLoader />
+        ) : (
+          <div className='w-full flex flex-col gap-6 pb-5'>
+            {UserInformationDataModules?.map((section) => (
+              <div className='w-full' key={section?.id}>
+                {section?.module}
+              </div>
+            ))}
+            <div className='w-full bg-transparent rounded-xl border border-red-700 overflow-hidden'>
+              <div className='flex items-start flex-col justify-start gap-1 px-6 py-4 border-b border-b-red-700 bg-red-100'>
+                <span className='w-full flex items-center justify-start gap-5 text-red-700'>
+                  <FiAlertTriangle className='text-xl' />
+
+                  <span className='font-inter text-lg font-semibold capitalize'>
+                    Danger Zone
+                  </span>
+                </span>
+              </div>
+              <div className='w-full'>
+                <div className='p-6 w-full'>
+                  <div className='w-full min-w-full grid grid-cols-1 gap-6'>
+                    <div className='w-full flex items-center justify-between'>
+                      <div className='w-fit'>
+                        <span className='text-black text-xl font-semibold'>
+                          Delete Account
+                        </span>
+                        <p className='text-black/80 text-base'>
+                          Permanently delete this account and all associated
+                          data. This action cannot be undone.
+                        </p>
+                      </div>
+                      <Button
+                        type='button'
+                        className='bg-red-700 text-white font-inter'
+                        onClick={() => {
+                          setShowDeleteModal(!showDeleteModal);
+                        }}
+                      >
+                        <span className='w-full flex items-center justify-center gap-4 px-4 py-3'>
+                          <MdDelete className='text-xl' />
+                          <span className='text-white text-lg'>
+                            Delete Organization
+                          </span>
+                        </span>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
+      </div>
+      {createPortal(
+        <DeleteModal
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
+          handelDelete={handelClickOnDelete}
+          loading={deleteModalLoading}
+        />,
+        document.body
       )}
-    </div>
+    </>
   );
 }
 

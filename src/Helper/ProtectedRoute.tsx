@@ -1,10 +1,10 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { getDataFromLocalStorage } from './HelperFunction';
+import { getDataFromSecureCookie } from './HelperFunction';
 
 function ProtectedRoute({ element }: { element: React.ReactElement }) {
-  const isAuthenticated = getDataFromLocalStorage('authenticationToken');
+  const isAuthenticated = getDataFromSecureCookie('adminAuthenticationToken');
 
   return typeof isAuthenticated === 'string' &&
     isAuthenticated.trim() !== '' ? (

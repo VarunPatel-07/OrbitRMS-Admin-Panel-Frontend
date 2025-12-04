@@ -368,11 +368,15 @@ function MaintenanceMode() {
                       </p>
                     ) : (
                       <p className='text-black/70 italic text-sm font-inter font-medium'>
-                        Last update on
-                        <strong className='text-black px-1'>
-                          {formateDate(formData?.updated_at, 'DD/MM/YYYY')}
-                        </strong>
-                        by {formData?.updated_by}.
+                        Last update on:
+                        {formData?.updated_at && (
+                          <>
+                            <strong className='text-black px-1'>
+                              {formateDate(formData?.updated_at, 'DD/MM/YYYY')}
+                            </strong>
+                            by {formData?.updated_by}.
+                          </>
+                        )}
                       </p>
                     )}
                   </div>

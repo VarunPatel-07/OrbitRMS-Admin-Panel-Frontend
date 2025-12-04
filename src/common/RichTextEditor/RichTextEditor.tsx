@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { FaStarOfLife } from 'react-icons/fa';
 import Bold from '@tiptap/extension-bold';
 import Document from '@tiptap/extension-document';
+import { FontSize } from '@tiptap/extension-font-size';
 import Heading from '@tiptap/extension-heading';
 import Highlight from '@tiptap/extension-highlight';
 import Italic from '@tiptap/extension-italic';
@@ -10,7 +11,7 @@ import Paragraph from '@tiptap/extension-paragraph';
 import Strike from '@tiptap/extension-strike';
 import Text from '@tiptap/extension-text';
 import TextAlign from '@tiptap/extension-text-align';
-import { TextStyleKit } from '@tiptap/extension-text-style';
+import { TextStyle } from '@tiptap/extension-text-style';
 import { EditorContent, useEditor } from '@tiptap/react';
 
 import { RichTextEditorInterface } from '../../interface/CommonComponentProps';
@@ -28,7 +29,8 @@ function RichTextEditor(props: RichTextEditorInterface) {
   } = props;
   const editor = useEditor({
     extensions: [
-      TextStyleKit,
+      TextStyle,
+      FontSize,
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
       }),

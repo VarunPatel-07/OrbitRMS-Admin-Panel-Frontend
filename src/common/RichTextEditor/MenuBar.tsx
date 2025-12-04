@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { BiFontFamily } from 'react-icons/bi';
 import { Editor } from '@tiptap/react';
@@ -13,7 +14,7 @@ import { Instance } from 'tippy.js';
 import { classNames } from '../../Helper/HelperFunction';
 import { RichTextEditorMenuProps } from '../../interface/CommonComponentProps';
 import {
-  EditorMenuDefaultFontFamilyArray,
+  // EditorMenuDefaultFontFamilyArray,
   EditorMenuDefaultHeadingItemArray,
   EditorMenuDefaultMenuItem,
 } from './EditorMenuItemArray';
@@ -176,7 +177,8 @@ function MenuBar({ editor }: { editor: Editor | null }) {
 
   const MenuItems = EditorMenuDefaultMenuItem(editor);
   const HeadingItemArray = EditorMenuDefaultHeadingItemArray(editor);
-  const FontFamilyArray = EditorMenuDefaultFontFamilyArray(editor);
+  // const FontFamilyArray = EditorMenuDefaultFontFamilyArray(editor);
+  const FontFamilyArray: any[] = [];
 
   const RenderMenuItemButton = (
     index: number,
@@ -298,38 +300,41 @@ function MenuBar({ editor }: { editor: Editor | null }) {
           >
             <FaLinkSlash className='text-lg' />
           </button>
-          <div className='relative'>
-            <button
-              onClick={() => {
-                setShowFontFamilyDropDown(!showFontFamilyDropDown);
-              }}
-              className={classNames(
-                'p-2 border border-black/20 rounded-md transition-all',
-                {
-                  'bg-black text-white': editor.isActive('link'),
-                  'hover:bg-black/10 text-black': !editor.isActive('link'),
-                }
-              )}
-            >
-              <BiFontFamily className='text-xl font-bold' />
-            </button>
-            <div
-              ref={FontFamilyDropDownRef}
-              className={classNames(
-                'min-w-[150px] min-h-[200px] max-h-[250px] overflow-auto hide-scrollbar absolute top-full right-0 mt-2 mr-2 bg-white border border-black/30 rounded-lg shadow-xl z-30 origin-top p-2',
-                {
-                  'opacity-0 scale-y-0 invisible': !showFontFamilyDropDown,
-                  'opacity-100 scale-100 visible': showFontFamilyDropDown,
-                }
-              )}
-            >
-              <div className='flex flex-col items-center justify-start gap-2'>
-                {FontFamilyArray.map((item, index) =>
-                  RenderMenuItemButton(index, item, 'w-full py-1.5')
+          {FontFamilyArray?.length > 0 && (
+            <div className='relative'>
+              <button
+                onClick={() => {
+                  setShowFontFamilyDropDown(!showFontFamilyDropDown);
+                }}
+                className={classNames(
+                  'p-2 border border-black/20 rounded-md transition-all',
+                  {
+                    'bg-black text-white': editor.isActive('link'),
+                    'hover:bg-black/10 text-black': !editor.isActive('link'),
+                  }
                 )}
+              >
+                <BiFontFamily className='text-xl font-bold' />
+              </button>
+
+              <div
+                ref={FontFamilyDropDownRef}
+                className={classNames(
+                  'min-w-[150px] min-h-[200px] max-h-[250px] overflow-auto hide-scrollbar absolute top-full right-0 mt-2 mr-2 bg-white border border-black/30 rounded-lg shadow-xl z-30 origin-top p-2',
+                  {
+                    'opacity-0 scale-y-0 invisible': !showFontFamilyDropDown,
+                    'opacity-100 scale-100 visible': showFontFamilyDropDown,
+                  }
+                )}
+              >
+                <div className='flex flex-col items-center justify-start gap-2'>
+                  {FontFamilyArray.map((item, index) =>
+                    RenderMenuItemButton(index, item, 'w-full py-1.5')
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

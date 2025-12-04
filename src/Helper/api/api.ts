@@ -6,8 +6,7 @@ import { LoginFormInterface } from '../../interface/CommonComponentProps';
 import {
   clearLocalSessionStorage,
   ErrorHandler,
-  getDataFromLocalStorage,
-  storeDataInSessionStorage,
+  getDataFromSecureCookie,
 } from '../HelperFunction';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_API_BASEURL;
@@ -41,10 +40,6 @@ export const signInApiFunction = async (
 
     if (res?.success) {
       setLoader(true);
-      storeDataInSessionStorage(
-        response?.data?.data?.authenticationToken,
-        'authenticationToken'
-      );
     }
 
     return response?.data;
@@ -55,8 +50,8 @@ export const signInApiFunction = async (
 
 export const verifyUserApiFunction = async () => {
   try {
-    const _localToken = getDataFromLocalStorage('authenticationToken');
-    if (!_localToken) {
+    const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+    if (!_cookieToken) {
       return { success: false, message: 'User not authenticated' };
     }
 
@@ -66,7 +61,7 @@ export const verifyUserApiFunction = async () => {
       url,
       headers: {
         ...defaultHeader,
-        Authorization: `Bearer ${_localToken}`,
+        Authorization: `Bearer ${_cookieToken}`,
       },
     };
 

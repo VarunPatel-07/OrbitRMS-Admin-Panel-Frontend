@@ -20,6 +20,7 @@ import {
   MaxLimitCountDownTimeFormatter,
   removeDataFromLocalStorage,
   storeDataInLocalStorage,
+  storeDataInSecureCookie,
 } from '../../Helper/HelperFunction';
 import { useDebounce } from '../../Hooks/useDebounce';
 import { endpointObject } from '../../interface/propsInterface';
@@ -90,9 +91,9 @@ function VerifyEmailAddress() {
     if (!res?.success) {
       handelNotification(res, 'top-right');
     } else {
-      storeDataInLocalStorage(
+      storeDataInSecureCookie(
         res?.data?.authenticationToken,
-        'authenticationToken'
+        'adminAuthenticationToken'
       );
       setOtpCode([]);
       handelNotification(res, 'top-right');
@@ -259,7 +260,7 @@ function VerifyEmailAddress() {
                         >
                           <input
                             className='w-full h-full bg-transparent overflow-hidden text-base focus:outline-none focus:ring-0  py-2.5 font-inter resize-none disabled:bg-[#7fab98]/15 text-black text-center'
-                            value={otpCode[index]}
+                            value={otpCode[index] || ''}
                             maxLength={1}
                             ref={(el) => {
                               if (el) OTPInputRefs.current[index] = el;

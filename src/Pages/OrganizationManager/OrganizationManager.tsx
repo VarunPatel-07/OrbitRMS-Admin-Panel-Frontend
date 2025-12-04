@@ -21,6 +21,7 @@ import {
 } from '../../Constant/OrganizationManagerConstant';
 import { FilterFieldsTypeEnums } from '../../enums/enums';
 import { multipleFetchApi, multiplePutApi } from '../../Helper/api/multipleAPI';
+import HelmetSeo from '../../Helper/HelmetSeo';
 import { classNames, formateDate } from '../../Helper/HelperFunction';
 import { useDebounce } from '../../Hooks/useDebounce';
 import { OrganizationManagerAlertModalInfoType } from '../../interface/CommonComponentProps';
@@ -78,7 +79,7 @@ function OrganizationManager() {
       canToggleVisibility: true,
       childKey: 'organization_image',
       renderContent: (data: string, childData: string) => (
-        <div className='w-fit'>
+        <div className='w-fit min-w-[200px]'>
           <div className='w-fit flex items-center justify-start gap-2.5'>
             <EmployeeProfilePicture
               profilePicture={childData}
@@ -86,7 +87,7 @@ function OrganizationManager() {
               width={40}
             />
             <p className='font-inter text-black font-semibold text-base'>
-              {data}
+              {data || '-'}
             </p>
           </div>
         </div>
@@ -127,7 +128,7 @@ function OrganizationManager() {
             href={`mailto:${data}`}
             className='font-inter text-black font-medium transition-all text-base hover:underline hover:text-blue-600'
           >
-            {data}
+            {data || '-'}
           </a>
         </div>
       ),
@@ -146,7 +147,7 @@ function OrganizationManager() {
             className='font-inter text-black font-medium transition-all text-base hover:underline hover:text-blue-600'
           >
             {childData?.country_number_code} {'  - '} {'  '}
-            {data}
+            {data || '-'}
           </a>
         </div>
       ),
@@ -161,7 +162,7 @@ function OrganizationManager() {
       renderContent: (data: OrganizationAddress) => (
         <div className='w-fit'>
           <p className='font-inter text-black font-medium text-base'>
-            {data?.country}
+            {data?.country|| '-'}
           </p>
         </div>
       ),
@@ -175,7 +176,7 @@ function OrganizationManager() {
 
       renderContent: (data: string) => (
         <div className='w-fit'>
-          <p className='font-inter text-black font-medium text-base'>{data}</p>
+          <p className='font-inter text-black font-medium text-base'>{data|| '-'}</p>
         </div>
       ),
     },
@@ -231,7 +232,7 @@ function OrganizationManager() {
       renderContent: (data: string) => (
         <div className='w-fit'>
           <p className='font-inter text-black font-medium text-base text-black/85'>
-            {data}
+            {data|| '-'}
           </p>
         </div>
       ),
@@ -485,6 +486,10 @@ function OrganizationManager() {
 
   return (
     <>
+      <HelmetSeo
+        Title='Organization Manager | OrbitRMS Admin Panel'
+        Content='Log in to OrbitRMS and start managing everything in one place with ease and efficiency!'
+      />
       <div className='w-full h-full relative'>
         <Breadcrumbs BreadcrumbsNavigationFlow={OrgManagerBreadcrumbsObjects} />
         <div className='w-full h-full pt-9'>

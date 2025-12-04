@@ -24,6 +24,7 @@ import {
   NotificationContextApiProps,
 } from '../../Context/Notification/NotificationContextApi';
 import { multipleFetchApi, multiplePutApi } from '../../Helper/api/multipleAPI';
+import HelmetSeo from '../../Helper/HelmetSeo';
 import { classNames } from '../../Helper/HelperFunction';
 import ProtectedRoute from '../../Helper/ProtectedRoute';
 import { useDebounce } from '../../Hooks/useDebounce';
@@ -180,6 +181,10 @@ function ViewOrganizationPage() {
   if (data)
     return (
       <>
+        <HelmetSeo
+          Title={`${data?.general_info?.organization_name || ''} Organization Info | OrbitRMS Admin Panel`}
+          Content='Log in to OrbitRMS and start managing everything in one place with ease and efficiency!'
+        />
         <div className='w-full h-full'>
           <div className='w-full h-full flex items-stretch justify-start'>
             <div className='w-[30%] max-w-[350px] bg-white border-r border-r-black/20 overflow-auto h-[calc(100vh-57px)] hide-scrollbar'>

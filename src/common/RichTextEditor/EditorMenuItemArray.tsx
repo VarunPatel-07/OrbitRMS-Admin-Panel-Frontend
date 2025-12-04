@@ -98,28 +98,28 @@ export const EditorMenuDefaultHeadingItemArray = (
   },
 ];
 
-function createFontOption(
-  editor: Editor,
-  name: string,
-  fontFamily: string
-): RichTextEditorMenuProps {
-  const isActive = editor.isActive('textStyle', { fontFamily });
-  return {
-    name,
-    onClick: !isActive
-      ? () => editor.chain().focus().setFontFamily(fontFamily).run()
-      : () => editor.chain().focus().unsetFontFamily().run(),
-    isActive,
-  };
-}
+// function createFontOption(
+//   editor: Editor,
+//   name: string,
+//   fontFamily: string
+// ): RichTextEditorMenuProps {
+//   const isActive = editor.isActive('textStyle', { fontFamily });
+//   return {
+//     name,
+//     onClick: !isActive
+//       ? () => editor.chain().focus().setFontFamily(fontFamily).run()
+//       : () => editor.chain().focus()?.unsetFontFamily().run(),
+//     isActive,
+//   };
+// }
 
-export const EditorMenuDefaultFontFamilyArray = (
-  editor: Editor
-): RichTextEditorMenuProps[] => [
-  createFontOption(editor, 'Inter', 'Inter'),
-  createFontOption(editor, 'Comic Sans', '"Comic Sans MS", "Comic Sans"'),
-  createFontOption(editor, 'Serif', 'serif'),
-  createFontOption(editor, 'Monospace', 'monospace'),
-  createFontOption(editor, 'Cursive', 'cursive'),
-  createFontOption(editor, 'Exo 2', '"Exo 2"'),
-];
+// export const EditorMenuDefaultFontFamilyArray = (
+//   editor: Editor
+// ): RichTextEditorMenuProps[] => [
+//   createFontOption(editor, 'Inter', 'Inter'),
+//   createFontOption(editor, 'Comic Sans', '"Comic Sans MS", "Comic Sans"'),
+//   createFontOption(editor, 'Serif', 'serif'),
+//   createFontOption(editor, 'Monospace', 'monospace'),
+//   createFontOption(editor, 'Cursive', 'cursive'),
+//   createFontOption(editor, 'Exo 2', '"Exo 2"'),
+// ];

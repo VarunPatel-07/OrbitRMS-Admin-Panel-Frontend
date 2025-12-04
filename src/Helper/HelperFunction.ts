@@ -2,6 +2,7 @@
 import React, { MutableRefObject, SetStateAction } from 'react';
 import { AxiosError } from 'axios';
 import CryptoJS from 'crypto-js';
+import Cookies from 'js-cookie';
 import validator from 'validator';
 
 const encryptionKey = import.meta.env.VITE_ENCRYPTION_KEY;
@@ -16,8 +17,11 @@ export const classNames = (
     .join(' ')}`;
 };
 
-export const isValidEmail = (email: string): boolean => {
-  const isValid = validator.isEmail(email);
+export const isValidEmail = (
+  email: string,
+  host_blacklist: string[] = []
+): boolean => {
+  const isValid = validator.isEmail(email, { host_blacklist: host_blacklist });
   return isValid;
 };
 
@@ -60,6 +64,58 @@ export const storeDataInLocalStorage = (
   localStorage.setItem(key, dataToStore);
 };
 
+export const storeDataInSecureCookie = (
+  _data: any,
+  key: string,
+  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+) => {
+  if (!key) {
+    console.error('the key is required to store the data');
+    return;
+  }
+  let dataToStore: string;
+  if (encrypted) {
+    _data = typeof _data == 'object' ? JSON.stringify(_data) : _data;
+    dataToStore = CryptoJS.AES.encrypt(_data, encryptionKey).toString();
+  } else {
+    dataToStore = JSON.stringify(_data);
+  }
+  Cookies.set(key, dataToStore, {
+    secure: true,
+    sameSite: 'strict',
+    expires: 7,
+  });
+};
+
+export const getDataFromSecureCookie = (
+  key: string,
+  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+): any | null => {
+  try {
+    const cookieStorageData = Cookies.get(key);
+    if (!cookieStorageData) return null;
+
+    if (encrypted) {
+      if (!encryptionKey)
+        throw new Error('Encryption key is required for decryption');
+      const decryptedData = CryptoJS.AES.decrypt(
+        cookieStorageData,
+        encryptionKey
+      ).toString();
+      if (key != 'adminAuthenticationToken') {
+        return JSON.parse(decryptedData);
+      } else {
+        return decryptedData;
+      }
+    }
+
+    return JSON.parse(cookieStorageData);
+  } catch (error) {
+    console.error(`Error reading from localStorage (key: ${key}):`, error);
+    return null;
+  }
+};
+
 //  * To Handel The Error From The One Place.
 
 export const getDataFromLocalStorage = (
@@ -77,7 +133,7 @@ export const getDataFromLocalStorage = (
         localStorageData,
         encryptionKey
       ).toString();
-      if (key != 'authenticationToken') {
+      if (key != 'adminAuthenticationToken') {
         return JSON.parse(decryptedData);
       } else {
         return decryptedData;
@@ -131,7 +187,7 @@ export const getDataFromTheSessionStorage = (
       sessionStorageData,
       encryptionKey
     ).toString();
-    if (key != 'authenticationToken') {
+    if (key != 'adminAuthenticationToken') {
       return JSON.parse(decryptedData);
     } else {
       return decryptedData;
@@ -330,3 +386,63 @@ export const stripHtml = (html: string = '') =>
     .replace(/<[^>]+>/g, '')
     .replace(/\s+/g, ' ')
     .trim();
+
+export const getRadianAngle = (rotation: number) => {
+  return (rotation * Math.PI) / 180;
+};
+
+export const createImageUtilFunction = (url: string) => {
+  return new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.src = url;
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = (error) => reject(error);
+  });
+};
+
+export const getBoundingBox = (
+  _width: number,
+  _height: number,
+  radian: number
+) => {
+  return {
+    width:
+      Math.abs(_width * Math.cos(radian)) +
+      Math.abs(_height * Math.sin(radian)),
+    height:
+      Math.abs(_width * Math.sin(radian)) +
+      Math.abs(_height * Math.cos(radian)),
+  };
+};
+
+export const dataUrlToFileConvertor = (dataUrl: string, filename: string) => {
+  const arr = dataUrl.split(',');
+  const match = arr[0].match(/:(.*?);/);
+  const mime = match ? match[1] : 'application/octet-stream';
+
+  const correctedFilename =
+    filename.endsWith('.png') && mime !== 'image/png'
+      ? filename.replace('.png', '.jpeg')
+      : filename;
+
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], correctedFilename, { type: mime });
+};
+
+export const generateTimeBasedGreeting = (): string => {
+  const date = new Date();
+  const time = date?.getHours();
+
+  if (time >= 5 && time < 12) return 'Good Morning';
+  if (time >= 12 && time < 16) return 'Good Afternoon';
+  if (time >= 16 && time < 20) return 'Good Evening';
+  return 'Good Night';
+};

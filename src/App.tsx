@@ -10,7 +10,7 @@ import {
 } from './Context/Notification/NotificationContextApi';
 import { verifyUserApiFunction } from './Helper/api/api';
 import HelmetSeo from './Helper/HelmetSeo';
-import { getDataFromLocalStorage } from './Helper/HelperFunction';
+import { getDataFromSecureCookie } from './Helper/HelperFunction';
 import ProtectedRoute from './Helper/ProtectedRoute';
 import { useDebounce } from './Hooks/useDebounce';
 import Dashboard from './Pages/Dashboard/Dashboard';
@@ -41,8 +41,8 @@ function App() {
   useEffect(() => {
     if (useEffectRef.current) return;
     useEffectRef.current = true;
-    const _localToken = getDataFromLocalStorage('authenticationToken');
-    if (_localToken) {
+    const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+    if (_cookieToken) {
       verifyUsersLoggedIn();
     } else {
       setShowGlobalLoader(false);
