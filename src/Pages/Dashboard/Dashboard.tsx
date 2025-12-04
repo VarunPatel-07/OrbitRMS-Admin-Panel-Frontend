@@ -37,8 +37,8 @@ const DeleteModal = React.lazy(
 const initialData: AddEditPostFormdataInterface = {
   description: '',
   new_images: [],
-  isCommentDisabled: false,
-  isLikeDisabled: false,
+  isCommentDisabled: true,
+  isLikeDisabled: true,
   existing_images: [],
   likes: [],
 };

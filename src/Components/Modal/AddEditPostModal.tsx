@@ -254,44 +254,6 @@ const AddEditPostModal = React.memo(function AddEditPostModal(
                 className='whitespace-pre-wrap'
               />
             </div>
-            <div className='w-full flex flex-col gap-4'>
-              <div className='flex items-center justify-between gap-3'>
-                <p className='text-black font-inter font-medium capitalize'>
-                  Disable Commenting
-                </p>
-                <button
-                  className={`w-[52px] h-[22px] rounded-full relative transition-all duration-200 ${formData.isCommentDisabled ? 'bg-green-500' : 'bg-red-500'}`}
-                  onClick={() =>
-                    setFormData((pervData) => ({
-                      ...pervData,
-                      isCommentDisabled: !pervData?.isCommentDisabled,
-                    }))
-                  }
-                >
-                  <span
-                    className={`w-[18px] h-[18px] bg-white rounded-full inline-block absolute top-1/2 -translate-y-1/2 transition-all duration-200 ${formData.isCommentDisabled ? 'left-8' : 'left-[3px]'}`}
-                  ></span>
-                </button>
-              </div>
-              <div className='flex items-center justify-between gap-3'>
-                <p className='text-black font-inter font-medium capitalize'>
-                  Disable Liking
-                </p>
-                <button
-                  className={`w-[52px] h-[22px] rounded-full relative transition-all duration-200 ${formData.isLikeDisabled ? 'bg-green-500' : 'bg-red-500'}`}
-                  onClick={() =>
-                    setFormData((pervData) => ({
-                      ...pervData,
-                      isLikeDisabled: !pervData?.isLikeDisabled,
-                    }))
-                  }
-                >
-                  <span
-                    className={`w-[18px] h-[18px] bg-white rounded-full inline-block absolute top-1/2 -translate-y-1/2 transition-all duration-200 ${formData.isLikeDisabled ? 'left-8' : 'left-[3px]'}`}
-                  ></span>
-                </button>
-              </div>
-            </div>
           </div>
           <div className='py-2 w-full border-t px-5 border-t-black/20 grid grid-cols-2 gap-3 items-center justify-center absolute bottom-0 left-0'>
             <button
