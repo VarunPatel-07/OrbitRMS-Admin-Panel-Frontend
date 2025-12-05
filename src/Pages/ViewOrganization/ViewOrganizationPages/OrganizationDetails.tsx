@@ -70,7 +70,7 @@ function OrganizationDetails(props: OrganizationDetailsPropsInterface) {
                 <div className='w-full'>
                   <InfoField
                     label='Organization Name'
-                    value={data?.general_info.organization_name}
+                    value={data?.general_info?.organization_name}
                   />
                 </div>
                 <div className='w-full'>
