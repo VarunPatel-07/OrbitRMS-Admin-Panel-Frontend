@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 import InfoLottieIcon from '../../assets/lottie/info.lottie';
-import Button from '../../common/Button';
-import Loader from '../../common/Loader';
-import { classNames } from '../../Helper/HelperFunction';
 import { OrgManagerAlertModalProps } from '../../interface/CommonComponentProps';
+import { classNames } from '../../utils/helper/HelperFunction';
+import Button from '../common/Button';
+import Loader from '../common/Loader';
 
 function OrgAlertModal(props: OrgManagerAlertModalProps) {
   const {

@@ -1,6 +1,6 @@
-import RichTextEditor from '../../../common/RichTextEditor/RichTextEditor';
-import { isRichTextEditorIsEmpty } from '../../../Helper/HelperFunction';
+import RichTextEditor from '../../../components/common/RichTextEditor/RichTextEditor';
 import { MaintenanceModeDescriptionInterface } from '../../../interface/MaintenanceMode';
+import { isRichTextEditorIsEmpty } from '../../../utils/helper/HelperFunction';
 
 function MaintenanceModeDescription(
   props: MaintenanceModeDescriptionInterface

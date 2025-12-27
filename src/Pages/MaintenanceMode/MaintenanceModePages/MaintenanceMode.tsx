@@ -4,33 +4,33 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { Link } from 'react-router-dom';
 import { Editor } from '@tiptap/react';
 
-import Breadcrumbs from '../../../common/Breadcrumbs';
-import Button from '../../../common/Button';
+import Breadcrumbs from '../../../components/common/Breadcrumbs';
+import Button from '../../../components/common/Button';
 import {
   initialMaintenanceModeModalPropsInfo,
   MaintenanceModeBreadCrumbObject,
   MaintenanceModeFormData,
-} from '../../../Constant/MaintenanceModeConstant';
+} from '../../../constant/MaintenanceModeConstant';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../../Context/Notification/NotificationContextApi';
-import {
-  multipleFetchApi,
-  multiplePutApi,
-} from '../../../Helper/api/multipleAPI';
-import {
-  formateDate,
-  isRichTextEditorIsEmpty,
-  stripHtml,
-} from '../../../Helper/HelperFunction';
-import { useDebounce } from '../../../Hooks/useDebounce';
+} from '../../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../../hooks/useDebounce';
 import {
   MaintenanceModeFormDataInterface,
   MaintenanceModeModalInfo,
   scheduledMaintenanceStartEndDatesInterface,
 } from '../../../interface/MaintenanceMode';
 import { endpointObject } from '../../../interface/propsInterface';
+import {
+  multipleFetchApi,
+  multiplePutApi,
+} from '../../../utils/api/multipleAPI';
+import {
+  formateDate,
+  isRichTextEditorIsEmpty,
+  stripHtml,
+} from '../../../utils/helper/HelperFunction';
 import MaintenanceModeAlertModal from '../MaintenanceModeHelper/MaintenanceModeAlertModal';
 import MaintenanceModeDescription from '../MaintenanceModeHelper/MaintenanceModeDescription';
 import {

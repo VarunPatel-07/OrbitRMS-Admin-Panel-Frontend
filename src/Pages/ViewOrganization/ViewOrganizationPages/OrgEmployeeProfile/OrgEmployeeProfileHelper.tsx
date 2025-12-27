@@ -2,13 +2,8 @@ import { LuUser } from 'react-icons/lu';
 import { MdOutlineEmail } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-import EmployeeProfilePicture from '../../../../Components/EmployeeProfilePicture';
-import { AlignableForChildInfo } from '../../../../Constant/Constant';
-import {
-  BeautifulAccountStatusRenderer,
-  InfoField,
-} from '../../../../Helper/Helper';
-import { classNames, formateDate } from '../../../../Helper/HelperFunction';
+import EmployeeProfilePicture from '../../../../components/EmployeeProfilePicture';
+import { AlignableForChildInfo } from '../../../../constant/Constant';
 import {
   AddressModuleInterface,
   EmployeeFamilyInfoInterface,
@@ -18,6 +13,14 @@ import {
   OrganizationSettingsInterface,
 } from '../../../../interface/OrganizationManager';
 import { UserProfileInformationInterface } from '../../../../interface/OrgEmployeeInterface';
+import {
+  BeautifulAccountStatusRenderer,
+  InfoField,
+} from '../../../../utils/helper/Helper';
+import {
+  classNames,
+  formateDate,
+} from '../../../../utils/helper/HelperFunction';
 
 export const EmployeeProfileElemRenderer = (
   data: UserProfileInformationInterface

@@ -3,12 +3,12 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { addMinutes, isSameDay } from 'date-fns';
 
 import InfoLottieIcon from '../../../assets/lottie/info.lottie';
-import Button from '../../../common/Button';
-import CommonDatePicker from '../../../common/CommonDatePicker';
-import Loader from '../../../common/Loader';
-import TextArea from '../../../common/TextArea';
-import { classNames } from '../../../Helper/HelperFunction';
+import Button from '../../../components/common/Button';
+import CommonDatePicker from '../../../components/common/CommonDatePicker';
+import Loader from '../../../components/common/Loader';
+import TextArea from '../../../components/common/TextArea';
 import { MaintenanceModeAlertModalInterface } from '../../../interface/MaintenanceMode';
+import { classNames } from '../../../utils/helper/HelperFunction';
 
 const AlertModalIcon = () => {
   return (

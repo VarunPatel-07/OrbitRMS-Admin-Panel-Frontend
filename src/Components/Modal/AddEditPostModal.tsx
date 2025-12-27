@@ -1,21 +1,21 @@
 import React, { useContext, useRef, useState } from 'react';
 import { IoClose, IoCloseCircle } from 'react-icons/io5';
 
-import MultipleDragAndDropFileUploader from '../../common/DragDropUploader/MultipleFileUploader/MultipleDragDropFileUploader';
-import Loader from '../../common/Loader';
-import RichTextEditor from '../../common/RichTextEditor/RichTextEditor';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../Context/Notification/NotificationContextApi';
-import {
-  classNames,
-  isRichTextEditorIsEmpty,
-} from '../../Helper/HelperFunction';
+} from '../../context/notification/NotificationContextApi';
 import {
   AddEditPostModalInterface,
   SelectedFileArrayObjInterface,
 } from '../../interface/interface';
+import {
+  classNames,
+  isRichTextEditorIsEmpty,
+} from '../../utils/helper/HelperFunction';
+import MultipleDragAndDropFileUploader from '../common/DragDropUploader/MultipleFileUploader/MultipleDragDropFileUploader';
+import Loader from '../common/Loader';
+import RichTextEditor from '../common/RichTextEditor/RichTextEditor';
 
 const AddEditPostModal = React.memo(function AddEditPostModal(
   props: AddEditPostModalInterface

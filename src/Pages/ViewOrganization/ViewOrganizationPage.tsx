@@ -11,23 +11,19 @@ import {
   useParams,
 } from 'react-router-dom';
 
-import Breadcrumbs from '../../common/Breadcrumbs';
-import NotFound from '../../common/NotFound';
-import OrgAlertModal from '../../Components/Modal/OrgAlertModal';
+import Breadcrumbs from '../../components/common/Breadcrumbs';
+import NotFound from '../../components/common/NotFound';
+import OrgAlertModal from '../../components/modal/OrgAlertModal';
 import {
   OrganizationInfoInitialData,
   OrganizationManagerAlertModalInitialObj,
   ViewOrganizationHeaderButtons,
-} from '../../Constant/OrganizationManagerConstant';
+} from '../../constant/OrganizationManagerConstant';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../Context/Notification/NotificationContextApi';
-import { multipleFetchApi, multiplePutApi } from '../../Helper/api/multipleAPI';
-import HelmetSeo from '../../Helper/HelmetSeo';
-import { classNames } from '../../Helper/HelperFunction';
-import ProtectedRoute from '../../Helper/ProtectedRoute';
-import { useDebounce } from '../../Hooks/useDebounce';
+} from '../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../hooks/useDebounce';
 import {
   NotFoundPagesOptionsButtonArray,
   OrganizationManagerAlertModalInfoType,
@@ -37,6 +33,10 @@ import {
   ViewOrganizationHeaderButtonsInterface,
 } from '../../interface/OrganizationManager';
 import { endpointObject } from '../../interface/propsInterface';
+import { multipleFetchApi, multiplePutApi } from '../../utils/api/multipleAPI';
+import HelmetSeo from '../../utils/helper/HelmetSeo';
+import { classNames } from '../../utils/helper/HelperFunction';
+import ProtectedRoute from '../../utils/helper/ProtectedRoute';
 import { OrganizationAlertModalHelperFunction } from '../OrganizationManager/OrganizationAlertModalHelper';
 import OrganizationSidebar from './OrganizationsHelper/OrganizationSidebar';
 import OrganizationDetails from './ViewOrganizationPages/OrganizationDetails';

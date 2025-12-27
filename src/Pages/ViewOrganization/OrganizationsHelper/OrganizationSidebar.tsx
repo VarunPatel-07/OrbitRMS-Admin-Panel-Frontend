@@ -2,19 +2,19 @@ import { useContext, useState } from 'react';
 import { RiVerifiedBadgeFill } from 'react-icons/ri';
 import Skeleton from 'react-loading-skeleton';
 
-import Button from '../../../common/Button';
-import EmployeeProfilePicture from '../../../Components/EmployeeProfilePicture';
-import ResetPasswordLinkModal from '../../../Components/Modal/ResetPasswordLinkModal';
-import { publicEmailProviders } from '../../../Constant/PublicEmailArray';
+import Button from '../../../components/common/Button';
+import EmployeeProfilePicture from '../../../components/EmployeeProfilePicture';
+import ResetPasswordLinkModal from '../../../components/modal/ResetPasswordLinkModal';
+import { publicEmailProviders } from '../../../constant/PublicEmailArray';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../../Context/Notification/NotificationContextApi';
-import { multiplePostApi } from '../../../Helper/api/multipleAPI';
-import { classNames, formateDate } from '../../../Helper/HelperFunction';
-import { useDebounce } from '../../../Hooks/useDebounce';
+} from '../../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../../hooks/useDebounce';
 import { ViewOrgSidebarPropsInterface } from '../../../interface/OrganizationManager';
 import { endpointObject } from '../../../interface/propsInterface';
+import { multiplePostApi } from '../../../utils/api/multipleAPI';
+import { classNames, formateDate } from '../../../utils/helper/HelperFunction';
 
 function OrganizationSidebar(props: ViewOrgSidebarPropsInterface) {
   const { loading, data, handelClickOnOrgPowerOff } = props;

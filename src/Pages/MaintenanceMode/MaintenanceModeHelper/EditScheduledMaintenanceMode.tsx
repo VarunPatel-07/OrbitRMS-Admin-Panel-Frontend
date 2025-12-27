@@ -4,19 +4,19 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { addMinutes, isSameDay } from 'date-fns';
 
 import InfoLottieIcon from '../../../assets/lottie/info.lottie';
-import Button from '../../../common/Button';
-import CommonDatePicker from '../../../common/CommonDatePicker';
-import Loader from '../../../common/Loader';
-import TextArea from '../../../common/TextArea';
-import {
-  classNames,
-  differenceBetweenDates,
-  getUTCDateFormIsoString,
-} from '../../../Helper/HelperFunction';
+import Button from '../../../components/common/Button';
+import CommonDatePicker from '../../../components/common/CommonDatePicker';
+import Loader from '../../../components/common/Loader';
+import TextArea from '../../../components/common/TextArea';
 import {
   EditScheduledMaintenanceModeInterface,
   MaintenanceModeHistoryInterface,
 } from '../../../interface/MaintenanceMode';
+import {
+  classNames,
+  differenceBetweenDates,
+  getUTCDateFormIsoString,
+} from '../../../utils/helper/HelperFunction';
 
 function EditScheduledMaintenanceMode(
   props: EditScheduledMaintenanceModeInterface
@@ -77,14 +77,14 @@ function EditScheduledMaintenanceMode(
       const startedDate = getUTCDateFormIsoString(editData.started_at);
 
       if (isSameDay(startedDate, selected)) {
-        return addMinutes(startedDate, -15); 
+        return addMinutes(startedDate, -15);
       }
 
       return new Date(selected.setHours(0, 0, 0, 0));
     }
 
     if (isSameDay(now, selected)) {
-      return addMinutes(now, -15); 
+      return addMinutes(now, -15);
     }
 
     return new Date(selected.setHours(0, 0, 0, 0));
@@ -95,8 +95,8 @@ function EditScheduledMaintenanceMode(
     const selected = editData ? new Date(editData[type]) : now;
 
     return isSameDay(now, selected)
-      ? new Date(now.setHours(23, 45, 0, 0)) 
-      : new Date(selected.setHours(23, 45, 0, 0)); 
+      ? new Date(now.setHours(23, 45, 0, 0))
+      : new Date(selected.setHours(23, 45, 0, 0));
   };
 
   const EditDateComponent = () => {

@@ -4,7 +4,7 @@ import {
   Equals,
   Is,
   StartsWith,
-} from '../../../Constant/FilterOperator';
+} from '../../../constant/FilterOperator';
 import { FilterFieldsTypeEnums } from '../../../enums/enums';
 import { SearchBarFilterOptionsInterface } from '../../../interface/propsInterface';
 

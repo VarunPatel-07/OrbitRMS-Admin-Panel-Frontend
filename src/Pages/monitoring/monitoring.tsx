@@ -3,20 +3,20 @@ import { FaTerminal } from 'react-icons/fa';
 import { FiRefreshCw } from 'react-icons/fi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Button from '../../common/Button';
-import { initialMetadata } from '../../Constant/Constant';
+import Button from '../../components/common/Button';
+import { initialMetadata } from '../../constant/Constant';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../Context/Notification/NotificationContextApi';
-import { multipleFetchApi } from '../../Helper/api/multipleAPI';
-import { getDataFromSecureCookie } from '../../Helper/HelperFunction';
-import { useDebounce } from '../../Hooks/useDebounce';
+} from '../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../hooks/useDebounce';
 import { RuntimeLogsFilesInterface } from '../../interface/interface';
 import {
   endpointObject,
   MetaDataInterface,
 } from '../../interface/propsInterface';
+import { multipleFetchApi } from '../../utils/api/multipleAPI';
+import { getDataFromSecureCookie } from '../../utils/helper/HelperFunction';
 import DownloadBackupFiles from './DownloadBackupFiles';
 import MonitoringSidebar from './MonitoringSidebar';
 

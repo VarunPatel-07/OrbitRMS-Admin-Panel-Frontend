@@ -2,22 +2,22 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { FiAlertTriangle } from 'react-icons/fi';
 import { RiCloseFill } from 'react-icons/ri';
 
-import Button from '../../common/Button';
+import Button from '../../components/common/Button';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../Context/Notification/NotificationContextApi';
-import { multipleFetchApi } from '../../Helper/api/multipleAPI';
-import {
-  classNames,
-  getDataFromSecureCookie,
-} from '../../Helper/HelperFunction';
-import { useDebounce } from '../../Hooks/useDebounce';
+} from '../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../hooks/useDebounce';
 import {
   DownloadBackupFilesInterface,
   RuntimeLogsFilesInterface,
 } from '../../interface/interface';
 import { endpointObject } from '../../interface/propsInterface';
+import { multipleFetchApi } from '../../utils/api/multipleAPI';
+import {
+  classNames,
+  getDataFromSecureCookie,
+} from '../../utils/helper/HelperFunction';
 import RenderFilesItems from './RenderFilesItems';
 
 function DownloadBackupFiles({

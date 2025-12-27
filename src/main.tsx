@@ -9,12 +9,12 @@ import './css/common.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import App from './App';
-import Notification from './common/Notification/Notification';
-import { NotificationContextApiProvider } from './Context/Notification/NotificationContextApi';
-import ProtectedRoute from './Helper/ProtectedRoute';
-import RedirectToDashboard from './Helper/RedirectToDashboard';
-import SignIn from './Pages/Auth/SignIn';
-import VerifyEmailAddress from './Pages/Auth/VerifyEmailAddress';
+import Notification from './components/common/Notification/Notification';
+import { NotificationContextApiProvider } from './context/notification/NotificationContextApi';
+import SignIn from './pages/Auth/SignIn';
+import VerifyEmailAddress from './pages/Auth/VerifyEmailAddress';
+import ProtectedRoute from './utils/helper/ProtectedRoute';
+import RedirectToDashboard from './utils/helper/RedirectToDashboard';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

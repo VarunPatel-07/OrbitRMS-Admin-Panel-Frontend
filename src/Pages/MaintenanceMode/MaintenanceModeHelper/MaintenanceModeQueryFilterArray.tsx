@@ -1,4 +1,4 @@
-import { Between, Is } from '../../../Constant/FilterOperator';
+import { Between, Is } from '../../../constant/FilterOperator';
 import { FilterFieldsTypeEnums } from '../../../enums/enums';
 import { SearchBarFilterOptionsInterface } from '../../../interface/propsInterface';
 

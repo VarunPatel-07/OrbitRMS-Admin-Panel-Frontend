@@ -7,16 +7,8 @@ import * as tus from 'tus-js-client';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../Context/Notification/NotificationContextApi';
-import {
-  multipleDeleteApi,
-  multipleFetchApi,
-  multiplePostApi,
-} from '../../Helper/api/multipleAPI';
-import { generateTimeBasedGreeting } from '../../Helper/HelperFunction';
-import { getCroppedImageBlob } from '../../Helper/ImageCropper';
-import { ImageDownscaler } from '../../Helper/ImageDownscaler';
-import { useDebounce } from '../../Hooks/useDebounce';
+} from '../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../hooks/useDebounce';
 import {
   AddEditPostFormdataInterface,
   cloudSignDataInterface,
@@ -24,14 +16,22 @@ import {
 } from '../../interface/Dashboard';
 import { CloudinaryUploadResult } from '../../interface/interface';
 import { endpointObject } from '../../interface/propsInterface';
+import {
+  multipleDeleteApi,
+  multipleFetchApi,
+  multiplePostApi,
+} from '../../utils/api/multipleAPI';
+import { generateTimeBasedGreeting } from '../../utils/helper/HelperFunction';
+import { getCroppedImageBlob } from '../../utils/helper/ImageCropper';
+import { ImageDownscaler } from '../../utils/helper/ImageDownscaler';
 import Feed from './Feed';
 
 const AddEditPostModal = React.lazy(
-  () => import('../../Components/Modal/AddEditPostModal')
+  () => import('../../components/modal/AddEditPostModal')
 );
 
 const DeleteModal = React.lazy(
-  () => import('../../Components/Modal/DeleteModal')
+  () => import('../../components/modal/DeleteModal')
 );
 
 const initialData: AddEditPostFormdataInterface = {
@@ -135,19 +135,6 @@ function Dashboard() {
     setEditPostId('');
   }, 100);
 
-  //
-  //
-  //* The Api That Help To Fetch The Initial Data Like Data For The Holiday Card
-  //
-  //
-  //
-
-  //
-  //
-  //* The Api That Help To Post The Feed As Well As For The Editing
-  //
-  //
-  //
   const CLOUDINARY_UPLOAD_URL = (cloudName: string) =>
     `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
   // -------------------------------

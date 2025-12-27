@@ -5,25 +5,22 @@ import { IoCloseCircleOutline, IoEye } from 'react-icons/io5';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 
-import Breadcrumbs from '../../common/Breadcrumbs';
-import Table from '../../common/Table/Table';
-import TableFilterSearchBar from '../../common/Table/TableFilterSearchBar';
-import TableInfoHeader from '../../common/Table/TableInfoHeader';
-import TableNoDataFound from '../../common/Table/TableNoDataFound';
-import TablePagination from '../../common/Table/TablePagination';
-import EmployeeProfilePicture from '../../Components/EmployeeProfilePicture';
-import TableSkeletonLoader from '../../Components/Loader/Table/TableSkeletonLoader';
-import OrgAlertModal from '../../Components/Modal/OrgAlertModal';
-import { dropdownMenuArray, initialMetadata } from '../../Constant/Constant';
+import Breadcrumbs from '../../components/common/Breadcrumbs';
+import Table from '../../components/common/Table/Table';
+import TableFilterSearchBar from '../../components/common/Table/TableFilterSearchBar';
+import TableInfoHeader from '../../components/common/Table/TableInfoHeader';
+import TableNoDataFound from '../../components/common/Table/TableNoDataFound';
+import TablePagination from '../../components/common/Table/TablePagination';
+import EmployeeProfilePicture from '../../components/EmployeeProfilePicture';
+import TableSkeletonLoader from '../../components/loader/Table/TableSkeletonLoader';
+import OrgAlertModal from '../../components/modal/OrgAlertModal';
+import { dropdownMenuArray, initialMetadata } from '../../constant/Constant';
 import {
   OrganizationManagerAlertModalInitialObj,
   OrgManagerBreadcrumbsObjects,
-} from '../../Constant/OrganizationManagerConstant';
+} from '../../constant/OrganizationManagerConstant';
 import { FilterFieldsTypeEnums } from '../../enums/enums';
-import { multipleFetchApi, multiplePutApi } from '../../Helper/api/multipleAPI';
-import HelmetSeo from '../../Helper/HelmetSeo';
-import { classNames, formateDate } from '../../Helper/HelperFunction';
-import { useDebounce } from '../../Hooks/useDebounce';
+import { useDebounce } from '../../hooks/useDebounce';
 import { OrganizationManagerAlertModalInfoType } from '../../interface/CommonComponentProps';
 import { Column } from '../../interface/interface';
 import {
@@ -37,6 +34,9 @@ import {
   MetaDataInterface,
   UrlEncodedFilterQueryInterface,
 } from '../../interface/propsInterface';
+import { multipleFetchApi, multiplePutApi } from '../../utils/api/multipleAPI';
+import HelmetSeo from '../../utils/helper/HelmetSeo';
+import { classNames, formateDate } from '../../utils/helper/HelperFunction';
 import { OrganizationAlertModalHelperFunction } from './OrganizationAlertModalHelper';
 import { OrganizationManagerFiltersArray } from './OrganizationManagerFiltersArray';
 
