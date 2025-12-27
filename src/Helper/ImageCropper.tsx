@@ -13,6 +13,7 @@ export const getCroppedImageBlob = async (
 ): Promise<Blob> => {
   const imageUrl = URL.createObjectURL(imageFile);
   const imageObject = await createImageUtilFunction(imageUrl);
+
   URL.revokeObjectURL(imageUrl);
 
   const canvasElement = document.createElement('canvas');
@@ -45,6 +46,7 @@ export const getCroppedImageBlob = async (
   // Prepare crop canvas
   const croppedCanvas = document.createElement('canvas');
   const croppedContext = croppedCanvas.getContext('2d');
+
   if (!croppedContext) throw new Error('Crop canvas context not available');
 
   croppedCanvas.width = croppedArea.width;

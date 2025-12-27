@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 import { ButtonProps } from '../interface/CommonComponentProps';
 
@@ -12,7 +12,7 @@ function Button({
   return (
     <button
       type={type}
-      className={clsx(
+      className={twMerge(
         'disabled:opacity-75 disabled:cursor-not-allowed text-base font-semibold font-inter rounded-lg',
         className
       )}

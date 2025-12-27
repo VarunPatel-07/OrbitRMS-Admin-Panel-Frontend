@@ -37,6 +37,7 @@ function OrganizationSidebar(props: ViewOrgSidebarPropsInterface) {
       ];
       const response = await multiplePostApi(endPointArr);
       const res = response[0];
+
       callBack(res?.success);
       handelNotification(res, 'top-right');
     }
@@ -52,6 +53,7 @@ function OrganizationSidebar(props: ViewOrgSidebarPropsInterface) {
       ];
       const response = await multiplePostApi(endPointArr);
       const res = response[0];
+
       callBack(res?.success);
       handelNotification(res, 'top-right');
     }

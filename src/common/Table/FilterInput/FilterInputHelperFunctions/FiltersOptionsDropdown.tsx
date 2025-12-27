@@ -73,12 +73,14 @@ const FiltersOptionsDropdown = React.memo(function FiltersOptionsDropdown(
       e.preventDefault();
       if (focusedIndex === 0) {
         setFocusedIndex(memoizedFilteredOptions?.length - 1);
+
         return;
       }
       setFocusedIndex((perv) => Math.max(perv - 1, 0));
     } else if (e.key === ' ' && focusedIndex !== -1) {
       e.preventDefault();
       const item = memoizedFilteredOptions[focusedIndex];
+
       if (item) {
         handelOptionsClick(item);
       }
@@ -136,6 +138,7 @@ const FiltersOptionsDropdown = React.memo(function FiltersOptionsDropdown(
 
                   return { ...arrayObj, moduleValue: updatedModuleValue };
                 }
+
                 return arrayObj;
               });
             });
@@ -276,6 +279,7 @@ const FiltersOptionsDropdown = React.memo(function FiltersOptionsDropdown(
         }
       }
     };
+
     if (showCurrentOptionDropdown)
       window.addEventListener('keydown', handelKeyboardNavigation);
 

@@ -14,6 +14,7 @@ function Sidebar() {
   const handelSidebarCollapse = () => {
     setCollapsed(!collapsed);
   };
+
   return (
     <div
       className={`h-full bg-white text-white flex flex-col  transition-all duration-300 border-r border-r-black/20  ${

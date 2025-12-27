@@ -56,6 +56,7 @@ function OrgEmployeeProfile(props: OrganizationEmployeeProfileInterface) {
 
       const response = await multipleFetchApi(endPointArr);
       const res = response[0];
+
       if (res?.success) {
         setData(res?.data);
       } else {
@@ -75,6 +76,7 @@ function OrgEmployeeProfile(props: OrganizationEmployeeProfileInterface) {
         message: 'invalid Ids',
         success: false,
       };
+
       handelNotification(data, 'top-right');
     } else {
       HandelFetchingEmployeeInfoWithDebounce(employee_id, organization_id);

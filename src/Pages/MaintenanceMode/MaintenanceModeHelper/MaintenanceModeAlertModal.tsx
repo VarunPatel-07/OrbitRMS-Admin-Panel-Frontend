@@ -57,6 +57,7 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
     setScheduledMaintenanceStartEndDates((prevData) => {
       if (module_name === 'started_at') {
         const newEndDate = new Date(date);
+
         newEndDate.setHours(newEndDate.getHours() + 1);
 
         return {
@@ -110,7 +111,9 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
         }
       }
     };
+
     document.addEventListener('mousedown', handelClickOutSideTheBox);
+
     return () => {
       document.removeEventListener('mousedown', handelClickOutSideTheBox);
     };

@@ -68,7 +68,9 @@ function DropDown({
         setShowDropDownMenu(false);
       }
     };
+
     document.addEventListener('mousedown', handelClickOutSideTheBox);
+
     return () => {
       document.removeEventListener('mousedown', handelClickOutSideTheBox);
     };

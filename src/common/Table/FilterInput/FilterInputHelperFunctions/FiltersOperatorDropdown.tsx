@@ -53,6 +53,7 @@ const FiltersOperatorDropdown = React.memo(function FiltersOperatorDropdown(
       e.preventDefault();
       if (focusedIndex === filteredOperator?.length - 1) {
         setFocusedIndex(0);
+
         return;
       }
       setFocusedIndex((perv) =>
@@ -62,12 +63,14 @@ const FiltersOperatorDropdown = React.memo(function FiltersOperatorDropdown(
       e.preventDefault();
       if (focusedIndex === 0) {
         setFocusedIndex(filteredOperator?.length - 1);
+
         return;
       }
       setFocusedIndex((perv) => Math.max(perv - 1, 0));
     } else if (e.key === ' ' && focusedIndex !== -1) {
       e.preventDefault();
       const item = filteredOperator[focusedIndex];
+
       if (item) {
         handelOperatorClick(item);
       }
@@ -84,6 +87,7 @@ const FiltersOperatorDropdown = React.memo(function FiltersOperatorDropdown(
 
   useEffect(() => {
     const el = itemRefs.current[focusedIndex];
+
     if (el) {
       el.scrollIntoView({ block: 'nearest' });
     }

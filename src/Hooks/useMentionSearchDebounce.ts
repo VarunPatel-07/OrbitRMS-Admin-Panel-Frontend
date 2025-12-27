@@ -17,11 +17,13 @@ export function useMentionSearchDebounce<
         if (timerRef.current) clearTimeout(timerRef.current);
         timerRef.current = setTimeout(async () => {
           const result = await callbackRef.current(...args);
+
           resolve(result);
         }, delay);
       }) as Promise<ReturnType<T>>;
     },
     [delay]
   );
+
   return naiveDebounce as T;
 }

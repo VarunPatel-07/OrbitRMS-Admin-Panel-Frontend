@@ -19,6 +19,7 @@ function TableLocalSearchBar({
   const handelOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const val = e.target.value;
+
     setSearchValue(val);
     if (val.length <= 0) {
       setSearchValue('');
@@ -41,6 +42,7 @@ function TableLocalSearchBar({
         ?.toLocaleLowerCase()
         .includes(searchValue?.toLocaleLowerCase())
     );
+
     setData(filterData);
   };
 
@@ -49,6 +51,7 @@ function TableLocalSearchBar({
     setShowSearchFilterData(false);
     setData([]);
   };
+
   return (
     <div className='w-ful p-2 bg-gray-200 border-x border-x-black/5'>
       <div className='flex items-stretch justify-between gap-2'>

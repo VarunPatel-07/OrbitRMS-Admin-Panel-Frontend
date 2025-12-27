@@ -78,6 +78,7 @@ function FeedPostCard(props: propsInterface) {
         setShowMenu(false);
       }
     };
+
     document.addEventListener('mousedown', handelClickOutSideTheBox);
 
     return () => {
@@ -96,6 +97,7 @@ function FeedPostCard(props: propsInterface) {
     };
 
     document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };

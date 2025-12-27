@@ -23,9 +23,11 @@ function TextArea(props: TextAreaProps) {
     e: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const val = e.target.value;
+
     if (!setValue) return;
     setValue(val);
   };
+
   return (
     <div className='w-full'>
       {labelFieldName && (

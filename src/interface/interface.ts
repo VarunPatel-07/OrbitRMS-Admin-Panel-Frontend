@@ -1,4 +1,4 @@
-import { SetStateAction } from 'react';
+import React, { SetStateAction } from 'react';
 import { Area } from 'react-easy-crop';
 import { Editor } from '@tiptap/react';
 
@@ -130,4 +130,36 @@ export interface AddEditPostModalInterface {
   loading: boolean;
   setLoading: React.Dispatch<SetStateAction<boolean>>;
   handelCancelButton: () => void;
+}
+
+export interface RuntimeLogsFilesInterface {
+  creation_time: string;
+  file_name: string;
+  file_path: string;
+  size: number;
+}
+
+export interface MonitoringSidebarInterface {
+  loading: boolean;
+  availableLogFiles: RuntimeLogsFilesInterface[];
+  setShowModal: React.Dispatch<SetStateAction<boolean>>;
+  handelClickOnDownload: (
+    file_name: string,
+    file_path: string,
+    bulkDownload?: boolean
+  ) => void;
+}
+
+export interface DownloadBackupFilesInterface {
+  showModal: boolean;
+  setShowModal: React.Dispatch<SetStateAction<boolean>>;
+}
+export interface RenderFilesItemsInterface {
+  loading: boolean;
+  availableLogFiles: RuntimeLogsFilesInterface[];
+  handelClickOnDownload: (
+    file_name: string,
+    file_path: string,
+    bulkDownload?: boolean
+  ) => void;
 }

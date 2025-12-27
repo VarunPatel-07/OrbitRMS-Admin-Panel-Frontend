@@ -162,6 +162,7 @@ function MaintenanceModeHistory() {
           .replace(/style="[^"]*"/g, '') // remove inline styles
           .replace(/<h1>/g, '<div>')
           .replace(/<\/h1>/g, '</div>');
+
         return (
           <div className='line-clamp-4 overflow-hidden min-w-[250px] text-ellipsis'>
             <div
@@ -347,6 +348,7 @@ function MaintenanceModeHistory() {
 
       const response = await multiplePutApi(endPointArr);
       const res = response[0];
+
       if (res?.success) {
         setEditData(null);
         setShowEditModal(false);
@@ -399,6 +401,7 @@ function MaintenanceModeHistory() {
   ) => {
     setIsFetchingData(true);
     let queryString = '';
+
     if (filterArray?.length > 0) {
       const queryFilterArray = filterArray?.map((queryObj) => {
         const obj: UrlEncodedFilterQueryInterface = {
@@ -406,6 +409,7 @@ function MaintenanceModeHistory() {
           operator: '',
           value: '',
         };
+
         queryObj?.moduleValue?.forEach((moduleValue) => {
           if (moduleValue?.type === FilterFieldsTypeEnums[0]) {
             obj.field_name = moduleValue?.label;
@@ -416,6 +420,7 @@ function MaintenanceModeHistory() {
           if (moduleValue?.type === FilterFieldsTypeEnums[2]) {
             if (queryObj?.optionType == 'multi-select') {
               const MultiSelectArr: string[] = [];
+
               queryObj?.moduleValue
                 ?.filter((tem) => tem.type === FilterFieldsTypeEnums[2])
                 ?.map((data) => MultiSelectArr.push(data?.value));
@@ -446,9 +451,11 @@ function MaintenanceModeHistory() {
     setRecordsPerPage(Number(value));
     const filterQuery = queryParameter.get('filter');
     let queryString = '';
+
     if (filterQuery) {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
+
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
     setIsFetchingData(true);
@@ -460,9 +467,11 @@ function MaintenanceModeHistory() {
 
     const filterQuery = queryParameter.get('filter');
     let queryString = '';
+
     if (filterQuery) {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
+
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
     setIsFetchingData(true);

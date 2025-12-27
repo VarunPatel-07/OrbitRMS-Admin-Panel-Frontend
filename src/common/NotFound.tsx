@@ -7,6 +7,7 @@ import Button from './Button';
 
 function NotFound(props: NotFoundPageComponentPropsInterface) {
   const { message, title, optionsButton } = props;
+
   return (
     <div className='w-full h-full pb-4'>
       <div className='w-full h-full bg-white rounded-lg'>
@@ -31,16 +32,24 @@ function NotFound(props: NotFoundPageComponentPropsInterface) {
               {message}
             </p>
             <div className='w-full mt-3 m-auto flex flex-col items-center justify-center gap-2.5'>
-              {optionsButton?.map((options) => {
+              {optionsButton?.map((options, index) => {
                 if (options?.type === 'button' && options?.onClick)
                   return (
-                    <Button type='button' className={options?.className}>
+                    <Button
+                      type='button'
+                      key={index}
+                      className={options?.className}
+                    >
                       {options?.label}
                     </Button>
                   );
                 if (options?.type === 'link' && options?.link)
                   return (
-                    <Link to={options?.link} className={options?.className}>
+                    <Link
+                      to={options?.link}
+                      key={index}
+                      className={options?.className}
+                    >
                       <span className='inline-block'>{options?.icon}</span>{' '}
                       <span className='inline-block'>{options?.label}</span>
                     </Link>

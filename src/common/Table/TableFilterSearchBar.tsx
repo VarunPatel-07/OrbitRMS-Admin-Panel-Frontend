@@ -24,6 +24,7 @@ export default function TableFilterSearchBar(
     urlDecodedFilterQuery,
     classNames,
   } = props;
+
   return (
     <div
       className={clsx(

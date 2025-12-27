@@ -59,6 +59,7 @@ function Notification() {
               )
               .map((notification: NotificationObject) => {
                 if (!notification.message?.trim()) return;
+
                 return (
                   <div
                     key={notification.id}

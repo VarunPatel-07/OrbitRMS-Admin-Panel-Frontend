@@ -47,6 +47,7 @@ export const InfoField = ({
         href={value}
         target='_blank'
         className='text-xs lg:text-sm text-blue-600 font-medium font-inter w-full text-ellipsis overflow-hidden text-nowrap inline-block'
+        rel='noreferrer'
       >
         {value || '-'}
       </a>

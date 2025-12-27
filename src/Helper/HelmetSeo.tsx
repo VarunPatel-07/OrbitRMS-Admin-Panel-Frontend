@@ -7,6 +7,7 @@ interface SeoPropsInterface {
 
 function HelmetSeo(prop: SeoPropsInterface) {
   const { Title, Content } = prop;
+
   return (
     <Helmet>
       <meta charSet='utf-8' />

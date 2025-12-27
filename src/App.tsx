@@ -16,6 +16,7 @@ import { useDebounce } from './Hooks/useDebounce';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import MaintenanceMode from './Pages/MaintenanceMode/MaintenanceModePages/MaintenanceMode';
 import MaintenanceModeHistory from './Pages/MaintenanceMode/MaintenanceModePages/MaintenanceModeHistory';
+import Monitoring from './Pages/monitoring/monitoring';
 import OrganizationManager from './Pages/OrganizationManager/OrganizationManager';
 import ViewOrganizationPage from './Pages/ViewOrganization/ViewOrganizationPage';
 
@@ -25,6 +26,7 @@ function App() {
   ) as NotificationContextApiProps;
 
   const useEffectRef = useRef(false);
+
   const [showGlobalLoader, setShowGlobalLoader] = useState<boolean>(true);
 
   const verifyUsersLoggedIn = useDebounce(async () => {
@@ -42,12 +44,14 @@ function App() {
     if (useEffectRef.current) return;
     useEffectRef.current = true;
     const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+
     if (_cookieToken) {
       verifyUsersLoggedIn();
     } else {
       setShowGlobalLoader(false);
     }
   }, [verifyUsersLoggedIn]);
+
   return (
     <>
       <HelmetSeo
@@ -85,12 +89,16 @@ function App() {
                     path='/maintenance-mode'
                     element={<ProtectedRoute element={<MaintenanceMode />} />}
                   />
-                  \
+
                   <Route
                     path='/maintenance-mode/history'
                     element={
                       <ProtectedRoute element={<MaintenanceModeHistory />} />
                     }
+                  />
+                  <Route
+                    path='/monitoring'
+                    element={<ProtectedRoute element={<Monitoring />} />}
                   />
                 </Routes>
               </div>

@@ -44,8 +44,10 @@ const FilterInputMainFilterDropdown = React.memo(
       setShowFilterDropDownMenu(true);
       setCurrentFilterId(id);
       const newItem: ModuleValueInterface = { label: id, value: value, type };
+
       setFilterObject((pervArray) => {
         const exist = pervArray?.find((item) => item?.id === id);
+
         if (exist) {
           return pervArray.map((item) =>
             item?.id === id
@@ -61,6 +63,7 @@ const FilterInputMainFilterDropdown = React.memo(
             optionType,
             moduleValue: [newItem],
           };
+
           return [...pervArray, newItemObj];
         }
       });
@@ -77,6 +80,7 @@ const FilterInputMainFilterDropdown = React.memo(
         e.preventDefault();
         if (focusedIndex === filteredItems?.length - 1) {
           setFocusedIndex(0);
+
           return;
         }
         setFocusedIndex((perv) => Math.min(perv + 1, filteredItems.length - 1));
@@ -84,12 +88,14 @@ const FilterInputMainFilterDropdown = React.memo(
         e.preventDefault();
         if (focusedIndex === 0) {
           setFocusedIndex(filteredItems?.length - 1);
+
           return;
         }
         setFocusedIndex((perv) => Math.max(perv - 1, 0));
       } else if (e.key === ' ' && focusedIndex !== -1) {
         e.preventDefault();
         const item = filteredItems[focusedIndex];
+
         if (item) {
           handelClickOnFilterItem(
             item.id,
@@ -112,6 +118,7 @@ const FilterInputMainFilterDropdown = React.memo(
 
     useEffect(() => {
       const el = itemRefs.current[focusedIndex];
+
       if (el) {
         el.scrollIntoView({ block: 'nearest' });
       }
@@ -146,6 +153,7 @@ const FilterInputMainFilterDropdown = React.memo(
           }
         }
       };
+
       if (showFilterDropDownMenu)
         window.addEventListener('keydown', handelKeyboardNavigation);
 

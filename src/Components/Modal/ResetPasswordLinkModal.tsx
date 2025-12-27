@@ -46,6 +46,7 @@ const ResetPasswordLinkModal = (props: ResetPasswordLinkModalInterface) => {
     if (useCustom) {
       if (customEmail == '' || !isValidEmail(customEmail, hostBlacklistMails)) {
         setShowError(true);
+
         return;
       }
     }
@@ -61,9 +62,11 @@ const ResetPasswordLinkModal = (props: ResetPasswordLinkModalInterface) => {
   const getEmailErrorMessage = (email: string) => {
     const domain = email.split('@')[1].toLowerCase();
     const check = publicEmailProviders.find((p) => p.mail === domain);
+
     if (check) {
       return `public email (${check.company} - ${check.mail}) Not Allowed`;
     }
+
     return 'Please enter a valid email address.';
   };
 

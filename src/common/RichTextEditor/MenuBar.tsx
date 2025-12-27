@@ -41,7 +41,9 @@ function MenuBar({ editor }: { editor: Editor | null }) {
         setShowFontFamilyDropDown(false);
       }
     };
+
     document.addEventListener('mousedown', handelClickOutSideTheBox);
+
     return () => {
       document.removeEventListener('mousedown', handelClickOutSideTheBox);
     };
@@ -56,7 +58,9 @@ function MenuBar({ editor }: { editor: Editor | null }) {
         setShowFontTextDropDown(false);
       }
     };
+
     document.addEventListener('mousedown', handelClickOutSideTheBox);
+
     return () => {
       document.removeEventListener('mousedown', handelClickOutSideTheBox);
     };
@@ -72,10 +76,12 @@ function MenuBar({ editor }: { editor: Editor | null }) {
     let url = previewUrl || '';
 
     const popoverWrapper = document.createElement('div');
+
     popoverWrapper.className =
       'p-2 flex flex-col gap-2 shadow-xl min-w-[200px]';
 
     const inputField = document.createElement('input');
+
     inputField.type = 'text';
     inputField.value = url;
     inputField.placeholder = 'Enter URL...';
@@ -84,15 +90,18 @@ function MenuBar({ editor }: { editor: Editor | null }) {
       'border border-black/45 bg-transparent rounded w-full text-black py-1 px-2 outline-0 resize-none focus:right-0 focus:outline-none focus:outline-2 focus:outline-[rgba(215,139,159,0.2)] focus:border-[var(--them-pink-color)] text-sm';
 
     const buttonWarper = document.createElement('div');
+
     buttonWarper.className =
       'w-full grid grid-cols-2 gap-3 border-t border-t-black/20 pt-2 items-center justify-center';
 
     const submitButton = document.createElement('button');
+
     submitButton.textContent = 'Submit';
     submitButton.className =
       'bg-[var(--them-green-color)] rounded text-white font-inter px-2 py-1 text-sm';
 
     const removeButton = document.createElement('button');
+
     removeButton.textContent = 'Remove';
     removeButton.className =
       'bg-white border border-black/20 rounded text-black font-inter px-2 py-1 text-sm';
@@ -241,6 +250,7 @@ function MenuBar({ editor }: { editor: Editor | null }) {
                 const isActive = editor.isActive('textStyle', {
                   fontSize: size,
                 });
+
                 return (
                   <button
                     key={index}

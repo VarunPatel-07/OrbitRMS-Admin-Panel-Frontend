@@ -17,9 +17,11 @@ function MainSuspenseLoader({
 
   useEffect(() => {
     let timer = null;
+
     if (!loading) {
       timer = setTimeout(() => setFadeOut(true), time || 200);
     }
+
     return () => {
       if (timer) clearTimeout(timer);
     };
@@ -32,9 +34,11 @@ function MainSuspenseLoader({
       }
     };
     const loaderElem = loadingElementRef.current;
+
     if (loaderElem) {
       loaderElem.addEventListener('animationend', handelAnimationEnd);
     }
+
     return () => {
       if (loaderElem) {
         loaderElem.removeEventListener('animationend', handelAnimationEnd);

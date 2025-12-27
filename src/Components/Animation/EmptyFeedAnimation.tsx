@@ -11,6 +11,7 @@ const DotLottieReact = React.lazy(() =>
 
 function EmptyFeedAnimation(props: EmptyFeedAnimationPropsInterface) {
   const { CTAButton } = props;
+
   return (
     <div className='w-full h-screen overflow-hidden bg-gradient-to-br from-white via-gray-50 to-green-50/20'>
       <div className='w-full h-full flex flex-col items-center justify-center relative px-6'>
@@ -51,11 +52,10 @@ function EmptyFeedAnimation(props: EmptyFeedAnimationPropsInterface) {
 
             <div className='w-full flex flex-col gap-6 items-center justify-center'>
               <p className='text-base text-gray-500 leading-relaxed max-w-sm'>
-                Your feed is waiting for its first story. Share what's on your
-                mind and start building your community today.
+                Your feed is waiting for its first story. Share what&apos;s on
+                your mind and start building your community today.
               </p>
 
-              {/* CTA Button container with enhanced styling */}
               {CTAButton && (
                 <div className='w-full flex justify-center transform hover:scale-105 transition-transform duration-200'>
                   {CTAButton}
@@ -65,7 +65,6 @@ function EmptyFeedAnimation(props: EmptyFeedAnimationPropsInterface) {
           </div>
         </div>
 
-        {/* Bottom decorative element */}
         <div className='absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white/40 to-transparent pointer-events-none'></div>
       </div>
     </div>

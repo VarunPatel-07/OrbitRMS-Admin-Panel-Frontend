@@ -51,6 +51,7 @@ export const signInApiFunction = async (
 export const verifyUserApiFunction = async () => {
   try {
     const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+
     if (!_cookieToken) {
       return { success: false, message: 'User not authenticated' };
     }
@@ -67,10 +68,12 @@ export const verifyUserApiFunction = async () => {
 
     const response = await axios(config);
     const res = response?.data;
+
     if (!res?.success) {
       window.location.href = '/auth/sign-in';
       clearLocalSessionStorage();
     }
+
     return res;
   } catch (error: any) {
     return ErrorHandler(error);

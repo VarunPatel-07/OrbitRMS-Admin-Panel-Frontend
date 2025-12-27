@@ -56,6 +56,7 @@ function FilterInputDateSelector(props: FilterInputDateSelectorInterface) {
         start_date: range[0]?.toISOString(),
         end_date: range[1]?.toISOString(),
       };
+
       if (range[0] !== null && range[1] !== null) {
         updateFilterObject(
           {

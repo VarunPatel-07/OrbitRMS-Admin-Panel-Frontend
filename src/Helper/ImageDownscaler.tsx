@@ -17,6 +17,7 @@ export const ImageDownscaler = (
 
         let width = newImage.width;
         let height = newImage.height;
+
         if (width > height) {
           if (width > MAX_WIDTH) {
             height = (height * MAX_WIDTH) / width;
@@ -64,6 +65,7 @@ export const ImageDownscaler = (
                   quality
                 );
               };
+
               compress();
             } else {
               resolve(new File([blob], file.name, { type: blob.type }));

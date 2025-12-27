@@ -91,6 +91,7 @@ function Dashboard() {
     ];
     const response = await multipleDeleteApi(endPointArr);
     const res = response[0];
+
     setIsDeleteLoading(false);
 
     if (res?.success) {
@@ -181,6 +182,7 @@ function Dashboard() {
           resolve(uploadData.url);
         },
       });
+
       uploadData.start();
     });
   };
@@ -203,6 +205,7 @@ function Dashboard() {
 
     return new Promise<CloudinaryUploadResult>((resolve, reject) => {
       const xhr = new XMLHttpRequest();
+
       xhr.open('POST', url);
       xhr.upload.onprogress = (e) => {
         if (e.lengthComputable) {
@@ -238,8 +241,10 @@ function Dashboard() {
       setProgress(totalProgress * 100);
     };
     const uploadedMedia: any[] = [];
+
     for (const item of data?.new_images || []) {
       const file = item?.originalFile;
+
       if (!file) return;
 
       const isVideo = file.type.startsWith('video');
@@ -257,6 +262,7 @@ function Dashboard() {
           },
           handleProgress
         );
+
         uploadedBytes += file.size;
 
         uploadedMedia.push({ url: uploadedUrl, type: 'video' });
@@ -264,6 +270,7 @@ function Dashboard() {
         setStage('uploading');
 
         let processedFile: File;
+
         if (file.size > 10 * 1024 * 1024) {
           processedFile = await ImageDownscaler(file, 10);
         } else {
@@ -288,6 +295,7 @@ function Dashboard() {
           },
           handleProgress
         );
+
         uploadedBytes += processedFile.size;
 
         if (uploadedUrl) {
@@ -301,6 +309,7 @@ function Dashboard() {
         uploadedMedia.push({ url: img, type: 'image' });
       }
     }
+
     return uploadedMedia;
   };
 
@@ -310,6 +319,7 @@ function Dashboard() {
       uploadImages: [{ type: 'image' | 'video'; url: string }]
     ) => {
       const multipartFormData = new FormData();
+
       multipartFormData.append('description', data.description);
       uploadImages?.map((item) => {
         if (item?.type == 'image')
@@ -344,6 +354,7 @@ function Dashboard() {
 
       const response = await multiplePostApi(endPointArr);
       const res = response[0];
+
       handelNotification(res, 'top-right');
 
       if (res?.success) {
@@ -374,6 +385,7 @@ function Dashboard() {
 
     const response = await multiplePostApi(endPointArr);
     const res = response[0];
+
     if (res?.success) {
       setFormSubmitLoader(false);
       setShowAddEditPostModal(false);
@@ -383,6 +395,7 @@ function Dashboard() {
       setUploadingPostFormData(formData);
 
       const responseData = await uploadImageVideoToCloud(formData, res.data);
+
       if (responseData) {
         setStage('processing');
         setProgress(100);

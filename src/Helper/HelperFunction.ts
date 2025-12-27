@@ -22,6 +22,7 @@ export const isValidEmail = (
   host_blacklist: string[] = []
 ): boolean => {
   const isValid = validator.isEmail(email, { host_blacklist: host_blacklist });
+
   return isValid;
 };
 
@@ -32,6 +33,7 @@ export const ErrorHandler = (error: Error | AxiosError) => {
       message: error?.response?.data?.detail?.message ?? 'something went wrong',
       data: null,
     };
+
     return errorData;
   } else {
     const errorData = {
@@ -39,6 +41,7 @@ export const ErrorHandler = (error: Error | AxiosError) => {
       message: 'An unknown error occurred',
       data: null,
     };
+
     return errorData;
   }
 };
@@ -52,9 +55,11 @@ export const storeDataInLocalStorage = (
 ) => {
   if (!key) {
     console.error('the key is required to store the data');
+
     return;
   }
   let dataToStore: string;
+
   if (encrypted) {
     _data = typeof _data == 'object' ? JSON.stringify(_data) : _data;
     dataToStore = CryptoJS.AES.encrypt(_data, encryptionKey).toString();
@@ -71,9 +76,11 @@ export const storeDataInSecureCookie = (
 ) => {
   if (!key) {
     console.error('the key is required to store the data');
+
     return;
   }
   let dataToStore: string;
+
   if (encrypted) {
     _data = typeof _data == 'object' ? JSON.stringify(_data) : _data;
     dataToStore = CryptoJS.AES.encrypt(_data, encryptionKey).toString();
@@ -93,6 +100,7 @@ export const getDataFromSecureCookie = (
 ): any | null => {
   try {
     const cookieStorageData = Cookies.get(key);
+
     if (!cookieStorageData) return null;
 
     if (encrypted) {
@@ -102,6 +110,7 @@ export const getDataFromSecureCookie = (
         cookieStorageData,
         encryptionKey
       ).toString(CryptoJS.enc.Utf8);
+
       if (key != 'adminAuthenticationToken') {
         return JSON.parse(decryptedData);
       } else {
@@ -112,6 +121,7 @@ export const getDataFromSecureCookie = (
     return JSON.parse(cookieStorageData);
   } catch (error) {
     console.error(`Error reading from localStorage (key: ${key}):`, error);
+
     return null;
   }
 };
@@ -124,6 +134,7 @@ export const getDataFromLocalStorage = (
 ): any | null => {
   try {
     const localStorageData = localStorage.getItem(key);
+
     if (!localStorageData) return null;
 
     if (encrypted) {
@@ -133,6 +144,7 @@ export const getDataFromLocalStorage = (
         localStorageData,
         encryptionKey
       ).toString(CryptoJS.enc.Utf8);
+
       if (key != 'adminAuthenticationToken') {
         return JSON.parse(decryptedData);
       } else {
@@ -143,6 +155,7 @@ export const getDataFromLocalStorage = (
     return JSON.parse(localStorageData);
   } catch (error) {
     console.error(`Error reading from localStorage (key: ${key}):`, error);
+
     return null;
   }
 };
@@ -170,9 +183,11 @@ export const storeDataInSessionStorage = (
 ) => {
   if (!key) {
     console.error('the key is required to store the data');
+
     return;
   }
   let dataToStore: string;
+
   if (encrypted) {
     _data = typeof _data == 'object' ? JSON.stringify(_data) : _data;
     dataToStore = CryptoJS.AES.encrypt(_data, encryptionKey).toString();
@@ -187,6 +202,7 @@ export const getDataFromTheSessionStorage = (
   encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
 ) => {
   const sessionStorageData = sessionStorage.getItem(key);
+
   if (!sessionStorageData) return null;
   if (encrypted) {
     if (!encryptionKey)
@@ -195,12 +211,14 @@ export const getDataFromTheSessionStorage = (
       sessionStorageData,
       encryptionKey
     ).toString(CryptoJS.enc.Utf8);
+
     if (key != 'adminAuthenticationToken') {
       return JSON.parse(decryptedData);
     } else {
       return decryptedData;
     }
   }
+
   return JSON.parse(sessionStorageData);
 };
 
@@ -211,6 +229,7 @@ export const MaxLimitCountDownTimeFormatter = (ms: number): string => {
     .toString()
     .padStart(2, '0');
   const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+
   return `${minutes}:${seconds}`;
 };
 
@@ -259,6 +278,7 @@ export const formateDate = (
   for (const token of tokenOrder) {
     // Replace exact tokens only (use \b boundaries or match whole token)
     const regex = new RegExp(`\\b${token}\\b`, 'g');
+
     formattedDate = formattedDate.replace(regex, replacements[token]);
   }
 
@@ -268,6 +288,7 @@ export const formateDate = (
       minute: '2-digit',
       hour12: true,
     });
+
     formattedDate += `, ${creationTime.toUpperCase()}`;
   }
 
@@ -317,9 +338,11 @@ export const NormalizeStringifiedArray = (value: string) => {
   if (!value) return null;
   try {
     const parsed = JSON.parse(value);
+
     if (Array.isArray(parsed)) {
       return parsed; // return the parsed array
     }
+
     return null;
   } catch {
     return null;
@@ -345,6 +368,7 @@ export const differenceBetweenDates = (next_date: string) => {
 
 export const isValidDateString = (dateString: string) => {
   const date = new Date(dateString);
+
   return !isNaN(date.getTime());
 };
 
@@ -402,6 +426,7 @@ export const getRadianAngle = (rotation: number) => {
 export const createImageUtilFunction = (url: string) => {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const img = new Image();
+
     img.src = url;
     img.crossOrigin = 'anonymous';
     img.onload = () => resolve(img);
@@ -452,5 +477,19 @@ export const generateTimeBasedGreeting = (): string => {
   if (time >= 5 && time < 12) return 'Good Morning';
   if (time >= 12 && time < 16) return 'Good Afternoon';
   if (time >= 16 && time < 20) return 'Good Evening';
+
   return 'Good Night';
+};
+
+export const bytesToSize = (bytes: number, decimal: number = 2): string => {
+  if (bytes === 0) return `0 Bytes`;
+
+  const k = 1024;
+  const decimalVal = decimal < 0 ? 0 : decimal;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+  return (
+    parseFloat((bytes / Math.pow(k, i)).toFixed(decimalVal)) + ' ' + sizes[i]
+  );
 };

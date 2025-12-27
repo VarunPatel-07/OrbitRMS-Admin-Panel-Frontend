@@ -12,6 +12,7 @@ const RedirectToDashboard = () => {
 
   const authToken = `Bearer ${_cookieToken}`;
   const tokenValue = authToken.split('Bearer')[1]?.trim();
+
   try {
     if (_data && tokenValue) {
       return (
@@ -19,10 +20,12 @@ const RedirectToDashboard = () => {
       );
     } else {
       clearLocalSessionStorage();
+
       return <Navigate to='/auth/sign-in' replace />;
     }
   } catch {
     clearLocalSessionStorage();
+
     return <Navigate to='/auth/sign-in' replace />;
   }
 };

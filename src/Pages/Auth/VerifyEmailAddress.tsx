@@ -49,9 +49,11 @@ function VerifyEmailAddress() {
     index: number
   ) => {
     const value = e.target.value;
+
     if (value.length > 1 || (value && !/^\d?$/.test(value))) return;
 
     const OtpCodeArray = [...otpCode];
+
     OtpCodeArray[index] = value;
 
     setOtpCode(OtpCodeArray);
@@ -68,6 +70,7 @@ function VerifyEmailAddress() {
     const isBackspace = e.key?.toLowerCase() == 'backspace';
 
     const currentValue = (e.target as HTMLInputElement).value;
+
     if (isBackspace && !currentValue && index > 0) {
       if (OTPInputRefs.current) OTPInputRefs.current[index - 1]?.focus();
     }
@@ -88,6 +91,7 @@ function VerifyEmailAddress() {
 
     const response = await multiplePostApi(endPointArr);
     const res = response[0];
+
     if (!res?.success) {
       handelNotification(res, 'top-right');
     } else {
@@ -121,6 +125,7 @@ function VerifyEmailAddress() {
 
     const response = await multiplePostApi(endPointArr);
     const res = response[0];
+
     if (res?.success) {
       storeDataInLocalStorage(
         res?.data?.resend_available_at,
@@ -154,12 +159,14 @@ function VerifyEmailAddress() {
     const localData = getDataFromLocalStorage(MINIMUM_RESEND_OTP_INTERVAL);
 
     const resendAvailableAt = searchParams.get('resend-available-at');
+
     if (resendAvailableAt) {
       if (!localData) {
         storeDataInLocalStorage(resendAvailableAt, MINIMUM_RESEND_OTP_INTERVAL);
         setExpiryTimeUTCString(resendAvailableAt);
         const id = searchParams.get('id');
         const signature = searchParams.get('signature');
+
         setTimeout(() => {
           navigate(`/auth/verify-email?id=${id}&signature=${signature}`);
         }, 0);
@@ -191,6 +198,7 @@ function VerifyEmailAddress() {
           ERROR_MESSAGES.VERIFY_EMAIL_ACCESS_DENIED_FOR_INSUFFICIENT_DATA,
         success: false,
       };
+
       handelNotification(data, 'top-right');
       navigate('/auth/sign-in');
     }

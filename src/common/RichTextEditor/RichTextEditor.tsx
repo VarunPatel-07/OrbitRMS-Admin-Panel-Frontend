@@ -151,6 +151,7 @@ function RichTextEditor(props: RichTextEditorInterface) {
     },
     onUpdate: ({ editor }) => {
       const _data = editor.getHTML();
+
       handelOnUpdateFunction(_data);
     },
   });
@@ -159,6 +160,7 @@ function RichTextEditor(props: RichTextEditorInterface) {
     if (!editor || !feedContent) return;
 
     const currentContent = editor.getHTML();
+
     if (currentContent !== feedContent) {
       editor.commands.setContent(feedContent);
     }

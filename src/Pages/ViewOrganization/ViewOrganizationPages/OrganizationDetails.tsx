@@ -38,7 +38,6 @@ function OrganizationDetails(props: OrganizationDetailsPropsInterface) {
     ];
     const response = await multiplePostApi(endPointArr);
     const res = response[0];
-   
 
     setDeleteModalLoading(false);
 
@@ -363,6 +362,7 @@ function OrganizationDetails(props: OrganizationDetailsPropsInterface) {
       title: 'Organization Organization Settings',
     },
   ];
+
   return (
     <>
       <div className='w-full h-[calc(100vh-60px)] overflow-auto hide-scrollbar px-5 pt-28'>

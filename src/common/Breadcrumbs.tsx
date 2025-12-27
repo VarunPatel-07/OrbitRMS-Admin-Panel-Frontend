@@ -11,6 +11,7 @@ function Breadcrumbs({
   BreadcrumbsNavigationFlow: Array<BreadcrumbsProps>;
 }) {
   const navigation = useLocation();
+
   return (
     <SkeletonTheme baseColor='#dcdce3' highlightColor='#ebebeb'>
       <div className='w-full bg-white py-2 px-3 absolute z-10 border-b border-b-black/20'>
@@ -19,9 +20,11 @@ function Breadcrumbs({
             const isLast = BreadcrumbsNavigationFlow.length === index + 1;
             const isActive = (link: string) => {
               const currentURL = navigation.pathname + navigation.search;
+
               if (navigation.search) {
                 return currentURL === link;
               }
+
               return navigation.pathname.includes(link) && isLast;
             };
 

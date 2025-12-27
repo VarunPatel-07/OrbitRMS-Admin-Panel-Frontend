@@ -68,6 +68,7 @@ const MultipleDragAndDropFileUploader = React.memo(
                   if (setIsImageCropperActive) setIsImageCropperActive(true);
 
                   let processedFile = eachFile;
+
                   if (eachFile.size > 2 * 1024 * 1024) {
                     try {
                       processedFile = await ImageDownscaler(eachFile, 2); // downscale to ~2MB
@@ -89,6 +90,7 @@ const MultipleDragAndDropFileUploader = React.memo(
                     },
                     rotation: 0,
                   };
+
                   setDroppedFilesArray((pervFile) => [
                     ...(pervFile || []),
                     imgObject,
@@ -98,6 +100,7 @@ const MultipleDragAndDropFileUploader = React.memo(
                     success: false,
                     message: `Oops! That file format isn't supported. Try ${RequiredFileTypeArray?.map((item) => item.split('/')[1]).join(', ')}`,
                   };
+
                   handelNotification(res, 'top-right');
                 }
               })
@@ -137,6 +140,7 @@ const MultipleDragAndDropFileUploader = React.memo(
 
             success: false,
           };
+
           if (setIsImageCropperActive) setIsImageCropperActive(false);
           handelNotification(res, 'top-right');
         }
@@ -146,6 +150,7 @@ const MultipleDragAndDropFileUploader = React.memo(
             message: 'Too many files! Max 5 at a time',
             success: false,
           };
+
           if (setIsImageCropperActive) setIsImageCropperActive(false);
           handelNotification(res, 'top-right');
         }
@@ -240,4 +245,5 @@ const MultipleDragAndDropFileUploader = React.memo(
     );
   }
 );
+
 export default MultipleDragAndDropFileUploader;
