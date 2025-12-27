@@ -14,6 +14,7 @@ import {
 import Breadcrumbs from '../../components/common/Breadcrumbs';
 import NotFound from '../../components/common/NotFound';
 import OrgAlertModal from '../../components/modal/OrgAlertModal';
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
 import {
   OrganizationInfoInitialData,
   OrganizationManagerAlertModalInitialObj,
@@ -148,7 +149,7 @@ function ViewOrganizationPage() {
   useEffect(() => {
     if (organization_id?.trim() == '') {
       const data = {
-        message: 'Organization Id Not Found',
+        message: ERROR_MESSAGES.ORGANIZATION_ID_NOT_FOUND,
         success: false,
       };
 

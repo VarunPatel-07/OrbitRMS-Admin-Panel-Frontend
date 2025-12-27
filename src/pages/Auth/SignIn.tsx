@@ -220,6 +220,7 @@ function SignIn() {
                         value={formData?.email}
                         type='text'
                         showError={showError}
+                        disabled={loading}
                         errorMessage={
                           showError
                             ? formData?.email?.trim()?.length === 0
@@ -241,6 +242,7 @@ function SignIn() {
                         value={formData?.password}
                         viewPasswordBtn
                         showError={showError}
+                        disabled={loading}
                         errorMessage={
                           showError
                             ? formData?.password?.trim()?.length === 0

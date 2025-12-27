@@ -3,6 +3,7 @@ import { FiAlertTriangle } from 'react-icons/fi';
 import { RiCloseFill } from 'react-icons/ri';
 
 import Button from '../../components/common/Button';
+import { ENV_CONFIG } from '../../config/EnvConfig';
 import {
   NotificationContext,
   NotificationContextApiProps,
@@ -19,6 +20,8 @@ import {
   getDataFromSecureCookie,
 } from '../../utils/helper/HelperFunction';
 import RenderFilesItems from './RenderFilesItems';
+
+const BACKEND_API_BASEURL = ENV_CONFIG.VITE_BACKEND_API_BASEURL;
 
 function DownloadBackupFiles({
   showModal,
@@ -59,11 +62,9 @@ function DownloadBackupFiles({
     file_path: string,
     bulkDownload: boolean = false
   ) => {
-    const Backend_Base_data = import.meta.env.VITE_BACKEND_API_BASEURL;
-
     const endpoint = bulkDownload
-      ? `${Backend_Base_data}/monitoring/logs/archive/files/download-all`
-      : `${Backend_Base_data}/monitoring/logs/download-file/${file_path}`;
+      ? `${BACKEND_API_BASEURL}/monitoring/logs/archive/files/download-all`
+      : `${BACKEND_API_BASEURL}/monitoring/logs/download-file/${file_path}`;
 
     const res = await fetch(endpoint, {
       method: 'GET',

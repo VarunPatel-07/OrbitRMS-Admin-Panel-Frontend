@@ -8,6 +8,7 @@ import Button from '../../../components/common/Button';
 import CommonDatePicker from '../../../components/common/CommonDatePicker';
 import Loader from '../../../components/common/Loader';
 import TextArea from '../../../components/common/TextArea';
+import { ERROR_MESSAGES } from '../../../constant/ErrorMessages';
 import {
   EditScheduledMaintenanceModeInterface,
   MaintenanceModeHistoryInterface,
@@ -123,7 +124,9 @@ function EditScheduledMaintenanceMode(
             maxTime={getMinimumTime('started_at')}
             minTime={getMaximumTime('started_at')}
             errorMessage={
-              showError && !data?.started_at ? 'this field is required' : ''
+              showError && !data?.started_at
+                ? ERROR_MESSAGES.REQUIRED_FIELD_LOWERCASE
+                : ''
             }
           />
         </div>
@@ -148,7 +151,9 @@ function EditScheduledMaintenanceMode(
             maxTime={getMaximumTime('ended_at')}
             disabled={differenceBetweenDates(data?.ended_at) <= 30}
             errorMessage={
-              showError && !data?.ended_at ? 'this field is required' : ''
+              showError && !data?.ended_at
+                ? ERROR_MESSAGES.REQUIRED_FIELD_LOWERCASE
+                : ''
             }
           />
         </div>
@@ -163,7 +168,7 @@ function EditScheduledMaintenanceMode(
             showError={showError}
             errorMessage={
               showError && maintenanceModeReason.trim().length == 0
-                ? 'this is a required field'
+                ? ERROR_MESSAGES.REQUIRED_FIELD_LOWERCASE_ALT
                 : ''
             }
           />
@@ -236,7 +241,7 @@ function EditScheduledMaintenanceMode(
             showError={showError}
             errorMessage={
               showError && maintenanceModeReason.trim().length == 0
-                ? 'this is a required field'
+                ? ERROR_MESSAGES.REQUIRED_FIELD_LOWERCASE_ALT
                 : ''
             }
           />

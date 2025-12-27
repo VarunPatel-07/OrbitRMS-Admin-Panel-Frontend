@@ -1,4 +1,5 @@
 import RichTextEditor from '../../../components/common/RichTextEditor/RichTextEditor';
+import { ERROR_MESSAGES } from '../../../constant/ErrorMessages';
 import { MaintenanceModeDescriptionInterface } from '../../../interface/MaintenanceMode';
 import { isRichTextEditorIsEmpty } from '../../../utils/helper/HelperFunction';
 
@@ -23,7 +24,7 @@ function MaintenanceModeDescription(
         errorMessage={
           showError
             ? isRichTextEditorIsEmpty(description)
-              ? 'This Is An Required Field'
+              ? ERROR_MESSAGES.REQUIRED_FIELD_CAPITALIZED
               : ''
             : ''
         }

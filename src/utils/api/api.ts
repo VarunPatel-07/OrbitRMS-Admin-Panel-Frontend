@@ -2,6 +2,8 @@
 import { SetStateAction } from 'react';
 import axios from 'axios';
 
+import { ENV_CONFIG } from '../../config/EnvConfig';
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
 import { LoginFormInterface } from '../../interface/CommonComponentProps';
 import {
   clearLocalSessionStorage,
@@ -9,7 +11,7 @@ import {
   getDataFromSecureCookie,
 } from '../helper/HelperFunction';
 
-const BASE_URL = import.meta.env.VITE_BACKEND_API_BASEURL;
+const BASE_URL = ENV_CONFIG.VITE_BACKEND_API_BASEURL;
 
 const defaultHeader = {
   'Content-Type': 'application/json',
@@ -53,7 +55,7 @@ export const verifyUserApiFunction = async () => {
     const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
 
     if (!_cookieToken) {
-      return { success: false, message: 'User not authenticated' };
+      return { success: false, message: ERROR_MESSAGES.USER_NOT_AUTHENTICATED };
     }
 
     const url = `${BASE_URL}/auth/verify-user`;

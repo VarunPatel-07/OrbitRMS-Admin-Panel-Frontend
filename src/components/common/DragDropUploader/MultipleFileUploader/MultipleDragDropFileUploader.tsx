@@ -5,6 +5,7 @@ import { FaCloudUploadAlt } from 'react-icons/fa';
 import { FaPlus } from 'react-icons/fa6';
 import { v4 as uuidv4 } from 'uuid';
 
+import { ERROR_MESSAGES } from '../../../../constant/ErrorMessages';
 import {
   NotificationContext,
   NotificationContextApiProps,
@@ -96,9 +97,15 @@ const MultipleDragAndDropFileUploader = React.memo(
                     imgObject,
                   ]);
                 } else {
+                  const formats = RequiredFileTypeArray?.map(
+                    (item) => item.split('/')[1]
+                  ).join(', ');
                   const res = {
                     success: false,
-                    message: `Oops! That file format isn't supported. Try ${RequiredFileTypeArray?.map((item) => item.split('/')[1]).join(', ')}`,
+                    message: ERROR_MESSAGES.FILE_FORMAT_NOT_SUPPORTED.replace(
+                      '{formats}',
+                      formats
+                    ),
                   };
 
                   handelNotification(res, 'top-right');
@@ -124,7 +131,7 @@ const MultipleDragAndDropFileUploader = React.memo(
 
         if (fileRejections?.some((item) => item?.file?.size > maxFileSize)) {
           const res = {
-            message: 'File too large! Keep it under 100MB',
+            message: ERROR_MESSAGES.FILE_TOO_LARGE_100MB,
             success: false,
           };
 
@@ -135,8 +142,12 @@ const MultipleDragAndDropFileUploader = React.memo(
           remainingImages &&
           !fileRejections?.some((item) => item?.file?.size > maxFileSize)
         ) {
+          const plural = remainingImages > 1 ? 's' : '';
           const res = {
-            message: `Max limit! ${remainingImages} image${remainingImages > 1 ? 's' : ''} left.`,
+            message: ERROR_MESSAGES.MAX_LIMIT_IMAGES_LEFT.replace(
+              '{count}',
+              remainingImages.toString()
+            ).replace('{plural}', plural),
 
             success: false,
           };
@@ -147,7 +158,7 @@ const MultipleDragAndDropFileUploader = React.memo(
 
         if (fileRejections.length > 6) {
           const res = {
-            message: 'Too many files! Max 5 at a time',
+            message: ERROR_MESSAGES.TOO_MANY_FILES_MAX_5_AT_TIME,
             success: false,
           };
 

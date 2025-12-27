@@ -277,6 +277,7 @@ function VerifyEmailAddress() {
                             onKeyDown={(e) => handelKeyDown(e, index)}
                             onFocus={() => setFocusedIndex(index)}
                             onBlur={() => setFocusedIndex(0)}
+                            disabled={loading}
                           />
                           {focusedIndex !== index && !otpCode[index] && (
                             <div className='w-full h-full absolute top-0 left-0 z-20 bg-gray-100'>

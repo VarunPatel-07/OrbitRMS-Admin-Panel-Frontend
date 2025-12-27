@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosResponse } from 'axios';
 
+import { ENV_CONFIG } from '../../config/EnvConfig';
 import { UNAUTHORIZED_STATUS_CODES } from '../../constant/Constant';
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
 import {
   ApiReturnInterface,
   endpointObject,
@@ -14,8 +16,8 @@ import {
   getDataFromSecureCookie,
 } from '../helper/HelperFunction';
 
-const BASE_URL = import.meta.env.VITE_BACKEND_API_BASEURL;
-const VITE_ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT;
+const BASE_URL = ENV_CONFIG.VITE_BACKEND_API_BASEURL;
+const VITE_ENVIRONMENT = ENV_CONFIG.VITE_ENVIRONMENT;
 
 const defaultHeader = {
   'Content-Type': 'application/json',
@@ -31,12 +33,20 @@ const multipleFetchApiErrorHandler = (error: any) => {
       clearCookieStorage();
       window.location.href = '/auth/sign-in';
 
-      return { success: false, message: 'UNAUTHORIZED', data: null };
+      return {
+        success: false,
+        message: ERROR_MESSAGES.UNAUTHORIZED,
+        data: null,
+      };
     } else if (!status && error?.message?.includes('Network')) {
       clearCookieStorage();
       window.location.href = '/auth/sign-in';
 
-      return { success: false, message: 'UNAUTHORIZED', data: null };
+      return {
+        success: false,
+        message: ERROR_MESSAGES.UNAUTHORIZED,
+        data: null,
+      };
     } else {
       return ErrorHandler(error);
     }
@@ -44,7 +54,13 @@ const multipleFetchApiErrorHandler = (error: any) => {
 };
 
 const returnApiResponse = (res: AxiosResponse<any, any>) => {
-  return res?.data ?? { success: false, message: 'UNAUTHORIZED', data: null };
+  return (
+    res?.data ?? {
+      success: false,
+      message: ERROR_MESSAGES.UNAUTHORIZED,
+      data: null,
+    }
+  );
 };
 
 export const multipleFetchApi = async (

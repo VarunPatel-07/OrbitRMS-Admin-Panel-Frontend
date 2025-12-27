@@ -4,6 +4,7 @@ import { FiRefreshCw } from 'react-icons/fi';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Button from '../../components/common/Button';
+import { ENV_CONFIG } from '../../config/EnvConfig';
 import { initialMetadata } from '../../constant/Constant';
 import {
   NotificationContext,
@@ -19,6 +20,8 @@ import { multipleFetchApi } from '../../utils/api/multipleAPI';
 import { getDataFromSecureCookie } from '../../utils/helper/HelperFunction';
 import DownloadBackupFiles from './DownloadBackupFiles';
 import MonitoringSidebar from './MonitoringSidebar';
+
+const BACKEND_API_BASEURL = ENV_CONFIG.VITE_BACKEND_API_BASEURL;
 
 function Monitoring() {
   const { handelNotification } = useContext(
@@ -98,9 +101,7 @@ function Monitoring() {
     file_name: string,
     file_path: string
   ) => {
-    const Backend_Base_data = import.meta.env.VITE_BACKEND_API_BASEURL;
-
-    const endpoint = `${Backend_Base_data}/monitoring/logs/download-file/${file_path}`;
+    const endpoint = `${BACKEND_API_BASEURL}/monitoring/logs/download-file/${file_path}`;
 
     const res = await fetch(endpoint, {
       method: 'GET',

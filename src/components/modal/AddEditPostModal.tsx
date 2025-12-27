@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from 'react';
 import { IoClose, IoCloseCircle } from 'react-icons/io5';
 
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
 import {
   NotificationContext,
   NotificationContextApiProps,
@@ -52,7 +53,7 @@ const AddEditPostModal = React.memo(function AddEditPostModal(
     if (totalImages > 5) {
       handelNotification(
         {
-          message: 'Too many files! Max 5 images allowed.',
+          message: ERROR_MESSAGES.TOO_MANY_FILES_MAX_5_IMAGES,
           success: false,
         },
         'top-right'
@@ -248,7 +249,7 @@ const AddEditPostModal = React.memo(function AddEditPostModal(
                 errorMessage={
                   showError
                     ? isRichTextEditorIsEmpty(formData?.description)
-                      ? 'This Is An Required Field'
+                      ? ERROR_MESSAGES.REQUIRED_FIELD_CAPITALIZED
                       : ''
                     : ''
                 }

@@ -5,6 +5,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import Breadcrumbs from '../../../../components/common/Breadcrumbs';
 import NotFound from '../../../../components/common/NotFound';
 import EmployeeProfileSkeletonLoader from '../../../../components/loader/EmployeeProfileSkeletonLoader';
+import { ERROR_MESSAGES } from '../../../../constant/ErrorMessages';
 import {
   NotificationContext,
   NotificationContextApiProps,
@@ -73,7 +74,7 @@ function OrgEmployeeProfile(props: OrganizationEmployeeProfileInterface) {
 
     if (!employee_id && organization_id) {
       const data = {
-        message: 'invalid Ids',
+        message: ERROR_MESSAGES.INVALID_IDS,
         success: false,
       };
 

@@ -5,8 +5,11 @@ import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie';
 import validator from 'validator';
 
-const encryptionKey = import.meta.env.VITE_ENCRYPTION_KEY;
-const current_environment = import.meta.env.VITE_ENVIRONMENT;
+import { ENV_CONFIG } from '../../config/EnvConfig';
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
+
+const ENCRYPTION_KEY = ENV_CONFIG.VITE_ENCRYPTION_KEY;
+const VITE_ENVIRONMENT = ENV_CONFIG.VITE_ENVIRONMENT;
 
 export const classNames = (
   defaultClass: string,
@@ -30,7 +33,9 @@ export const ErrorHandler = (error: Error | AxiosError) => {
   if (axios.isAxiosError(error)) {
     const errorData = {
       success: error?.response?.data?.detail?.success ?? false,
-      message: error?.response?.data?.detail?.message ?? 'something went wrong',
+      message:
+        error?.response?.data?.detail?.message ??
+        ERROR_MESSAGES.SOMETHING_WENT_WRONG,
       data: null,
     };
 
@@ -38,7 +43,7 @@ export const ErrorHandler = (error: Error | AxiosError) => {
   } else {
     const errorData = {
       success: false,
-      message: 'An unknown error occurred',
+      message: ERROR_MESSAGES.UNKNOWN_ERROR,
       data: null,
     };
 
@@ -51,7 +56,7 @@ export const ErrorHandler = (error: Error | AxiosError) => {
 export const storeDataInLocalStorage = (
   _data: any,
   key: string,
-  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+  encrypted: boolean = VITE_ENVIRONMENT == 'PRODUCTION' ? true : false
 ) => {
   if (!key) {
     console.error('the key is required to store the data');
@@ -62,7 +67,7 @@ export const storeDataInLocalStorage = (
 
   if (encrypted) {
     _data = typeof _data == 'object' ? JSON.stringify(_data) : _data;
-    dataToStore = CryptoJS.AES.encrypt(_data, encryptionKey).toString();
+    dataToStore = CryptoJS.AES.encrypt(_data, ENCRYPTION_KEY).toString();
   } else {
     dataToStore = JSON.stringify(_data);
   }
@@ -72,7 +77,7 @@ export const storeDataInLocalStorage = (
 export const storeDataInSecureCookie = (
   _data: any,
   key: string,
-  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+  encrypted: boolean = VITE_ENVIRONMENT == 'PRODUCTION' ? true : false
 ) => {
   if (!key) {
     console.error('the key is required to store the data');
@@ -83,7 +88,7 @@ export const storeDataInSecureCookie = (
 
   if (encrypted) {
     _data = typeof _data == 'object' ? JSON.stringify(_data) : _data;
-    dataToStore = CryptoJS.AES.encrypt(_data, encryptionKey).toString();
+    dataToStore = CryptoJS.AES.encrypt(_data, ENCRYPTION_KEY).toString();
   } else {
     dataToStore = JSON.stringify(_data);
   }
@@ -96,7 +101,7 @@ export const storeDataInSecureCookie = (
 
 export const getDataFromSecureCookie = (
   key: string,
-  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+  encrypted: boolean = VITE_ENVIRONMENT == 'PRODUCTION' ? true : false
 ): any | null => {
   try {
     const cookieStorageData = Cookies.get(key);
@@ -104,11 +109,11 @@ export const getDataFromSecureCookie = (
     if (!cookieStorageData) return null;
 
     if (encrypted) {
-      if (!encryptionKey)
+      if (!ENCRYPTION_KEY)
         throw new Error('Encryption key is required for decryption');
       const decryptedData = CryptoJS.AES.decrypt(
         cookieStorageData,
-        encryptionKey
+        ENCRYPTION_KEY
       ).toString(CryptoJS.enc.Utf8);
 
       if (key != 'adminAuthenticationToken') {
@@ -130,7 +135,7 @@ export const getDataFromSecureCookie = (
 
 export const getDataFromLocalStorage = (
   key: string,
-  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+  encrypted: boolean = VITE_ENVIRONMENT == 'PRODUCTION' ? true : false
 ): any | null => {
   try {
     const localStorageData = localStorage.getItem(key);
@@ -138,11 +143,11 @@ export const getDataFromLocalStorage = (
     if (!localStorageData) return null;
 
     if (encrypted) {
-      if (!encryptionKey)
+      if (!ENCRYPTION_KEY)
         throw new Error('Encryption key is required for decryption');
       const decryptedData = CryptoJS.AES.decrypt(
         localStorageData,
-        encryptionKey
+        ENCRYPTION_KEY
       ).toString(CryptoJS.enc.Utf8);
 
       if (key != 'adminAuthenticationToken') {
@@ -179,7 +184,7 @@ export const clearCookieStorage = () => {
 export const storeDataInSessionStorage = (
   _data: any,
   key: string,
-  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+  encrypted: boolean = VITE_ENVIRONMENT == 'PRODUCTION' ? true : false
 ) => {
   if (!key) {
     console.error('the key is required to store the data');
@@ -190,7 +195,7 @@ export const storeDataInSessionStorage = (
 
   if (encrypted) {
     _data = typeof _data == 'object' ? JSON.stringify(_data) : _data;
-    dataToStore = CryptoJS.AES.encrypt(_data, encryptionKey).toString();
+    dataToStore = CryptoJS.AES.encrypt(_data, ENCRYPTION_KEY).toString();
   } else {
     dataToStore = JSON.stringify(_data);
   }
@@ -199,17 +204,17 @@ export const storeDataInSessionStorage = (
 
 export const getDataFromTheSessionStorage = (
   key: string,
-  encrypted: boolean = current_environment == 'PRODUCTION' ? true : false
+  encrypted: boolean = VITE_ENVIRONMENT == 'PRODUCTION' ? true : false
 ) => {
   const sessionStorageData = sessionStorage.getItem(key);
 
   if (!sessionStorageData) return null;
   if (encrypted) {
-    if (!encryptionKey)
+    if (!ENCRYPTION_KEY)
       throw new Error('Encryption key is required for decryption');
     const decryptedData = CryptoJS.AES.decrypt(
       sessionStorageData,
-      encryptionKey
+      ENCRYPTION_KEY
     ).toString(CryptoJS.enc.Utf8);
 
     if (key != 'adminAuthenticationToken') {

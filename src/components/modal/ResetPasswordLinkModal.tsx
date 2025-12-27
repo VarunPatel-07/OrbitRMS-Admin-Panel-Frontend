@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MdBusiness, MdClose, MdPerson } from 'react-icons/md';
 
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
 import { publicEmailProviders } from '../../constant/PublicEmailArray';
 import { ResetPasswordLinkModalInterface } from '../../interface/interface';
 import { classNames, isValidEmail } from '../../utils/helper/HelperFunction';
@@ -64,10 +65,13 @@ const ResetPasswordLinkModal = (props: ResetPasswordLinkModalInterface) => {
     const check = publicEmailProviders.find((p) => p.mail === domain);
 
     if (check) {
-      return `public email (${check.company} - ${check.mail}) Not Allowed`;
+      return ERROR_MESSAGES.PUBLIC_EMAIL_NOT_ALLOWED.replace(
+        '{company}',
+        check.company
+      ).replace('{mail}', check.mail);
     }
 
-    return 'Please enter a valid email address.';
+    return ERROR_MESSAGES.VALID_EMAIL_ADDRESS;
   };
 
   const handleCancel = () => {
@@ -247,13 +251,13 @@ const ResetPasswordLinkModal = (props: ResetPasswordLinkModalInterface) => {
                       errorMessage={
                         showError
                           ? customEmail.trim() === ''
-                            ? 'This field is required.'
+                            ? ERROR_MESSAGES.REQUIRED_FIELD_WITH_PERIOD
                             : hostBlacklistMails !== undefined
                               ? !isValidEmail(customEmail, hostBlacklistMails)
                                 ? getEmailErrorMessage(customEmail)
                                 : ''
                               : !isValidEmail(customEmail)
-                                ? 'Please enter a valid email.'
+                                ? ERROR_MESSAGES.VALID_EMAIL
                                 : ''
                           : ''
                       }

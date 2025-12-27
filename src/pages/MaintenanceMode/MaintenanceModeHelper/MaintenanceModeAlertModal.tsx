@@ -7,6 +7,7 @@ import Button from '../../../components/common/Button';
 import CommonDatePicker from '../../../components/common/CommonDatePicker';
 import Loader from '../../../components/common/Loader';
 import TextArea from '../../../components/common/TextArea';
+import { ERROR_MESSAGES } from '../../../constant/ErrorMessages';
 import { MaintenanceModeAlertModalInterface } from '../../../interface/MaintenanceMode';
 import { classNames } from '../../../utils/helper/HelperFunction';
 
@@ -211,7 +212,7 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
                     errorMessage={
                       showError &&
                       !scheduledMaintenanceStartEndDates?.started_at
-                        ? 'this field is required'
+                        ? ERROR_MESSAGES.REQUIRED_FIELD_LOWERCASE
                         : ''
                     }
                   />
@@ -235,7 +236,7 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
                     maxTime={getMaximumTime('ended_at')}
                     errorMessage={
                       showError && !scheduledMaintenanceStartEndDates?.ended_at
-                        ? 'this field is required'
+                        ? ERROR_MESSAGES.REQUIRED_FIELD_LOWERCASE
                         : ''
                     }
                   />
@@ -258,7 +259,7 @@ function MaintenanceModeAlertModal(props: MaintenanceModeAlertModalInterface) {
                     showError={showError}
                     errorMessage={
                       showError && maintenanceModeReason.trim().length == 0
-                        ? 'this is a required field'
+                        ? ERROR_MESSAGES.REQUIRED_FIELD_LOWERCASE_ALT
                         : ''
                     }
                   />
