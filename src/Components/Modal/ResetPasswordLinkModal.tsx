@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MdBusiness, MdClose, MdPerson } from 'react-icons/md';
 
-import Button from '../../common/Button';
-import Input from '../../common/Input';
-import Loader from '../../common/Loader';
-import { publicEmailProviders } from '../../Constant/PublicEmailArray';
-import { classNames, isValidEmail } from '../../Helper/HelperFunction';
+import { publicEmailProviders } from '../../constant/PublicEmailArray';
 import { ResetPasswordLinkModalInterface } from '../../interface/interface';
+import { classNames, isValidEmail } from '../../utils/helper/HelperFunction';
+import Button from '../common/Button';
+import Input from '../common/Input';
+import Loader from '../common/Loader';
 
 const ResetPasswordLinkModal = (props: ResetPasswordLinkModalInterface) => {
   const {

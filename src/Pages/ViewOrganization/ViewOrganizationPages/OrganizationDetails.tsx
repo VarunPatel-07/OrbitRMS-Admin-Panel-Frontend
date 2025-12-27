@@ -4,19 +4,19 @@ import { FiAlertTriangle } from 'react-icons/fi';
 import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
-import Button from '../../../common/Button';
-import OrganizationSettingLoader from '../../../Components/Loader/OrganizationSettingLoader';
-import DeleteModal from '../../../Components/Modal/DeleteModal';
+import Button from '../../../components/common/Button';
+import OrganizationSettingLoader from '../../../components/loader/OrganizationSettingLoader';
+import DeleteModal from '../../../components/modal/DeleteModal';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../../Context/Notification/NotificationContextApi';
-import { multiplePostApi } from '../../../Helper/api/multipleAPI';
-import { InfoField } from '../../../Helper/Helper';
-import { useDebounce } from '../../../Hooks/useDebounce';
+} from '../../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../../hooks/useDebounce';
 import { InterFaceModuleData } from '../../../interface/interface';
 import { OrganizationDetailsPropsInterface } from '../../../interface/OrganizationManager';
 import { endpointObject } from '../../../interface/propsInterface';
+import { multiplePostApi } from '../../../utils/api/multipleAPI';
+import { InfoField } from '../../../utils/helper/Helper';
 
 function OrganizationDetails(props: OrganizationDetailsPropsInterface) {
   const { data, loading } = props;

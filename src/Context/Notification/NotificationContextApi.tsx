@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   getEnterAnimationClass,
   getExitAnimationClass,
-} from '../../Constant/Constant';
+} from '../../constant/Constant';
 
 export interface NotificationObject {
   id: string;

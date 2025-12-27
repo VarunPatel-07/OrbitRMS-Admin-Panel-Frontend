@@ -2,15 +2,14 @@ import { useContext, useEffect, useState } from 'react';
 import { GoArrowLeft } from 'react-icons/go';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import Breadcrumbs from '../../../../common/Breadcrumbs';
-import NotFound from '../../../../common/NotFound';
-import EmployeeProfileSkeletonLoader from '../../../../Components/Loader/EmployeeProfileSkeletonLoader';
+import Breadcrumbs from '../../../../components/common/Breadcrumbs';
+import NotFound from '../../../../components/common/NotFound';
+import EmployeeProfileSkeletonLoader from '../../../../components/loader/EmployeeProfileSkeletonLoader';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../../../Context/Notification/NotificationContextApi';
-import { multipleFetchApi } from '../../../../Helper/api/multipleAPI';
-import { useDebounce } from '../../../../Hooks/useDebounce';
+} from '../../../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../../../hooks/useDebounce';
 import { NotFoundPagesOptionsButtonArray } from '../../../../interface/CommonComponentProps';
 import { InterFaceModuleData } from '../../../../interface/interface';
 import {
@@ -19,6 +18,7 @@ import {
 } from '../../../../interface/OrganizationManager';
 import { UserProfileInformationInterface } from '../../../../interface/OrgEmployeeInterface';
 import { endpointObject } from '../../../../interface/propsInterface';
+import { multipleFetchApi } from '../../../../utils/api/multipleAPI';
 import { EmployeeInfoInitialState } from './EmployeeInfoInitialState';
 import {
   EmployeeGeneralInfo,

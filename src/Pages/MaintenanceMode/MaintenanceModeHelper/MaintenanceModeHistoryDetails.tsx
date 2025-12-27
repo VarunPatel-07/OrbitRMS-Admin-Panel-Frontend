@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 
+import { MaintenanceModeHistoryDetailsInterface } from '../../../interface/MaintenanceMode';
 import {
   InfoField,
   RenderBeautifulMaintenanceStatus,
-} from '../../../Helper/Helper';
-import { classNames } from '../../../Helper/HelperFunction';
-import { MaintenanceModeHistoryDetailsInterface } from '../../../interface/MaintenanceMode';
+} from '../../../utils/helper/Helper';
+import { classNames } from '../../../utils/helper/HelperFunction';
 
 function MaintenanceModeHistoryDetails(
   props: MaintenanceModeHistoryDetailsInterface

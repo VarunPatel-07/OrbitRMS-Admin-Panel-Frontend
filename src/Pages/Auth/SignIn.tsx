@@ -4,24 +4,27 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 import OrbitLogo from '../../assets/Images/orbitrms-final-logo-transperent.webp';
 import AuthLotiAnimation from '../../assets/lottie/AuthPageLoginAnimation.lottie';
-import AlertModal from '../../common/AlertModal';
-import Button from '../../common/Button';
-import Input from '../../common/Input';
-import Loader from '../../common/Loader';
-import MainSuspenseLoader from '../../Components/Loader/MainSuspenseLoader';
+import AlertModal from '../../components/common/AlertModal';
+import Button from '../../components/common/Button';
+import Input from '../../components/common/Input';
+import Loader from '../../components/common/Loader';
+import MainSuspenseLoader from '../../components/loader/MainSuspenseLoader';
 import {
   alertModalSuccessButtonArray,
   AuthFormDataInitialState,
   initialAlertModalPropsInfo,
-} from '../../Constant/AuthPageConstant';
-import { MAX_SIGN_IN_ATTEMPT } from '../../Constant/Constant';
-import { ERROR_MESSAGES } from '../../Constant/ErrorMessages';
+} from '../../constant/AuthPageConstant';
+import { MAX_SIGN_IN_ATTEMPT } from '../../constant/Constant';
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../Context/Notification/NotificationContextApi';
-import { signInApiFunction, verifyUserApiFunction } from '../../Helper/api/api';
-import HelmetSeo from '../../Helper/HelmetSeo';
+} from '../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../hooks/useDebounce';
+import { SignInPageFormDataInterface } from '../../interface/AuthPageInterface';
+import { ModalInfoType } from '../../interface/CommonComponentProps';
+import { signInApiFunction, verifyUserApiFunction } from '../../utils/api/api';
+import HelmetSeo from '../../utils/helper/HelmetSeo';
 import {
   getDataFromLocalStorage,
   getDataFromSecureCookie,
@@ -29,10 +32,7 @@ import {
   isValidEmail,
   MaxLimitCountDownTimeFormatter,
   storeDataInLocalStorage,
-} from '../../Helper/HelperFunction';
-import { useDebounce } from '../../Hooks/useDebounce';
-import { SignInPageFormDataInterface } from '../../interface/AuthPageInterface';
-import { ModalInfoType } from '../../interface/CommonComponentProps';
+} from '../../utils/helper/HelperFunction';
 
 function SignIn() {
   const { handelNotification } = useContext(

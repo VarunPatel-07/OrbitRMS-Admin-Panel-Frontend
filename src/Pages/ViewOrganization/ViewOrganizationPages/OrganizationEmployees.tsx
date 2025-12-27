@@ -6,27 +6,17 @@ import { IoCloseCircleOutline, IoEye } from 'react-icons/io5';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 
-import Table from '../../../common/Table/Table';
-import TableFilterSearchBar from '../../../common/Table/TableFilterSearchBar';
-import TableNoDataFound from '../../../common/Table/TableNoDataFound';
-import TablePagination from '../../../common/Table/TablePagination';
-import EmployeeProfilePicture from '../../../Components/EmployeeProfilePicture';
-import TableSkeletonLoader from '../../../Components/Loader/Table/TableSkeletonLoader';
-import OrgAlertModal from '../../../Components/Modal/OrgAlertModal';
-import { dropdownMenuArray, initialMetadata } from '../../../Constant/Constant';
-import { OrganizationManagerAlertModalInitialObj } from '../../../Constant/OrganizationManagerConstant';
+import Table from '../../../components/common/Table/Table';
+import TableFilterSearchBar from '../../../components/common/Table/TableFilterSearchBar';
+import TableNoDataFound from '../../../components/common/Table/TableNoDataFound';
+import TablePagination from '../../../components/common/Table/TablePagination';
+import EmployeeProfilePicture from '../../../components/EmployeeProfilePicture';
+import TableSkeletonLoader from '../../../components/loader/Table/TableSkeletonLoader';
+import OrgAlertModal from '../../../components/modal/OrgAlertModal';
+import { dropdownMenuArray, initialMetadata } from '../../../constant/Constant';
+import { OrganizationManagerAlertModalInitialObj } from '../../../constant/OrganizationManagerConstant';
 import { FilterFieldsTypeEnums } from '../../../enums/enums';
-// import {
-//   NotificationContext,
-//   NotificationContextApiProps,
-// } from '../../../Context/Notification/NotificationContextApi';
-import {
-  multipleFetchApi,
-  multiplePutApi,
-} from '../../../Helper/api/multipleAPI';
-import { BeautifulAccountStatusRenderer } from '../../../Helper/Helper';
-import { classNames } from '../../../Helper/HelperFunction';
-import { useDebounce } from '../../../Hooks/useDebounce';
+import { useDebounce } from '../../../hooks/useDebounce';
 import { OrganizationManagerAlertModalInfoType } from '../../../interface/CommonComponentProps';
 import { Column } from '../../../interface/interface';
 import {
@@ -41,6 +31,12 @@ import {
   MetaDataInterface,
   UrlEncodedFilterQueryInterface,
 } from '../../../interface/propsInterface';
+import {
+  multipleFetchApi,
+  multiplePutApi,
+} from '../../../utils/api/multipleAPI';
+import { BeautifulAccountStatusRenderer } from '../../../utils/helper/Helper';
+import { classNames } from '../../../utils/helper/HelperFunction';
 import { OrganizationEmployeeAlertModalHelper } from '../OrganizationsHelper/OrganizationEmployeeAlertModalHelper';
 import { EmployeeListingFiltersArray } from './EmployeeListingFiltersArray';
 

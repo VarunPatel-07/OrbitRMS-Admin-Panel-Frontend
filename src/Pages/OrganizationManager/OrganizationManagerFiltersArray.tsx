@@ -1,11 +1,11 @@
-import { CountryDataForSearch } from '../../Constant/CountryData';
+import { CountryDataForSearch } from '../../constant/CountryData';
 import {
   Contains,
   EndsWith,
   Equals,
   Is,
   StartsWith,
-} from '../../Constant/FilterOperator';
+} from '../../constant/FilterOperator';
 import { FilterFieldsTypeEnums } from '../../enums/enums';
 import { SearchBarFilterOptionsInterface } from '../../interface/propsInterface';
 

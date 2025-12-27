@@ -1,11 +1,7 @@
 import { MetaDataInterface } from '../interface/propsInterface';
 
-export const unauthorizedStatusCodes = [
-  404,
-  401, // Unauthorized (authentication required or token missing/invalid)
-  403, // Forbidden (authenticated but not authorized for the resource)
-  407, // Proxy Authentication Required (rare, but still access-related)
-];
+export const UNAUTHORIZED_STATUS_CODES = [404, 401, 403, 407];
+
 export const getEnterAnimationClass = {
   'top-right': 'animate-enter-top-right',
   'top-left': 'animate-enter-top-left',

@@ -1,8 +1,8 @@
 import React, { SetStateAction, useEffect, useRef } from 'react';
 import { MdDeleteOutline } from 'react-icons/md';
 
-import Loader from '../../common/Loader';
-import { classNames } from '../../Helper/HelperFunction';
+import { classNames } from '../../utils/helper/HelperFunction';
+import Loader from '../common/Loader';
 
 function DeleteModal({
   showDeleteModal,

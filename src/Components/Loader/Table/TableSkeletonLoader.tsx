@@ -2,7 +2,7 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import { classNames } from '../../../Helper/HelperFunction';
+import { classNames } from '../../../utils/helper/HelperFunction';
 
 function TableSkeletonLoader({
   showHeaderLoader = true,

@@ -1,7 +1,7 @@
 import { BiDownload } from 'react-icons/bi';
 import Skeleton from 'react-loading-skeleton';
 
-import Button from '../../common/Button';
+import Button from '../../components/common/Button';
 import { MonitoringSidebarInterface } from '../../interface/interface';
 import RenderFilesItems from './RenderFilesItems';
 

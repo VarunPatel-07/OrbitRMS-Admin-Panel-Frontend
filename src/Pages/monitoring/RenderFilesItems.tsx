@@ -2,12 +2,12 @@ import { BiArchive, BiDownload } from 'react-icons/bi';
 import { FiFileText } from 'react-icons/fi';
 import Skeleton from 'react-loading-skeleton';
 
-import Button from '../../common/Button';
-import { bytesToSize, formateDate } from '../../Helper/HelperFunction';
+import Button from '../../components/common/Button';
 import {
   RenderFilesItemsInterface,
   RuntimeLogsFilesInterface,
 } from '../../interface/interface';
+import { bytesToSize, formateDate } from '../../utils/helper/HelperFunction';
 
 function RenderSkeletonButton({ index }: { index: number }) {
   return (
@@ -41,6 +41,7 @@ function RenderSkeletonButton({ index }: { index: number }) {
     </div>
   );
 }
+
 function RenderFilesItems({
   loading,
   availableLogFiles,

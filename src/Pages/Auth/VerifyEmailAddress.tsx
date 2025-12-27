@@ -5,15 +5,17 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 
 import OrbitLogo from '../../assets/Images/orbitrms-final-logo-transperent.webp';
 import AuthLotiAnimation from '../../assets/lottie/AuthPageLoginAnimation.lottie';
-import Button from '../../common/Button';
-import Loader from '../../common/Loader';
-import { MINIMUM_RESEND_OTP_INTERVAL } from '../../Constant/Constant';
-import { ERROR_MESSAGES } from '../../Constant/ErrorMessages';
+import Button from '../../components/common/Button';
+import Loader from '../../components/common/Loader';
+import { MINIMUM_RESEND_OTP_INTERVAL } from '../../constant/Constant';
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../Context/Notification/NotificationContextApi';
-import { multiplePostApi } from '../../Helper/api/multipleAPI';
+} from '../../context/notification/NotificationContextApi';
+import { useDebounce } from '../../hooks/useDebounce';
+import { endpointObject } from '../../interface/propsInterface';
+import { multiplePostApi } from '../../utils/api/multipleAPI';
 import {
   getDataFromLocalStorage,
   handleCountDownFunction,
@@ -21,9 +23,7 @@ import {
   removeDataFromLocalStorage,
   storeDataInLocalStorage,
   storeDataInSecureCookie,
-} from '../../Helper/HelperFunction';
-import { useDebounce } from '../../Hooks/useDebounce';
-import { endpointObject } from '../../interface/propsInterface';
+} from '../../utils/helper/HelperFunction';
 
 function VerifyEmailAddress() {
   const { handelNotification } = useContext(

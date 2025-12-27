@@ -5,30 +5,21 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 import { differenceInMinutes } from 'date-fns';
 
-import Breadcrumbs from '../../../common/Breadcrumbs';
-import Table from '../../../common/Table/Table';
-import TableFilterSearchBar from '../../../common/Table/TableFilterSearchBar';
-import TableInfoHeader from '../../../common/Table/TableInfoHeader';
-import TableNoDataFound from '../../../common/Table/TableNoDataFound';
-import TablePagination from '../../../common/Table/TablePagination';
-import TableSkeletonLoader from '../../../Components/Loader/Table/TableSkeletonLoader';
-import { dropdownMenuArray, initialMetadata } from '../../../Constant/Constant';
-import { MaintenanceModeHistoryBreadCrumbObject } from '../../../Constant/MaintenanceModeConstant';
+import Breadcrumbs from '../../../components/common/Breadcrumbs';
+import Table from '../../../components/common/Table/Table';
+import TableFilterSearchBar from '../../../components/common/Table/TableFilterSearchBar';
+import TableInfoHeader from '../../../components/common/Table/TableInfoHeader';
+import TableNoDataFound from '../../../components/common/Table/TableNoDataFound';
+import TablePagination from '../../../components/common/Table/TablePagination';
+import TableSkeletonLoader from '../../../components/loader/Table/TableSkeletonLoader';
+import { dropdownMenuArray, initialMetadata } from '../../../constant/Constant';
+import { MaintenanceModeHistoryBreadCrumbObject } from '../../../constant/MaintenanceModeConstant';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from '../../../Context/Notification/NotificationContextApi';
+} from '../../../context/notification/NotificationContextApi';
 import { FilterFieldsTypeEnums } from '../../../enums/enums';
-import {
-  multipleFetchApi,
-  multiplePutApi,
-} from '../../../Helper/api/multipleAPI';
-import { RenderBeautifulMaintenanceStatus } from '../../../Helper/Helper';
-import {
-  formateDate,
-  getUTCDateFormIsoString,
-} from '../../../Helper/HelperFunction';
-import { useDebounce } from '../../../Hooks/useDebounce';
+import { useDebounce } from '../../../hooks/useDebounce';
 import { Column } from '../../../interface/interface';
 import { MaintenanceModeHistoryInterface } from '../../../interface/MaintenanceMode';
 import {
@@ -37,6 +28,15 @@ import {
   MetaDataInterface,
   UrlEncodedFilterQueryInterface,
 } from '../../../interface/propsInterface';
+import {
+  multipleFetchApi,
+  multiplePutApi,
+} from '../../../utils/api/multipleAPI';
+import { RenderBeautifulMaintenanceStatus } from '../../../utils/helper/Helper';
+import {
+  formateDate,
+  getUTCDateFormIsoString,
+} from '../../../utils/helper/HelperFunction';
 import EditScheduledMaintenanceMode from '../MaintenanceModeHelper/EditScheduledMaintenanceMode';
 import MaintenanceModeHistoryDetails from '../MaintenanceModeHelper/MaintenanceModeHistoryDetails';
 import { MaintenanceModeQueryFilterArray } from '../MaintenanceModeHelper/MaintenanceModeQueryFilterArray';

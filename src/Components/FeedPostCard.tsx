@@ -4,9 +4,9 @@ import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import Button from '../common/Button';
-import { classNames, formateDate } from '../Helper/HelperFunction';
 import { FeedPostDataPropsInterface } from '../interface/Dashboard';
+import { classNames, formateDate } from '../utils/helper/HelperFunction';
+import Button from './common/Button';
 import EmployeeProfilePicture from './EmployeeProfilePicture';
 
 interface propsInterface {

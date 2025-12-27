@@ -2,10 +2,10 @@ import React from 'react';
 import { FaFilter } from 'react-icons/fa';
 import { FaPenToSquare } from 'react-icons/fa6';
 
-import EmptyFeedAnimation from '../../Components/Animation/EmptyFeedAnimation';
-import FeedPostCard from '../../Components/FeedPostCard';
-import FeedPostLoader from '../../Components/Loader/FeedPostLoader';
-import UploadingPostDefaultLoader from '../../Components/Loader/UploadingPostDefaultLoader';
+import EmptyFeedAnimation from '../../components/animation/EmptyFeedAnimation';
+import FeedPostCard from '../../components/FeedPostCard';
+import FeedPostLoader from '../../components/loader/FeedPostLoader';
+import UploadingPostDefaultLoader from '../../components/loader/UploadingPostDefaultLoader';
 import { OrganizationFeedPropsInterface } from '../../interface/Dashboard';
 
 const CTAButton = ({
