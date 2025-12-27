@@ -86,6 +86,7 @@ function MaintenanceMode() {
     ];
     const response = await multipleFetchApi(endPointArr);
     const res = response[0];
+
     if (res?.success) {
       setFormData(res?.data);
       setDummyData(res?.data);
@@ -111,6 +112,7 @@ function MaintenanceMode() {
       ];
       const response = await multiplePutApi(endPointArr);
       const res = response[0];
+
       handelNotification(res, 'top-right');
       if (res?.success) {
         editorRef.current?.commands.clearContent();
@@ -142,7 +144,6 @@ function MaintenanceMode() {
         ...scheduledMaintenanceStartEndDates,
       };
 
-      console.log(type);
       const endPointArr: endpointObject[] = [
         {
           endPoint:
@@ -156,6 +157,7 @@ function MaintenanceMode() {
       ];
       const response = await multiplePutApi(endPointArr);
       const res = response[0];
+
       handelNotification(res, 'top-right');
       if (res?.success) {
         editorRef.current?.commands.clearContent();
@@ -272,6 +274,7 @@ function MaintenanceMode() {
       setAlertModalPropsInfo(SchedulingMaintenanceModeObject('cancelling'));
     }
   };
+
   useEffect(() => {
     if (useEffectRef.current) return;
     useEffectRef.current = true;

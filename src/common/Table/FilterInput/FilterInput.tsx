@@ -61,6 +61,7 @@ function FilterInput({
     setFilterObject((pervArray) => {
       let updatedArray: FilterObjectInterface[];
       const exist = pervArray?.find((item) => item?.id === id);
+
       if (exist) {
         updatedArray = pervArray.map((item) =>
           item?.id === id
@@ -73,6 +74,7 @@ function FilterInput({
       if (callback) {
         callback(updatedArray);
       }
+
       return updatedArray;
     });
   };
@@ -113,6 +115,7 @@ function FilterInput({
           value: inputValue.trim(),
           type: FilterFieldsTypeEnums[2],
         };
+
         updateFilterObject(newObject, currentFilterId, (updatedArray) => {
           updateFinalFilterQuery(updatedArray);
           setInputValue('');
@@ -146,6 +149,7 @@ function FilterInput({
     const filterData = selectedFilterObject.filter(
       (item) => item.id != data.id
     );
+
     setSelectedFilterObject(filterData);
     setCurrentFilterId('');
     setShowFilterDropDownMenu(false);
@@ -196,7 +200,9 @@ function FilterInput({
         }
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -264,6 +270,7 @@ function FilterInput({
           id: arrayItem?.field_name,
           moduleValue: modelValueArray,
         };
+
         filteredFieldArray.push(obj);
       });
 
@@ -279,12 +286,14 @@ function FilterInput({
         if (showFilterDropDownMenu) {
           const inputElement = inputFieldRef?.current;
           const isInputFocused = document.activeElement === inputElement;
+
           if (!isInputFocused) {
             handelInputFieldFocus();
           }
         }
       }
     };
+
     window.addEventListener('keydown', handelClickForTheSearchKeyCombination);
 
     return () => {

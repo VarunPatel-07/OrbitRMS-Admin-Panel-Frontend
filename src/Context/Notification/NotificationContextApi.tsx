@@ -66,6 +66,7 @@ const NotificationContextApiProvider: React.FC<{ children: ReactNode }> = ({
     ) => {
       if (!data?.message) return;
       const notificationId = uuidv4();
+
       setNotificationInfoArray((previous) => [
         ...previous,
         {
@@ -79,6 +80,7 @@ const NotificationContextApiProvider: React.FC<{ children: ReactNode }> = ({
 
       setTimeout(() => {
         const element = document.getElementById(notificationId);
+
         if (element) {
           element.classList.remove(
             getEnterAnimationClass[direction || 'top-right']
@@ -106,6 +108,7 @@ const NotificationContextApiProvider: React.FC<{ children: ReactNode }> = ({
       handelNotification,
     };
   }, [notificationInfoArray, handelNotification]);
+
   return (
     <NotificationContext.Provider value={NotificationContextValue}>
       {children}

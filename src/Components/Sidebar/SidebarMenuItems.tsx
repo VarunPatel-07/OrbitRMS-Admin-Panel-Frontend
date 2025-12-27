@@ -1,4 +1,5 @@
 import { ReactElement } from 'react';
+import { BsTerminalFill } from 'react-icons/bs';
 import { FaWrench } from 'react-icons/fa';
 import { LuBuilding2 } from 'react-icons/lu';
 import { MdSpaceDashboard } from 'react-icons/md';
@@ -46,5 +47,15 @@ export const SidebarMenuItems = (
     protected: true,
     showToolTip: true,
     ToolTipValue: 'Maintenance Mode',
+  },
+  {
+    id: 4,
+    name: 'Monitoring',
+    icon: <BsTerminalFill className='w-6 h-6' />,
+    label: 'data-tooltip-monitoring',
+    link: `/${organization}/monitoring`,
+    protected: true,
+    showToolTip: true,
+    ToolTipValue: 'Monitoring',
   },
 ];

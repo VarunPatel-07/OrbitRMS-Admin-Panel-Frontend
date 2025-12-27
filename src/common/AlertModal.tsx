@@ -22,7 +22,9 @@ function AlertModal(props: AlertModalProps) {
         }
       }
     };
+
     document.addEventListener('mousedown', handelClickOutSideTheBox);
+
     return () => {
       document.removeEventListener('mousedown', handelClickOutSideTheBox);
     };

@@ -31,11 +31,13 @@ const multipleFetchApiErrorHandler = (error: any) => {
       if (unauthorizedStatusCodes.includes(status)) {
         clearCookieStorage();
         window.location.href = '/auth/sign-in';
+
         return;
       }
     } else if (!status && error?.message?.includes('Network')) {
       clearCookieStorage();
       window.location.href = '/auth/sign-in';
+
       return;
     } else {
       return ErrorHandler(error);
@@ -83,6 +85,7 @@ export const multipleFetchApi = async (
 
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         return multipleFetchApiErrorHandler(error);
@@ -93,8 +96,10 @@ export const multipleFetchApi = async (
         method: 'GET',
         url,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         return multipleFetchApiErrorHandler(error);
@@ -138,8 +143,10 @@ export const multiplePostApi = async (
         headers: headers,
         data: eachEndPoint.data,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         return multipleFetchApiErrorHandler(error);
@@ -153,8 +160,10 @@ export const multiplePostApi = async (
         headers: eachEndPoint?.header ? eachEndPoint.header : defaultHeader,
         data: eachEndPoint.data,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         return multipleFetchApiErrorHandler(error);
@@ -199,8 +208,10 @@ export const multiplePutApi = async (
         headers,
         data: eachEndPoint.data,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         return multipleFetchApiErrorHandler(error);
@@ -214,8 +225,10 @@ export const multiplePutApi = async (
         headers: eachEndPoint?.header ? eachEndPoint.header : defaultHeader,
         data: eachEndPoint.data,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         return multipleFetchApiErrorHandler(error);
@@ -259,8 +272,10 @@ export const multipleDeleteApi = async (
         headers: headers,
         data: eachEndPoint.data,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         return multipleFetchApiErrorHandler(error);
@@ -274,8 +289,10 @@ export const multipleDeleteApi = async (
         headers: eachEndPoint?.header ? eachEndPoint.header : defaultHeader,
         data: eachEndPoint.data,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         return multipleFetchApiErrorHandler(error);
@@ -294,11 +311,14 @@ export const multiUrlFetcher = async (urlArray: Array<URLObject>) => {
         url: eachURL.url,
         headers: eachURL.header || defaultHeader,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         console.error(`Error fetching data from ${eachURL.url}`, error);
+
         return ErrorHandler(error);
       }
     } else if (eachURL.Method == 'POST') {
@@ -308,14 +328,18 @@ export const multiUrlFetcher = async (urlArray: Array<URLObject>) => {
         headers: eachURL.header || defaultHeader,
         data: eachURL?.data,
       };
+
       try {
         const res = await axios(config);
+
         return res?.data;
       } catch (error: any) {
         console.error(`Error fetching data from ${eachURL.url}`, error);
+
         return ErrorHandler(error);
       }
     }
   });
+
   return await Promise.all(promises);
 };

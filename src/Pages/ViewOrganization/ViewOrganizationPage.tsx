@@ -69,6 +69,7 @@ function ViewOrganizationPage() {
   const handelClickOnOrgPowerOff = (data: OrganizationSettingsInterface) => {
     setDeactivateOrganizationModal(!deactivateOrganizationModal);
     const obj = OrganizationAlertModalHelperFunction(data?.status, data?.id);
+
     setAlertModalInfo(obj);
   };
 
@@ -92,6 +93,7 @@ function ViewOrganizationPage() {
 
   const OrganizationHeaderButtonArray = useMemo(() => {
     let buttonArray: ViewOrganizationHeaderButtonsInterface[] = [];
+
     if (organization_id?.trim() !== '' && organization_id) {
       buttonArray = ViewOrganizationHeaderButtons(organization_id);
     }
@@ -109,6 +111,7 @@ function ViewOrganizationPage() {
 
     const response = await multipleFetchApi(endPointArr);
     const res = response[0];
+
     if (res?.success) {
       setData(res?.data);
     } else {
@@ -141,12 +144,14 @@ function ViewOrganizationPage() {
     setOrganizationStatusLoader(true);
     handelOrgStatusWithDebounce(id);
   };
+
   useEffect(() => {
     if (organization_id?.trim() == '') {
       const data = {
         message: 'Organization Id Not Found',
         success: false,
       };
+
       handelNotification(data, 'top-right');
       navigate('/orbitrms/organization-manager');
     } else {

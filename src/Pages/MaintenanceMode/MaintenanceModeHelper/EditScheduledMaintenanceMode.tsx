@@ -52,6 +52,7 @@ function EditScheduledMaintenanceMode(
         if (!pervData) return null;
         if (module_name === 'started_at') {
           const newEndDate = new Date(date);
+
           newEndDate.setHours(newEndDate.getHours() + 1);
 
           return {
@@ -68,31 +69,6 @@ function EditScheduledMaintenanceMode(
       });
   };
 
-  // const handelClickOnDate = (
-  //   date: Date | null,
-  //   module_name: 'started_at' | 'ended_at'
-  // ) => {
-  //   if (!date) return;
-
-  //   setScheduledMaintenanceStartEndDates((prevData) => {
-  //     if (module_name === 'started_at') {
-  //       const newEndDate = new Date(date);
-  //       newEndDate.setHours(newEndDate.getHours() + 1);
-
-  //       return {
-  //         ...prevData,
-  //         started_at: date,
-  //         ended_at: newEndDate,
-  //       };
-  //     }
-
-  //     return {
-  //       ...prevData,
-  //       [module_name]: new Date(date),
-  //     };
-  //   });
-  // };
-
   const getMinimumTime = (type: 'started_at' | 'ended_at') => {
     const now = getUTCDateFormIsoString(data[type]);
     const selected = editData ? new Date(editData[type]) : now;
@@ -101,17 +77,17 @@ function EditScheduledMaintenanceMode(
       const startedDate = getUTCDateFormIsoString(editData.started_at);
 
       if (isSameDay(startedDate, selected)) {
-        return addMinutes(startedDate, -15); // allow ending time from started_at time
+        return addMinutes(startedDate, -15); 
       }
 
-      return new Date(selected.setHours(0, 0, 0, 0)); // future: allow full-day
+      return new Date(selected.setHours(0, 0, 0, 0));
     }
 
     if (isSameDay(now, selected)) {
-      return addMinutes(now, -15); // today: restrict to current time - 15 mins
+      return addMinutes(now, -15); 
     }
 
-    return new Date(selected.setHours(0, 0, 0, 0)); // future: full-day
+    return new Date(selected.setHours(0, 0, 0, 0));
   };
 
   const getMaximumTime = (type: 'started_at' | 'ended_at') => {
@@ -119,8 +95,8 @@ function EditScheduledMaintenanceMode(
     const selected = editData ? new Date(editData[type]) : now;
 
     return isSameDay(now, selected)
-      ? new Date(now.setHours(23, 45, 0, 0)) // if today
-      : new Date(selected.setHours(23, 45, 0, 0)); // any selected date
+      ? new Date(now.setHours(23, 45, 0, 0)) 
+      : new Date(selected.setHours(23, 45, 0, 0)); 
   };
 
   const EditDateComponent = () => {
@@ -244,9 +220,9 @@ function EditScheduledMaintenanceMode(
         </div>
         <div className='w-full'>
           <p className='text-black font-inter text-sm text-pretty'>
-            You're about to remove the scheduled maintenance window. This action
-            cannot be undone and may affect planned operations. Are you sure you
-            want to proceed?
+            You&apos;re about to remove the scheduled maintenance window. This
+            action cannot be undone and may affect planned operations. Are you
+            sure you want to proceed?
           </p>
         </div>
         <div className='w-full'>
@@ -295,7 +271,9 @@ function EditScheduledMaintenanceMode(
         setShowEditModal(false);
       }
     };
+
     document.addEventListener('mousedown', handelClickOutSideTheBox);
+
     return () => {
       document.removeEventListener('mousedown', handelClickOutSideTheBox);
     };

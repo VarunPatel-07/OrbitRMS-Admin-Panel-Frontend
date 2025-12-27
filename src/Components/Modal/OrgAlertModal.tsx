@@ -35,7 +35,9 @@ function OrgAlertModal(props: OrgManagerAlertModalProps) {
         }
       }
     };
+
     document.addEventListener('mousedown', handelClickOutSideTheBox);
+
     return () => {
       document.removeEventListener('mousedown', handelClickOutSideTheBox);
     };

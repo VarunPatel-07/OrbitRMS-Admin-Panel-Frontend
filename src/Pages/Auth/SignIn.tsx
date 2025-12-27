@@ -75,6 +75,7 @@ function SignIn() {
       setLoading(false);
       setShowAlertModal(true);
       const link = `/auth/verify-email?id=${res?.data?.id}&signature=${res?.data?.admin_signature}&resend-available-at=${encodeURIComponent(res?.data?.resend_available_at)}`;
+
       setAlertModalPropsInfo({
         success: true,
         alertModalTitle: 'A 6-Digit Code Has Been Sent',
@@ -141,6 +142,7 @@ function SignIn() {
     if (useEffectRef.current) return;
     useEffectRef.current = true;
     const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+
     if (_cookieToken) {
       verifyUsersLoggedIn();
     } else {

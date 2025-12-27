@@ -67,6 +67,7 @@ function OrganizationManager() {
   const handelClickOnOrgPowerOff = (data: OrganizationDetails) => {
     setDeactivateOrganizationModal(!deactivateOrganizationModal);
     const obj = OrganizationAlertModalHelperFunction(data?.status, data?.id);
+
     setAlertModalInfo(obj);
   };
 
@@ -162,7 +163,7 @@ function OrganizationManager() {
       renderContent: (data: OrganizationAddress) => (
         <div className='w-fit'>
           <p className='font-inter text-black font-medium text-base'>
-            {data?.country|| '-'}
+            {data?.country || '-'}
           </p>
         </div>
       ),
@@ -176,7 +177,9 @@ function OrganizationManager() {
 
       renderContent: (data: string) => (
         <div className='w-fit'>
-          <p className='font-inter text-black font-medium text-base'>{data|| '-'}</p>
+          <p className='font-inter text-black font-medium text-base'>
+            {data || '-'}
+          </p>
         </div>
       ),
     },
@@ -232,7 +235,7 @@ function OrganizationManager() {
       renderContent: (data: string) => (
         <div className='w-fit'>
           <p className='font-inter text-black font-medium text-base text-black/85'>
-            {data|| '-'}
+            {data || '-'}
           </p>
         </div>
       ),
@@ -357,6 +360,7 @@ function OrganizationManager() {
   ) => {
     setIsFetchingData(true);
     let queryString = '';
+
     if (filterArray?.length > 0) {
       const queryFilterArray = filterArray?.map((queryObj) => {
         const obj: UrlEncodedFilterQueryInterface = {
@@ -364,6 +368,7 @@ function OrganizationManager() {
           operator: '',
           value: '',
         };
+
         queryObj?.moduleValue?.forEach((moduleValue) => {
           if (moduleValue?.type === FilterFieldsTypeEnums[0]) {
             obj.field_name = moduleValue?.label;
@@ -374,6 +379,7 @@ function OrganizationManager() {
           if (moduleValue?.type === FilterFieldsTypeEnums[2]) {
             if (queryObj?.optionType == 'multi-select') {
               const MultiSelectArr: string[] = [];
+
               queryObj?.moduleValue
                 ?.filter((tem) => tem.type === FilterFieldsTypeEnums[2])
                 ?.map((data) => MultiSelectArr.push(data?.value));
@@ -404,9 +410,11 @@ function OrganizationManager() {
     setRecordsPerPage(value);
     const filterQuery = queryParameter.get('filter');
     let queryString = '';
+
     if (filterQuery) {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
+
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
     setIsFetchingData(true);
@@ -418,9 +426,11 @@ function OrganizationManager() {
 
     const filterQuery = queryParameter.get('filter');
     let queryString = '';
+
     if (filterQuery) {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
+
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
     setIsFetchingData(true);
@@ -456,9 +466,11 @@ function OrganizationManager() {
   const handelClickOnOrganizationStatusToggled = (id: string) => {
     const filterQuery = queryParameter.get('filter');
     let queryString = '';
+
     if (filterQuery) {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
+
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
     setOrganizationStatusLoader(true);

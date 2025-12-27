@@ -57,6 +57,7 @@ const AddEditPostModal = React.memo(function AddEditPostModal(
         },
         'top-right'
       );
+
       return;
     }
 
@@ -93,6 +94,7 @@ const AddEditPostModal = React.memo(function AddEditPostModal(
       formData.new_images?.length == 0
     ) {
       setShowError(true);
+
       return;
     }
     setLoading(true);

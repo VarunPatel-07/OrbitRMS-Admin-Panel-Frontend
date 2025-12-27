@@ -52,4 +52,5 @@ const HandleMultiInputChange = React.memo(function HandleMultiInputChange(
     </div>
   );
 });
+
 export default HandleMultiInputChange;

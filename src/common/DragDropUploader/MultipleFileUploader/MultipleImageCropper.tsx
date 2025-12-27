@@ -68,6 +68,7 @@ function MultipleImageCropper({
 
       const imageUrl = URL.createObjectURL(selectedFileObj?.file);
       const imageObject = await createImageUtilFunction(imageUrl);
+
       URL.revokeObjectURL(imageUrl);
 
       const canvasElement = document.createElement('canvas');
@@ -120,6 +121,7 @@ function MultipleImageCropper({
 
       setSelectedFileObj((pervItem) => {
         if (!pervItem) return null;
+
         return {
           ...pervItem,
           croppedImagePreview: dataUrl,
@@ -173,6 +175,7 @@ function MultipleImageCropper({
 
     setSelectedFileObj((pervValue) => {
       if (!pervValue) return pervValue;
+
       return { ...pervValue, croppedImagePreview: '' };
     });
   };
@@ -201,6 +204,7 @@ function MultipleImageCropper({
     setZoom(1);
     setTimeout(() => {
       const previewUrl = URL.createObjectURL(file?.file);
+
       setSelectedFileObj({
         id: file?.id,
         file: file?.file,
@@ -231,6 +235,7 @@ function MultipleImageCropper({
 
     setFinalSelectedImageArray((prevData) => {
       const exists = prevData?.some((item) => item?.id === data?.id);
+
       if (exists) {
         return prevData?.map((item) =>
           item?.id === data?.id
@@ -245,6 +250,7 @@ function MultipleImageCropper({
             : item
         );
       }
+
       return [...(prevData || []), { ...data, file }];
     });
 
@@ -253,11 +259,13 @@ function MultipleImageCropper({
       const alreadyExist = finalSelectedImageArray?.some(
         (data) => data?.id === item?.id
       );
+
       return !alreadyExist;
     });
 
     if (filteredData?.length >= 1) {
       const previewUrl = URL.createObjectURL(filteredData[0]?.file);
+
       setSelectedFileObj({
         id: filteredData[0]?.id,
         file: filteredData[0]?.file,
@@ -309,6 +317,7 @@ function MultipleImageCropper({
   useEffect(() => {
     if (!selectedFileObj && DroppedFilesArray?.length !== 0) {
       const previewUrl = URL.createObjectURL(DroppedFilesArray[0]?.file);
+
       setSelectedFileObj({
         id: DroppedFilesArray[0]?.id,
         file: DroppedFilesArray[0]?.file,

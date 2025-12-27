@@ -16,7 +16,10 @@ import {
   getRadianAngle,
 } from '../../../Helper/HelperFunction';
 import { useDebounce } from '../../../Hooks/useDebounce';
-import { DragDropUploaderProps, endpointObject } from '../../../interface/propsInterface';
+import {
+  DragDropUploaderProps,
+  endpointObject,
+} from '../../../interface/propsInterface';
 import ImageCropper from './ImageCropper';
 
 function DragAndDropFileUploader(props: DragDropUploaderProps) {
@@ -57,6 +60,7 @@ function DragAndDropFileUploader(props: DragDropUploaderProps) {
             success: false,
             message: `The Formate Is Not Allowed`,
           };
+
           handelNotification(res, 'top-right');
         }
       });
@@ -71,11 +75,13 @@ function DragAndDropFileUploader(props: DragDropUploaderProps) {
       const isLarge = fileRejections?.some(
         (item) => item?.file?.size > 3 * 1024 * 1024
       );
+
       if (isLarge) {
         const res = {
           message: 'File too large! Keep it under 2MB',
           success: false,
         };
+
         handelNotification(res, 'top-right');
       }
       if (fileRejections.length > 0 && !isLarge) {
@@ -83,6 +89,7 @@ function DragAndDropFileUploader(props: DragDropUploaderProps) {
           message: 'Too many files! Max 5 at a time',
           success: false,
         };
+
         handelNotification(res, 'top-right');
       }
     },
@@ -105,6 +112,7 @@ function DragAndDropFileUploader(props: DragDropUploaderProps) {
 
       const imageUrl = URL.createObjectURL(selectedFile);
       const imageObject = await createImageUtilFunction(imageUrl);
+
       URL.revokeObjectURL(imageUrl);
 
       const canvasElement = document.createElement('canvas');
@@ -173,6 +181,7 @@ function DragAndDropFileUploader(props: DragDropUploaderProps) {
       };
 
       const formData = new FormData();
+
       formData.append('file', file);
 
       const endpointArray: Array<endpointObject> = [
@@ -186,16 +195,19 @@ function DragAndDropFileUploader(props: DragDropUploaderProps) {
 
       const response = await multiplePostApi(endpointArray);
       const res = response[0];
+
       if (!res?.success) {
         const successData = {
           success: false,
           message: 'Unable To Upload Image Try Again Letter',
         };
+
         handelNotification(successData, 'top-right');
 
         setLoading(false);
         setSelectedFile(null);
         setCroppedImagePreview('');
+
         return;
       }
       setImageUrl(res?.data?.url);
@@ -204,6 +216,7 @@ function DragAndDropFileUploader(props: DragDropUploaderProps) {
         success: true,
         message: 'Image Uploaded Successfully',
       };
+
       handelNotification(successData, 'top-right');
 
       setLoading(false);

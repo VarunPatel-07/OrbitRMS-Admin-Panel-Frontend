@@ -81,6 +81,7 @@ function OrganizationEmployees() {
       data?.account_status,
       data?.personal_info?.user_id
     );
+
     setAlertModalInfo(obj);
   };
 
@@ -318,6 +319,7 @@ function OrganizationEmployees() {
 
       const response = await multipleFetchApi(endPointArr);
       const res = response[0];
+
       if (res?.success) {
         setData(res?.data);
         setMetaData(res?.metadata);
@@ -335,6 +337,7 @@ function OrganizationEmployees() {
   ) => {
     setIsFetchingData(true);
     let queryString = '';
+
     if (filterArray?.length > 0) {
       const queryFilterArray = filterArray?.map((queryObj) => {
         const obj: UrlEncodedFilterQueryInterface = {
@@ -342,6 +345,7 @@ function OrganizationEmployees() {
           operator: '',
           value: '',
         };
+
         queryObj?.moduleValue?.forEach((moduleValue) => {
           if (moduleValue?.type === FilterFieldsTypeEnums[0]) {
             obj.field_name = moduleValue?.label;
@@ -352,6 +356,7 @@ function OrganizationEmployees() {
           if (moduleValue?.type === FilterFieldsTypeEnums[2]) {
             if (queryObj?.optionType == 'multi-select') {
               const MultiSelectArr: string[] = [];
+
               queryObj?.moduleValue
                 ?.filter((tem) => tem.type === FilterFieldsTypeEnums[2])
                 ?.map((data) => MultiSelectArr.push(data?.value));
@@ -384,9 +389,11 @@ function OrganizationEmployees() {
     setRecordsPerPage(value);
     const filterQuery = queryParameter.get('filter');
     let queryString = '';
+
     if (filterQuery) {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
+
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
     setIsFetchingData(true);
@@ -403,9 +410,11 @@ function OrganizationEmployees() {
 
     const filterQuery = queryParameter.get('filter');
     let queryString = '';
+
     if (filterQuery) {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
+
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
     setIsFetchingData(true);
@@ -431,6 +440,7 @@ function OrganizationEmployees() {
       ];
       const response = await multiplePutApi(endPointArr);
       const res = response[0];
+
       if (!res.success) {
         setIsFetchingData(true);
         setAlertModalInfo(OrganizationManagerAlertModalInitialObj);
@@ -444,9 +454,11 @@ function OrganizationEmployees() {
   const handelClickOnDisableEmployee = (id: string) => {
     const filterQuery = queryParameter.get('filter');
     let queryString = '';
+
     if (filterQuery) {
       const decodeQuery = decodeURIComponent(filterQuery);
       const parsedFilter = JSON.parse(decodeQuery);
+
       queryString = `filter=${encodeURIComponent(JSON.stringify(parsedFilter))}`;
     }
     setEmployeeStatusLoader(true);
@@ -456,6 +468,7 @@ function OrganizationEmployees() {
         id,
         organization_id
       );
+
       return;
     }
   };
