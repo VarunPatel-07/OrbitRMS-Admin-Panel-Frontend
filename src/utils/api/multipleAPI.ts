@@ -1,0 +1,363 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import axios, { AxiosResponse } from 'axios';
+
+import { ENV_CONFIG } from '../../config/EnvConfig';
+import { UNAUTHORIZED_STATUS_CODES } from '../../constant/Constant';
+import { ERROR_MESSAGES } from '../../constant/ErrorMessages';
+import {
+  ApiReturnInterface,
+  endpointObject,
+  URLObject,
+} from '../../interface/propsInterface';
+import {
+  clearCookieStorage,
+  clearLocalSessionStorage,
+  ErrorHandler,
+  getDataFromSecureCookie,
+} from '../helper/HelperFunction';
+
+const BASE_URL = ENV_CONFIG.VITE_BACKEND_API_BASEURL;
+const VITE_ENVIRONMENT = ENV_CONFIG.VITE_ENVIRONMENT;
+
+const defaultHeader = {
+  'Content-Type': 'application/json',
+};
+
+const multipleFetchApiErrorHandler = (error: any) => {
+  if (VITE_ENVIRONMENT == 'DEVELOPMENT') {
+    return ErrorHandler(error);
+  } else {
+    const status = error?.response?.status || error?.status;
+
+    if (UNAUTHORIZED_STATUS_CODES.includes(status)) {
+      clearCookieStorage();
+      window.location.href = '/auth/sign-in';
+
+      return {
+        success: false,
+        message: ERROR_MESSAGES.UNAUTHORIZED,
+        data: null,
+      };
+    } else if (!status && error?.message?.includes('Network')) {
+      clearCookieStorage();
+      window.location.href = '/auth/sign-in';
+
+      return {
+        success: false,
+        message: ERROR_MESSAGES.UNAUTHORIZED,
+        data: null,
+      };
+    } else {
+      return ErrorHandler(error);
+    }
+  }
+};
+
+const returnApiResponse = (res: AxiosResponse<any, any>) => {
+  return (
+    res?.data ?? {
+      success: false,
+      message: ERROR_MESSAGES.UNAUTHORIZED,
+      data: null,
+    }
+  );
+};
+
+export const multipleFetchApi = async (
+  endPointArr: Array<endpointObject>
+): Promise<ApiReturnInterface[]> => {
+  const promises = endPointArr.map(async (eachEndPoint) => {
+    if (eachEndPoint.protected) {
+      const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+
+      if (!_cookieToken) {
+        window.location.href = '/auth/sign-in';
+        clearLocalSessionStorage();
+      }
+
+      const authToken = `Bearer ${_cookieToken}`;
+
+      // const token = await grecaptcha.execute('YOUR_SITE_KEY', {
+      //   action: 'submit',
+      // });
+
+      const headers: Record<string, string> = eachEndPoint?.header
+        ? (eachEndPoint.header as Record<string, string>)
+        : {
+            'Content-Type': 'application/json',
+            Authorization: authToken,
+          };
+
+      // headers['X-Recaptcha-Token'] = token;
+
+      if (!headers?.Authorization) {
+        headers.Authorization = authToken;
+      }
+      const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
+
+      const config = {
+        method: 'GET',
+        url,
+        headers: headers,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        return multipleFetchApiErrorHandler(error);
+      }
+    } else {
+      const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
+      const config = {
+        method: 'GET',
+        url,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        return multipleFetchApiErrorHandler(error);
+      }
+    }
+  });
+
+  // Wait for all promises to resolve
+  return await Promise.all(promises);
+};
+
+export const multiplePostApi = async (
+  endPointArr: Array<endpointObject>
+): Promise<ApiReturnInterface[]> => {
+  const promises = endPointArr.map(async (eachEndPoint) => {
+    if (eachEndPoint.protected) {
+      const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+
+      if (!_cookieToken) {
+        window.location.href = '/auth/sign-in';
+        clearLocalSessionStorage();
+      }
+
+      const authToken = `Bearer ${_cookieToken}`;
+      const headers: Record<string, string> = eachEndPoint?.header
+        ? (eachEndPoint.header as Record<string, string>)
+        : {
+            'Content-Type': 'application/json',
+            Authorization: authToken,
+          };
+
+      if (!headers?.Authorization) {
+        headers.Authorization = authToken;
+      }
+
+      const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
+
+      const config = {
+        method: 'POST',
+        url,
+        headers: headers,
+        data: eachEndPoint.data,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        return multipleFetchApiErrorHandler(error);
+      }
+    } else {
+      const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
+
+      const config = {
+        method: 'POST',
+        url,
+        headers: eachEndPoint?.header ? eachEndPoint.header : defaultHeader,
+        data: eachEndPoint.data,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        return multipleFetchApiErrorHandler(error);
+      }
+    }
+  });
+
+  return await Promise.all(promises);
+};
+
+// todo we need to add put api helper for editing api
+
+export const multiplePutApi = async (
+  endPointArr: Array<endpointObject>
+): Promise<ApiReturnInterface[]> => {
+  const promises = endPointArr.map(async (eachEndPoint) => {
+    if (eachEndPoint.protected) {
+      const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+
+      if (!_cookieToken) {
+        window.location.href = '/auth/sign-in';
+        clearLocalSessionStorage();
+      }
+
+      const authToken = `Bearer ${_cookieToken}`;
+      const headers: Record<string, string> = eachEndPoint.header
+        ? (eachEndPoint.header as Record<string, string>)
+        : {
+            'Content-Type': 'application/json',
+            Authorization: authToken,
+          };
+
+      if (!headers.Authorization) {
+        headers.Authorization = authToken;
+      }
+
+      const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
+
+      const config = {
+        method: 'PUT',
+        url,
+        headers,
+        data: eachEndPoint.data,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        return multipleFetchApiErrorHandler(error);
+      }
+    } else {
+      const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
+
+      const config = {
+        method: 'PUT',
+        url,
+        headers: eachEndPoint?.header ? eachEndPoint.header : defaultHeader,
+        data: eachEndPoint.data,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        return multipleFetchApiErrorHandler(error);
+      }
+    }
+  });
+
+  return await Promise.all(promises);
+};
+
+export const multipleDeleteApi = async (
+  endPointArr: Array<endpointObject>
+): Promise<ApiReturnInterface[]> => {
+  const promises = endPointArr.map(async (eachEndPoint) => {
+    if (eachEndPoint.protected) {
+      const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+
+      if (!_cookieToken) {
+        window.location.href = '/auth/sign-in';
+        clearLocalSessionStorage();
+      }
+
+      const authToken = `Bearer ${_cookieToken}`;
+
+      const headers: Record<string, string> = eachEndPoint?.header
+        ? (eachEndPoint.header as Record<string, string>)
+        : {
+            'Content-Type': 'application/json',
+            Authorization: authToken,
+          };
+
+      if (!headers?.Authorization) {
+        headers.Authorization = authToken;
+      }
+
+      const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
+
+      const config = {
+        method: 'DELETE',
+        url,
+        headers: headers,
+        data: eachEndPoint.data,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        return multipleFetchApiErrorHandler(error);
+      }
+    } else {
+      const url = `${BASE_URL}/${eachEndPoint.endPoint}`;
+
+      const config = {
+        method: 'DELETE',
+        url,
+        headers: eachEndPoint?.header ? eachEndPoint.header : defaultHeader,
+        data: eachEndPoint.data,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        return multipleFetchApiErrorHandler(error);
+      }
+    }
+  });
+
+  return await Promise.all(promises);
+};
+
+export const multiUrlFetcher = async (urlArray: Array<URLObject>) => {
+  const promises = urlArray.map(async (eachURL: URLObject) => {
+    if (eachURL.Method == 'GET') {
+      const config = {
+        method: eachURL.Method,
+        url: eachURL.url,
+        headers: eachURL.header || defaultHeader,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        console.error(`Error fetching data from ${eachURL.url}`, error);
+
+        return ErrorHandler(error);
+      }
+    } else if (eachURL.Method == 'POST') {
+      const config = {
+        method: eachURL.Method,
+        url: eachURL.url,
+        headers: eachURL.header || defaultHeader,
+        data: eachURL?.data,
+      };
+
+      try {
+        const res = await axios(config);
+
+        return returnApiResponse(res);
+      } catch (error: any) {
+        console.error(`Error fetching data from ${eachURL.url}`, error);
+
+        return ErrorHandler(error);
+      }
+    }
+  });
+
+  return await Promise.all(promises);
+};

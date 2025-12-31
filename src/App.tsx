@@ -1,23 +1,24 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import MainSuspenseLoader from './Components/Loader/MainSuspenseLoader';
-import Navbar from './Components/Navbar/Navbar';
-import Sidebar from './Components/Sidebar/Sidebar';
+import MainSuspenseLoader from './components/loader/MainSuspenseLoader';
+import Navbar from './components/navbar/Navbar';
+import Sidebar from './components/sidebar/Sidebar';
 import {
   NotificationContext,
   NotificationContextApiProps,
-} from './Context/Notification/NotificationContextApi';
-import { verifyUserApiFunction } from './Helper/api/api';
-import HelmetSeo from './Helper/HelmetSeo';
-import { getDataFromSecureCookie } from './Helper/HelperFunction';
-import ProtectedRoute from './Helper/ProtectedRoute';
-import { useDebounce } from './Hooks/useDebounce';
-import Dashboard from './Pages/Dashboard/Dashboard';
-import MaintenanceMode from './Pages/MaintenanceMode/MaintenanceModePages/MaintenanceMode';
-import MaintenanceModeHistory from './Pages/MaintenanceMode/MaintenanceModePages/MaintenanceModeHistory';
-import OrganizationManager from './Pages/OrganizationManager/OrganizationManager';
-import ViewOrganizationPage from './Pages/ViewOrganization/ViewOrganizationPage';
+} from './context/notification/NotificationContextApi';
+import { useDebounce } from './hooks/useDebounce';
+import Dashboard from './pages/Dashboard/Dashboard';
+import MaintenanceMode from './pages/MaintenanceMode/MaintenanceModePages/MaintenanceMode';
+import MaintenanceModeHistory from './pages/MaintenanceMode/MaintenanceModePages/MaintenanceModeHistory';
+import Monitoring from './pages/monitoring/monitoring';
+import OrganizationManager from './pages/OrganizationManager/OrganizationManager';
+import ViewOrganizationPage from './pages/ViewOrganization/ViewOrganizationPage';
+import { verifyUserApiFunction } from './utils/api/api';
+import HelmetSeo from './utils/helper/HelmetSeo';
+import { getDataFromSecureCookie } from './utils/helper/HelperFunction';
+import ProtectedRoute from './utils/helper/ProtectedRoute';
 
 function App() {
   const { handelNotification } = useContext(
@@ -25,6 +26,7 @@ function App() {
   ) as NotificationContextApiProps;
 
   const useEffectRef = useRef(false);
+
   const [showGlobalLoader, setShowGlobalLoader] = useState<boolean>(true);
 
   const verifyUsersLoggedIn = useDebounce(async () => {
@@ -42,12 +44,14 @@ function App() {
     if (useEffectRef.current) return;
     useEffectRef.current = true;
     const _cookieToken = getDataFromSecureCookie('adminAuthenticationToken');
+
     if (_cookieToken) {
       verifyUsersLoggedIn();
     } else {
       setShowGlobalLoader(false);
     }
   }, [verifyUsersLoggedIn]);
+
   return (
     <>
       <HelmetSeo
@@ -85,12 +89,16 @@ function App() {
                     path='/maintenance-mode'
                     element={<ProtectedRoute element={<MaintenanceMode />} />}
                   />
-                  \
+
                   <Route
                     path='/maintenance-mode/history'
                     element={
                       <ProtectedRoute element={<MaintenanceModeHistory />} />
                     }
+                  />
+                  <Route
+                    path='/monitoring'
+                    element={<ProtectedRoute element={<Monitoring />} />}
                   />
                 </Routes>
               </div>
