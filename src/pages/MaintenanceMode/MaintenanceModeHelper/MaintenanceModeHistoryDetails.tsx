@@ -6,7 +6,7 @@ import {
   InfoField,
   RenderBeautifulMaintenanceStatus,
 } from '../../../utils/helper/Helper';
-import { classNames } from '../../../utils/helper/HelperFunction';
+import { classNames, formateDate } from '../../../utils/helper/HelperFunction';
 
 function MaintenanceModeHistoryDetails(
   props: MaintenanceModeHistoryDetailsInterface
@@ -182,6 +182,16 @@ function MaintenanceModeHistoryDetails(
                     dangerouslySetInnerHTML={{ __html: data?.message }}
                   ></div>
                 </div>
+              </div>
+              <div className='w-full'>
+                <p className='text-black/70 italic text-sm font-inter font-medium'>
+                  Last update on:
+                  <strong className='text-black px-1'>
+                    {data?.updated_at
+                      ? formateDate(data?.updated_at, 'DD/MM/YYYY')
+                      : formateDate(data?.created_at, 'DD/MM/YYYY')}
+                  </strong>
+                </p>
               </div>
             </div>
           </div>

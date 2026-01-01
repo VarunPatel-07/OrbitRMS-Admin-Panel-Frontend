@@ -241,7 +241,7 @@ function MaintenanceModeHistory() {
       renderContent: (data: string) => (
         <div className='w-fit min-w-[200px]'>
           <p className='w-full text-ellipsis overflow-hidden line-clamp-4 font-inter text-base text-black'>
-            {data ? formateDate(data, 'DD/MM/YYYY', false) : '-'}
+            {data ? formateDate(data, 'DD/MM/YYYY', true) : '-'}
           </p>
         </div>
       ),
@@ -256,7 +256,7 @@ function MaintenanceModeHistory() {
       renderContent: (data: string) => (
         <div className='w-fit min-w-[200px]'>
           <p className='w-full text-ellipsis overflow-hidden line-clamp-4 font-inter text-base text-black'>
-            {data ? formateDate(data, 'DD/MM/YYYY', false) : '-'}
+            {data ? formateDate(data, 'DD/MM/YYYY', true) : '-'}
           </p>
         </div>
       ),
