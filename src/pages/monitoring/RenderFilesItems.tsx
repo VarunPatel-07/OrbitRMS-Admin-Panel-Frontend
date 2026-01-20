@@ -48,7 +48,7 @@ function RenderFilesItems({
   handelClickOnDownload,
 }: RenderFilesItemsInterface) {
   return (
-    <div className='flex-1 overflow-y-auto hide-scrollbar'>
+    <div className='flex-1 overflow-y-auto hide-scrollbar h-full'>
       {loading ? (
         <>
           {Array?.from({ length: 10 })?.map((_, index) => (
@@ -58,7 +58,7 @@ function RenderFilesItems({
       ) : (
         <>
           {availableLogFiles?.length === 0 ? (
-            <div className='flex flex-col items-center justify-center h-full text-center'>
+            <div className='flex flex-col items-center justify-center h-full text-center w-full h-full'>
               <div className='w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center mb-5'>
                 <FiFileText size={32} className='text-gray-600' />
               </div>
