@@ -53,7 +53,7 @@ export const SidebarMenuItems = (
     name: 'Monitoring',
     icon: <BsTerminalFill className='w-6 h-6' />,
     label: 'data-tooltip-monitoring',
-    link: `/${organization}/monitoring`,
+    link: `/${organization}/monitoring?type=runtime`,
     protected: true,
     showToolTip: true,
     ToolTipValue: 'Monitoring',
