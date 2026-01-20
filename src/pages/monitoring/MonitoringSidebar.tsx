@@ -12,7 +12,7 @@ function MonitoringSidebar({
   handelClickOnDownload,
 }: MonitoringSidebarInterface) {
   return (
-    <div className='min-w-[380px] max-w-[380px] max-h-[calc(100vh-95px)] hide-scrollbar bg-white flex flex-col rounded-xl border border-gray-200 shadow-sm overflow-hidden'>
+    <div className='min-w-[380px] max-w-[380px] max-h-[calc(100vh-105px)] hide-scrollbar bg-white flex flex-col rounded-xl border border-gray-200 shadow-sm overflow-hidden'>
       <div className='p-5 border-b border-gray-200 bg-gradient-to-br from-gray-50 to-white'>
         <h2 className='text-lg font-semibold text-gray-900 mb-1.5 font-inter'>
           Log Files
