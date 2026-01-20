@@ -2,8 +2,11 @@ import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { FaTerminal } from 'react-icons/fa';
 import { FiRefreshCw } from 'react-icons/fi';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Skeleton from 'react-loading-skeleton';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Button from '../../components/common/Button';
+import SearchDrop from '../../components/common/SearchDrop';
 import { ENV_CONFIG } from '../../config/EnvConfig';
 import { initialMetadata } from '../../constant/Constant';
 import {
@@ -28,6 +31,9 @@ function Monitoring() {
     NotificationContext
   ) as NotificationContextApiProps;
 
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
   const autoRefreshIntervalRef = useRef<number | null>(null);
 
   const [filteredLogs, setFilteredLogs] = useState<string[]>([]);
@@ -39,13 +45,12 @@ function Monitoring() {
   >([]);
   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
-
-  const fetchLogsWithDebounce = useDebounce(async (_page?: number) => {
+  const [selectedValue, setSelectedValue] = useState<'failures' | 'runtime'>(
+    'runtime'
+  );
+  const [loadingLogs, setLoadingLogs] = useState<boolean>(true);
+  const fetchLogsFileWithDebounce = useDebounce(async () => {
     const endPointArr: endpointObject[] = [
-      {
-        endPoint: `monitoring/logs/runtime?page=${_page || 1}&limit=100`,
-        protected: true,
-      },
       {
         endPoint: `monitoring/logs/history/files`,
         protected: true,
@@ -53,29 +58,42 @@ function Monitoring() {
     ];
     const response = await multipleFetchApi(endPointArr);
     const res = response[0];
-    const logFiles = response[1];
 
     if (res?.success) {
-      if (_page === 1) {
-        setFilteredLogs(res.data);
-      } else {
-        setFilteredLogs((pervData) => [...pervData, ...res.data]);
-      }
-
-      setMetaData(res?.metadata);
-    } else {
-      setFilteredLogs([]);
-      handelNotification(res, 'top-right');
-    }
-
-    if (logFiles?.success) {
-      setAvailableLogFiles(logFiles?.data);
+      setAvailableLogFiles(res?.data);
     } else {
       setAvailableLogFiles([]);
       handelNotification(res, 'top-right');
     }
     setLoading(false);
-  }, 100);
+  });
+  const fetchLogsWithDebounce = useDebounce(
+    async (_page: number, type: 'failures' | 'runtime') => {
+      const endPointArr: endpointObject[] = [
+        {
+          endPoint: `monitoring/logs/${type || 'runtime'}?page=${_page || 1}&limit=100`,
+          protected: true,
+        },
+      ];
+      const response = await multipleFetchApi(endPointArr);
+      const res = response[0];
+
+      if (res?.success) {
+        if (_page === 1) {
+          setFilteredLogs(res.data);
+        } else {
+          setFilteredLogs((pervData) => [...pervData, ...res.data]);
+        }
+
+        setMetaData(res?.metadata);
+      } else {
+        setFilteredLogs([]);
+        handelNotification(res, 'top-right');
+      }
+      setLoadingLogs(false);
+    },
+    100
+  );
 
   const initializeAutoRefresh = () => {
     if (autoRefreshIntervalRef.current) {
@@ -85,7 +103,7 @@ function Monitoring() {
     autoRefreshIntervalRef.current = window.setInterval(() => {
       if (autoRefresh) {
         if (page < metaData.total_pages) {
-          fetchLogsWithDebounce(1);
+          fetchLogsWithDebounce(1, selectedValue);
         }
       }
     }, 300_000);
@@ -132,20 +150,40 @@ function Monitoring() {
     setPage((prevPage) => {
       const nextPage = prevPage + 1;
 
-      fetchLogsWithDebounce(nextPage);
+      fetchLogsWithDebounce(nextPage, selectedValue);
 
       return nextPage;
     });
   };
 
   const handelRefreshNowBtn = () => {
-    fetchLogsWithDebounce(1);
+    fetchLogsWithDebounce(1, selectedValue);
     setPage(1);
     initializeAutoRefresh();
   };
 
+  const handelOnSelect = (data: string | object) => {
+    if (typeof data === 'string') {
+      if (['runtime', 'failures'].includes(data?.toLocaleLowerCase())) {
+        setLoadingLogs(true);
+        navigate(`?type=${data?.toLocaleLowerCase()}`);
+        setSelectedValue(data as 'runtime' | 'failures');
+        fetchLogsWithDebounce(
+          1,
+          data?.toLocaleLowerCase() as 'runtime' | 'failures'
+        );
+      }
+    }
+  };
+
   useEffect(() => {
-    fetchLogsWithDebounce();
+    const searchVal = searchParams?.get('type');
+
+    if (searchVal && ['failures', 'runtime'].includes(searchVal)) {
+      setSelectedValue(searchVal as 'runtime' | 'failures');
+      fetchLogsWithDebounce(1, searchVal as 'runtime' | 'failures');
+      fetchLogsFileWithDebounce();
+    }
   }, []);
 
   useEffect(() => {
@@ -186,6 +224,18 @@ function Monitoring() {
                 </span>
               </div>
               <div className='flex items-center justify-end gap-5'>
+                <div>
+                  <SearchDrop
+                    options={['Runtime', 'Failures']}
+                    emptyDataMessage='No Options Found'
+                    position='bottom'
+                    searchKey=''
+                    showSearchBar={false}
+                    onSelectValBtn={handelOnSelect}
+                    selectedValue={selectedValue}
+                    className='min-w-[120px]'
+                  />
+                </div>
                 <div className='flex items-center gap-2'>
                   <Button
                     onClick={() => setAutoRefresh(!autoRefresh)}
@@ -222,45 +272,52 @@ function Monitoring() {
               id='log-scroll-container'
               className='py-5 flex-1 overflow-y-auto h-full max-h-[calc(100vh-180px)] hide-scrollbar'
             >
-              {filteredLogs?.length !== 0 ? (
-                <InfiniteScroll
-                  dataLength={filteredLogs?.length}
-                  next={fetchMoreData}
-                  hasMore={hasMore}
-                  loader={<h4>Loading...</h4>}
-                  endMessage={
-                    <p className='py-5 text-black text-center'>
-                      <b>Yay! You’ve seen all the logs.</b>
-                    </p>
-                  }
-                  scrollableTarget='log-scroll-container'
-                >
-                  <div className='flex flex-col h-full w-full'>
-                    {filteredLogs.map((log, index) => (
-                      <span
-                        key={index}
-                        className={`py-1 px-8 block w-full font-inter text-sm ${String(log).includes('INFO') ? 'text-black' : 'text-rose-600 font-medium'}`}
-                      >
-                        {log}
-                      </span>
-                    ))}
-                  </div>
-                </InfiniteScroll>
-              ) : (
-                <div className='flex flex-col items-center justify-center h-full text-center px-8'>
-                  <div className='w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center mb-5'>
-                    <FaTerminal size={32} className='text-gray-600' />
-                  </div>
-                  <h3 className='text-lg font-semibold text-gray-900 mb-2 font-inter'>
-                    No Console Output
-                  </h3>
-                  <p className='text-sm text-gray-500 max-w-sm font-inter leading-relaxed'>
-                    Console logs will appear here once your application starts
-                    generating output.
-                  </p>
+              {loadingLogs ? (
+                <div className='w-full h-full px-5'>
+                  <Skeleton width='100%' height='100%' borderRadius={6} />
                 </div>
+              ) : (
+                <>
+                  {filteredLogs?.length !== 0 ? (
+                    <InfiniteScroll
+                      dataLength={filteredLogs?.length}
+                      next={fetchMoreData}
+                      hasMore={hasMore}
+                      loader={<h4>Loading...</h4>}
+                      endMessage={
+                        <p className='py-5 text-black text-center'>
+                          <b>Yay! You’ve seen all the logs.</b>
+                        </p>
+                      }
+                      scrollableTarget='log-scroll-container'
+                    >
+                      <div className='flex flex-col h-full w-full'>
+                        {filteredLogs.map((log, index) => (
+                          <span
+                            key={index}
+                            className={`py-1 px-8 block w-full font-inter text-sm ${String(log).includes('INFO') ? 'text-black' : 'text-rose-600 font-medium'}`}
+                          >
+                            {log}
+                          </span>
+                        ))}
+                      </div>
+                    </InfiniteScroll>
+                  ) : (
+                    <div className='flex flex-col items-center justify-center h-full text-center px-8'>
+                      <div className='w-20 h-20 bg-gray-100 rounded-xl flex items-center justify-center mb-5'>
+                        <FaTerminal size={32} className='text-gray-600' />
+                      </div>
+                      <h3 className='text-lg font-semibold text-gray-900 mb-2 font-inter'>
+                        No Console Output
+                      </h3>
+                      <p className='text-sm text-gray-500 max-w-sm font-inter leading-relaxed'>
+                        Console logs will appear here once your application
+                        starts generating output.
+                      </p>
+                    </div>
+                  )}
+                </>
               )}
-              {/* <div className='pt-10' ref={bottomObserverRef}></div> */}
             </div>
           </div>
         </div>

@@ -163,3 +163,23 @@ export interface RenderFilesItemsInterface {
     bulkDownload?: boolean
   ) => void;
 }
+
+export interface SearchDropProps {
+  name?: string;
+  className?: string;
+  labelFieldName?: string;
+  isRequiredField?: boolean;
+  selectedValue?: string;
+  setSelectedValue?: React.Dispatch<SetStateAction<string>>;
+  onSelectValBtn?: (data: string | object, index?: number) => void;
+  placeHolderName?: string;
+  options: Array<string | object>;
+  searchKey: string;
+  position: 'bottom' | 'top';
+  emptyDataMessage: string;
+  loading?: boolean;
+  showSearchBar?: boolean;
+  showError?: boolean;
+  errorMessage?: string;
+  disabled?: boolean;
+}
