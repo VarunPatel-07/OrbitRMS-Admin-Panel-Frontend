@@ -12,7 +12,7 @@ function MonitoringSidebar({
   handelClickOnDownload,
 }: MonitoringSidebarInterface) {
   return (
-    <div className='min-w-[380px] max-w-[380px] max-h-[calc(100vh-110px)] hide-scrollbar bg-white flex flex-col rounded-xl border border-gray-200 shadow-sm overflow-hidden'>
+    <div className='min-w-[380px] max-w-[380px] max-h-[calc(100vh-95x)] hide-scrollbar bg-white flex flex-col rounded-xl border border-gray-200 shadow-sm overflow-hidden'>
       <div className='p-5 border-b border-gray-200 bg-gradient-to-br from-gray-50 to-white'>
         <h2 className='text-lg font-semibold text-gray-900 mb-1.5 font-inter'>
           Log Files
@@ -42,7 +42,7 @@ function MonitoringSidebar({
           )}
         </div>
       </div>
-      <div className='w-full grow'>
+      <div className='w-full grow overflow-auto'>
         <RenderFilesItems
           loading={loading}
           availableLogFiles={availableLogFiles}

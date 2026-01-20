@@ -270,7 +270,7 @@ function Monitoring() {
 
             <div
               id='log-scroll-container'
-              className='py-5 flex-1 overflow-y-auto h-full max-h-[calc(100vh-180px)] hide-scrollbar'
+              className='py-5 flex-1 overflow-y-auto h-full max-h-[calc(100vh-200px)] hide-scrollbar'
             >
               {loadingLogs ? (
                 <div className='w-full h-full px-5'>
