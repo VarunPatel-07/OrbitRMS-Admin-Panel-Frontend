@@ -167,7 +167,7 @@ function Monitoring() {
       if (['runtime', 'failures'].includes(data?.toLocaleLowerCase())) {
         setLoadingLogs(true);
         navigate(`?type=${data?.toLocaleLowerCase()}`);
-        setSelectedValue(data as 'runtime' | 'failures');
+        setSelectedValue(data?.toLocaleLowerCase() as 'runtime' | 'failures');
         fetchLogsWithDebounce(
           1,
           data?.toLocaleLowerCase() as 'runtime' | 'failures'

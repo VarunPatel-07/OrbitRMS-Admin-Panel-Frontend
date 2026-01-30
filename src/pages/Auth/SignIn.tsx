@@ -182,7 +182,7 @@ function SignIn() {
               />
             </div>
           </div>
-          <div className='w-full lg:w-1/2'>
+          <div className='w-full lg:w-1/2 p-4'>
             <div className='flex items-center justify-center flex-col w-full h-full'>
               <div className='flex flex-col items-center justify-center gap-5 max-w-[500px]'>
                 <div className='w-full block lg:hidden m-auto'>
